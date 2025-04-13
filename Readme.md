@@ -1,7 +1,3 @@
-Here's your updated project description with all the requested additions, formatting improvements, and relevant tags for your AMU Hacks 4.0 submission:
-
----
-
 # 🚀 Bluprnt  
 ### **🏆Built for AMU Hacks 4.0 by Team Heckers**  
 ### **🤝Team Members: Mohd Tabish Khan, Abhay Singh, Pratham Mohan and Aayushmaan Saxena**
@@ -10,10 +6,9 @@ Here's your updated project description with all the requested additions, format
 
 
 
-## Project Overview  
 
-**Bluprnt** is a web application designed for **AMU Hacks 4.0** that leverages the power of the [Gemini API](https://gemini.com) to generate structured JSON responses. These responses are then dynamically rendered as interactive flowcharts on the frontend using [React Flow](https://reactflow.dev/). The goal is to help users visualize processes, learning roadmaps, and system workflows with ease.  
-
+## Project Overview   
+Bluprnt is a web application designed for **AMU Hacks 4.0** that leverages the power of the [Gemini API](https://gemini.com) to generate structured JSON responses, which are dynamically rendered as interactive flowcharts on the frontend using [React Flow](https://reactflow.dev/). The platform is an AI-powered solution aimed at simplifying project planning and execution for developers, innovators, and teams. Users input their project name, description, and tech stack, and Bluprnt generates a detailed, interactive roadmap in the form of a visual flowchart. It also provides curated resources, source code examples, and study materials to accelerate learning and development. By addressing challenges like unclear project direction, steep learning curves for new tech stacks, and time-consuming manual planning, Bluprnt enables users to focus on building while the system handles the blueprint. Whether visualizing processes, creating learning roadmaps, or mapping system workflows, Bluprnt makes project planning intuitive, efficient, and visually engaging.
 ---
 
 ## Installation 🛠️  
@@ -93,6 +88,22 @@ GEMINI_API_KEY=your_gemini_api_key_here
 - **State Management**: React's built-in state management  
 
 ---
+# Proposed System
+The proposed system is an intelligent, web-based platform that leverages AI to generate customized project roadmaps dynamically. Key features include:
+
+AI-Driven Roadmap Generation : Users input project details, and the system creates a visual, interactive roadmap using React Flow.
+Resource Recommendations : Curated learning materials, source code snippets, and documentation are provided based on the chosen tech stack.
+Collaboration Tools : Real-time sharing and collaboration on roadmaps for team projects.
+Scalability : Adaptable to various project sizes and complexities, from small apps to enterprise-level systems.
+The system works by analyzing user inputs, mapping dependencies, and suggesting optimal workflows, ensuring clarity and efficiency in project execution.
+
+# Existing System and Drawbacks
+Currently, project planning relies heavily on manual efforts or generic tools like flowchart software, whiteboards, or static templates. These methods have significant limitations:
+
+Time-Consuming : Creating detailed roadmaps manually is labor-intensive and prone to errors.
+Lack of Customization : Generic tools fail to account for specific tech stacks or project requirements.
+No Learning Support : Existing solutions do not provide integrated resources or guidance for unfamiliar technologies.
+Limited Collaboration : Many tools lack real-time collaboration features, making teamwork inefficient.
 
 ## Features 🌟  
 
@@ -132,5 +143,5 @@ For questions, reach out at [mohdtabishkhan001@gmail.com](#)
 ---
 
 ### 🔖 Hashtags  
-#Bluprnt #AMUHACKS4.0 #CSSAMU #AMU #ReactFlow #GeminiAPI #Hackathon
+#Bluprnt #AMUHACKS4.0 #CSSAMU #AMU #ReactFlow #GeminiAPI
  
