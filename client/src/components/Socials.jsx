@@ -14,7 +14,7 @@ function Socials({ className }) {
                 <a href="https://www.linkedin.com/in/m-tabishk/" target="_blank"><Linkedin /></a>
             </Avatar>
             <Avatar className={`${avatarClass}`}>
-                <a href="https://github.com/m-tabish/buildflow" target="_blank"><Github /></a>
+                <a href="https://github.com/m-tabish/bluprnt" target="_blank"><Github /></a>
 
             </Avatar>
             <Avatar className={`${avatarClass}`}>
