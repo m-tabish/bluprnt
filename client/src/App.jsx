@@ -106,7 +106,7 @@ function App() {
   return (
     <div className={`h-screen  bg-cover bg-fixed  bg-center m-auto bg-black/10 text-white overflow-none  shadow-none  bg-no-repeat  overflow-x-hidden`}>
       <Analytics />
-      {/* <Socials className={'absolute top-1/3 bg-white rounded-sm'} /> */}
+      <Socials className={'absolute top-1/3 bg-white rounded-sm'} />
       <p className="text-center  text-blue-800 ">NOTE:Since the backend is hosted on a free tier on Render, it takes <span className="font-black text-blue-900">50 seconds</span> for the server to start.</p>
 
       <div className="fixed -z-20 inset-0 bg-cover bg-center " style={{ backgroundImage: `url(${bg})`, backgroundBlendMode: 'hard-light', opacity: "90%" }}>

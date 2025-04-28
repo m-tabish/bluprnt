@@ -1,20 +1,17 @@
-# 🚀 Bluprnt  
-### **🏆Built for AMU Hacks 4.0 by Team Heckers**  
-### **🤝Team Members: Mohd Tabish Khan, Abhay Singh, Pratham Mohan and Aayushmaan Saxena**
-# Visit  [🔹BluPrnt🔹](https://www.bluprnt.tech/)
-### Backend hosted on Render:  [https://heckers-amuhacks4-0.onrender.com](https://heckers-amuhacks4-0.onrender.com)
+# 🚀 Bluprnt   
+# Visit  [🔹BluPrnt🔹](https://www.bluprnt.tech/) 
 
 
 
 
 ## Project Overview   
-Bluprnt is a web application designed for **AMU Hacks 4.0** that leverages the power of the [Gemini API](https://gemini.com) to generate structured JSON responses, which are dynamically rendered as interactive flowcharts on the frontend using [React Flow](https://reactflow.dev/). The platform is an AI-powered solution aimed at simplifying project planning and execution for developers, innovators, and teams. Users input their project name, description, and tech stack, and Bluprnt generates a detailed, interactive roadmap in the form of a visual flowchart. It also provides curated resources, source code examples, and study materials to accelerate learning and development. By addressing challenges like unclear project direction, steep learning curves for new tech stacks, and time-consuming manual planning, Bluprnt enables users to focus on building while the system handles the blueprint. Whether visualizing processes, creating learning roadmaps, or mapping system workflows, Bluprnt makes project planning intuitive, efficient, and visually engaging.
+Bluprnt is a web applicationthat leverages the power of the [Gemini API](https://gemini.com) to generate structured JSON responses, which are dynamically rendered as interactive flowcharts on the frontend using [React Flow](https://reactflow.dev/). The platform is an AI-powered solution aimed at simplifying project planning and execution for developers, innovators, and teams. Users input their project name, description, and tech stack, and Bluprnt generates a detailed, interactive roadmap in the form of a visual flowchart. It also provides curated resources, source code examples, and study materials to accelerate learning and development. By addressing challenges like unclear project direction, steep learning curves for new tech stacks, and time-consuming manual planning, Bluprnt enables users to focus on building while the system handles the blueprint. Whether visualizing processes, creating learning roadmaps, or mapping system workflows, Bluprnt makes project planning intuitive, efficient, and visually engaging.
 ---
 
 ## Installation 🛠️  
 
 ### Prerequisites  
-
+v
 Ensure the following are installed before proceeding:  
 - **Node.js**: [Download here](https://nodejs.org/)  
 - **npm**: Comes bundled with Node.js  
@@ -141,7 +138,4 @@ Feel free to fork the repo and submit a PR. Contributions are highly appreciated
 For questions, reach out at [mohdtabishkhan001@gmail.com](#)
 
 ---
-
-### 🔖 Hashtags  
-#Bluprnt #AMUHACKS4.0 #CSSAMU #AMU #ReactFlow #GeminiAPI
  
