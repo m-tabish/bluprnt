@@ -1,24 +1,30 @@
 /* eslint-disable no-unused-vars */
 import { Analytics } from "@vercel/analytics/react";
 import axios from "axios";
-import countapi from "countapi-js";
-import { ArrowDown, Loader2, SquareArrowOutUpRight } from "lucide-react";
+
+import { ArrowDown, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 import bg from "./assets/2.jpg";
 import logo from "./assets/logo.png";
 import AllProjects from "./components/AllProjects";
 import Socials from "./components/Socials";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
-import { Textarea } from "./components/ui/textarea";
-import { addProject } from "./slices/projectSlice";
 
+import NavigationBar from "./components/NavigationMenu";
+import { Textarea } from "./components/ui/textarea";
+import { useAuth } from "./firebase/authContext";
+import { addProject } from "./slices/projectSlice";
 function App() {
+
+ 
+  const { userLoggedIn } = useAuth();
   async function call_backend() {
     try {
       const resp = await axios.get(`${serverURL}/projects`)
-      console.log('backend hit', resp.data);
+      // console.log('backend hit', resp.data);
     }
     catch (e) {
       console.log(e)
@@ -98,27 +104,27 @@ function App() {
   };
 
 
-  countapi.visits('global').then((result) => {
-    console.log(result.value);
-  });
-
-
+  if (!userLoggedIn) return (<Navigate to={'/login'} replace={true} />)
   return (
-    <div className={`h-screen  bg-cover bg-fixed  bg-center m-auto bg-black/10 text-white overflow-none  shadow-none  bg-no-repeat  overflow-x-hidden`}>
+
+    <div className={`h-screen  bg-cover bg-fixed  bg-center m-auto bg-black/10 text-white overflow-none  shadow-none  bg-no-repeat  overflow-x-hidden items-center flex flex-col`}>
+      <NavigationBar />
       <Analytics />
-      <Socials className={'absolute top-1/3 bg-white rounded-sm'} />
-      <p className="text-center  text-blue-800 ">NOTE:Since the backend is hosted on a free tier on Render, it takes <span className="font-black text-blue-900">50 seconds</span> for the server to start.</p>
+      <p className="text-center  text-blue-800 ">NOTE: Since the backend is hosted on a free tier on Render, it takes <span className="font-black text-blue-900">50 seconds</span> for the server to start.</p>
+
 
       <div className="fixed -z-20 inset-0 bg-cover bg-center " style={{ backgroundImage: `url(${bg})`, backgroundBlendMode: 'hard-light', opacity: "90%" }}>
+        <Socials className={'absolute top-1/3 bg-white rounded-sm'} />
       </div>
       <div className='h-screen flex flex-col  min-w-screen justify-center items-center overflow-visible overscroll-contain'>
         <div className="flex flex-col gap-3 scroll-my-0">
+
           <div className='text-center flex flex-col  text-black   tracking-wider mb-10 flex-wrap  items-center'>
-            <div className="hover:underline  text-transparent h-24 mx-auto bg-center  font-extrabold  justify-end w-3/4 flex items-center gap-10 z-10 text-3xl "   target="_blank" rel="noopener noreferrer " style={{ backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }}>
-             
+            <div className="hover:underline  text-transparent h-24 mx-auto bg-center  font-extrabold  justify-end w-3/4 flex items-center gap-10 z-10 text-3xl " target="_blank" rel="noopener noreferrer " style={{ backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }}>
+
             </div>
             <div className="text-2xl font-semibold  text-white">Generate a Roadmap for your next project.</div>
-            <div className="text-base font-semibold  text-white/60">Scroll down to see latest roadmaps <ArrowDown size={"1em"}  className=" inline animate-bounce" />
+            <div className="text-base font-semibold  text-white/60">Scroll down to see latest roadmaps <ArrowDown size={"1em"} className=" inline animate-bounce" />
             </div>
           </div>
 
