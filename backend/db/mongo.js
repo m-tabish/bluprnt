@@ -15,11 +15,11 @@ const projectSchema = new mongoose.Schema({
 
   technologies: {
     type: [String],
-    required: true
+    required: true,
   },
   projectDescription: {
     type: String,
-    required: true
+    required: true,
   },
   language: {
     type: String,
@@ -27,11 +27,33 @@ const projectSchema = new mongoose.Schema({
   },
   steps: {
     type: Object,
-    required: true
+    required: true,
   },
 
 });
 
-const Project = mongoose.model('Project', projectSchema);
 
-module.exports = { Project };
+const waitlistSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+  },
+
+  email: {
+    type: String,
+    required: true,
+  },
+  twitterHandle: {
+    type: String,
+    required: false,
+  },
+  pay: {
+    type: Boolean,
+    required: false,
+  },
+});
+
+const Project = mongoose.model('Project', projectSchema);
+const Waitlist = mongoose.model("Waitlist", waitlistSchema);
+
+module.exports = { Project, Waitlist };
