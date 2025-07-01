@@ -1,27 +1,42 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const PORT = 3000;
 const { generateContent } = require("./gemini/index");
-const { Project } = require("./db/mongo");
+const { Project, Waitlist } = require("./db/mongo");
 const e = require("cors");
+
+require('dotenv').config();
+const PORT = process.env.PORT || 3000;
+
+
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json({ limit: '10mb' })); // Adjust '10mb' as needed
-require('dotenv').config();
 
 app.get("/", (req, res) => {
     console.log("home");
-    res.send("hello ");
+    res.send("Server running");
 });
 
 app.get('/api', (req, res) => {
     res.json({ message: 'CORS is enabled for all origins!' });
 });
 
+//------------------------------Waitlist Users-----------------------------------------//
+
+app.post("/newUser", async (req, res) => {
+    try {
+        const userDetails = req.body;
+
+        const waitlist = await Waitlist.create({ ...userDetails })
+        res.status(201).json(waitlist);
+    } catch (error) {
+        res.status(500).send({ msg: "Error in user in waitlist: \n", error })
+    }
+})
 
 //------------------------------GenAI API-----------------------------------------//
 
@@ -102,6 +117,6 @@ app.delete('/delete-project/:id', async (req, res) => {
 //---------------------------------LISTEN---------------------------------------//
 
 app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
+    console.log(`Server started on port ${PORT} `);
 });
 // module.exports = app;
