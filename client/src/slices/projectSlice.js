@@ -8,7 +8,7 @@ const initialState = {
         language: ""
     },
     viewProject: "ID 12345",
-    serverURL: "https://heckers-amuhacks4-0.onrender.com"
+    serverURL: import.meta.env.VITE_SERVER_URL,
     // serverURL: "http://localhost:3000"
 
 
