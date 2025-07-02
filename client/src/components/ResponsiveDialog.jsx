@@ -26,7 +26,7 @@ function ResponsiveDialog() {
     const [submitted, setSubmitted] = useState(false);
 
     const serverURL = useSelector(state => state.serverURL)
-    console.log(serverURL);
+    // console.log(serverURL);
 
     const submitDetails = async (user) => {
         try {
