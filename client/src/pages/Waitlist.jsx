@@ -36,7 +36,7 @@ function Waitlist() {
 
       {/* new members which joined wishlist */}
       <div className="bg-[#ffffff20] rounded-full px-2 w-auto mt-3">
-        <span className="text-white text-sm lg:text-lg opacity-100 text-center">@tabish has joined the waitlist 🔥</span>
+        {/* <span className="text-white text-sm lg:text-lg opacity-100 text-center">@tabish has joined the waitlist 🔥</span> */}
       </div>
  
       <Ticker />
