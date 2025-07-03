@@ -20,7 +20,7 @@ function Waitlist() {
           <span className="text-primary relative inline-block">
             <img
               src={brush}
-              alt="brush stroke"
+              alt="brush stroke "
               className="absolute w-full lg:h-[50px] h-full object-cover -z-10 opacity-100"
             />
             <span className="relative px-2"> in Minutes</span>
