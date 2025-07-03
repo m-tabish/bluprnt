@@ -17,13 +17,13 @@ import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 
-function ResponsiveDialog() {
+function ResponsiveDialog({ submit, setSubmit }) {
 
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('')
     const [twitterHandle, setTwitterHandle] = useState('')
     const [user, setUser] = useState("");
-    const [submitted, setSubmitted] = useState(false);
+    const [submitted, setSubmitted] = useState(submit);
 
     const serverURL = useSelector(state => state.serverURL)
     // console.log(serverURL);
@@ -45,7 +45,7 @@ function ResponsiveDialog() {
                     }
                 )
 
-                if (result) { setSubmitted(true); console.log(result) }
+                if (result) { setSubmit(true); setSubmitted(true); console.log(result) }
             }
         } catch (error) {
             console.error(error)
@@ -73,21 +73,26 @@ function ResponsiveDialog() {
 
     if (submitted) {
         return (
-            <h1 className="text-center text-2xl lg:text-2xl font-bold inline-block text-transparent bg-clip-text bg-gradient-to-r from-orange-200 via-orange-500 to-orange-500">
-                Thanks for joining us! We can&apos;t wait to share something special with you.
-            </h1>)
+            <div className="text-lg text-center flex flex-col  font-marker  items-center justify-center">
+                Thank you for joining the waitlist🩵🩵🩵
+
+
+            </div>
+
+
+        )
     }
 
 
     return (
-        <Drawer className= "flex justify-center items-center">
+        <Drawer className=" border-t-4 border-red flex justify-center items-center">
             <DrawerTrigger className=" w-52 min-h-full  lg:w-64 lg:h-20   text-primary font-marker font-bold border-transparent border-2 text-md bg-white hover:bg-primary hover:border-2 hover:border-blue-600 active:border-white active:border-2 hover:text-white transition-all duration-300">
                 Join the waitlist
             </DrawerTrigger>
 
             <DrawerContent className="mx-auto w-[90%] sm:w-[70%] md:w-[50%] lg:w-1/2 p-4 font-bold">
                 <DrawerHeader>
-                    <DrawerTitle className="font-bold text-center text-2xl font-marker">Kindly enter your email.</DrawerTitle>
+                    <DrawerTitle className="font-bold text-center text-2xl font-marker">Kindly fill this form</DrawerTitle>
                     <DrawerDescription className="font-bold text-center text-md font-jetMono text-red-400">
                         Note: We might reach out for feedback on beta version.
                     </DrawerDescription>
