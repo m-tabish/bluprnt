@@ -80,8 +80,8 @@ function ResponsiveDialog() {
 
 
     return (
-        <Drawer>
-            <DrawerTrigger className="lg:w-48 lg:h-16 w-32 rounded-lg text-primary font-marker font-bold border-transparent border-2 text-md bg-white hover:bg-primary hover:border-2 hover:border-blue-600 active:border-white active:border-2 hover:text-white transition-all duration-300">
+        <Drawer className= "flex justify-center items-center">
+            <DrawerTrigger className=" w-52 min-h-full  lg:w-64 lg:h-20   text-primary font-marker font-bold border-transparent border-2 text-md bg-white hover:bg-primary hover:border-2 hover:border-blue-600 active:border-white active:border-2 hover:text-white transition-all duration-300">
                 Join the waitlist
             </DrawerTrigger>
 
