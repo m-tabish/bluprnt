@@ -1,21 +1,13 @@
 import "@/App.css"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import ResponsiveDialog from "@/components/ResponsiveDialog"
 import { useState } from "react"
 import brush from "../assets/brush.svg"
-import icon1 from "../assets/icon1.png"
-import icon2 from "../assets/icon2.png"
-import icon3 from "../assets/icon3.png"
-import icon4 from "../assets/icon4.png"
-import plus2 from "../assets/plus2.png"
 import logo from "../assets/logo.png"
-import ResponsiveDialog from "@/components/ResponsiveDialog"
 
 function Waitlist() {
   const [submitted, setSubmitted] = useState(false);
- 
- 
+
+
   return (
     <div className='w-screen absolute -z-20 overflow-y-hidden bg-[#0066cc] blueprint-background text-white flex flex-col items-center justify-center pt-36 lg:gap-0 gap-8'>
       <img src={logo} alt="bluprnt logo" className="w-[250px] lg:w-[400px] -mt-36" />
@@ -37,14 +29,14 @@ function Waitlist() {
         <h3 className="text-md lg:text-lg lg:w-2/3  mt-4 text-white opacity-80 font-jetMono text-center mb-8 text-balance">
           Get complete development flowchart and technical roadmap <br className="hidden lg:block" />powered by AI.
         </h3>
-      </div> 
+      </div>
 
 
       {/* button */}
 
       <ResponsiveDialog submit={submitted} setSubmit={setSubmitted}></ResponsiveDialog>
 
-      <p className="absolute bottom-28 opacity-80 text-center">4 users have already joined the waitlist🩵🩵🩵 </p>
+      {/* <p className="absolute bottom-28 opacity-80 text-center font-bold">4 users have already joined the waitlist🩵🩵🩵 </p> */}
 
 
 
