@@ -36,7 +36,7 @@ const projectSchema = new mongoose.Schema({
 const waitlistSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
+    required: false,
   },
 
   email: {
