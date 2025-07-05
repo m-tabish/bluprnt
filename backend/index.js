@@ -45,7 +45,7 @@ app.post("/newUser", async (req, res) => {
         const userDetails = req.body;
         console.log(userDetails);
 
-        const waitlist = await Waitlist.create({ ...userDetails })
+        const waitlist = await Waitlist.create({...userDetails })
         if (!waitlist) {
             throw new Error(error.message || "Failed to create waitlist user");
         }
