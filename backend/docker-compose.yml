@@ -4,10 +4,11 @@ services:
   backend:
     build: .
     ports:
-      - "3000:3000"
+      - "8080:3000"
     volumes:
       - .:/app # Mount your local files into the container
       - /app/node_modules # Avoid overwriting node_modules
     env_file:
       - .env # Load your local .env file
     command: npm run dev # Use nodemon or vite for hot reload
+    container_name: exp
