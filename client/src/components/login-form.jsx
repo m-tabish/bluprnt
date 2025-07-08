@@ -4,11 +4,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { doSignInwithEmailandPassword, doSignInWithGoogle } from "@/firebase/auth"
 import { cn } from "@/lib/utils"
-import { GalleryVerticalEnd } from "lucide-react"
 import { useState } from "react"
 import { Navigate } from "react-router-dom"
+import "../App.css"
+import navlogo from "../assets/navlogo.png"
 import { useAuth } from "../firebase/authContext/index"
-
 export function LoginForm({
   className,
   ...props
@@ -51,35 +51,39 @@ export function LoginForm({
   if (!userLoggedIn) {
     <Navigate to={"/signup"} replace={true} />
   }
+
+
   return (
-    <div className={cn("w-screen h-screen flex flex-col gap-6 justify-center items-center text-blue-500", className)} {...props}>
-      {userLoggedIn && (<Navigate to={"/"} replace={true} />)}
+    <div className={cn("bluprnt-background text-white font-jetMono w-screen h-screen flex flex-col gap-6 justify-center items-center  ", className)} {...props}>
+      {userLoggedIn && (<Navigate to={"/app/dashboard"} replace={true} />)}
 
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2">
-            <a href="#" className="flex flex-col items-center gap-2 font-medium">
-              <div className="flex h-8 w-8 items-center justify-center rounded-md">
-                <GalleryVerticalEnd className="size-6" />
+            <a href="/" className="flex flex-col items-center gap-2 font-medium">
+              <div className="flex w-full h-full p-4 items-center justify-center rounded-2xl gap-3 mb-2 bg-white/30 backdrop-blur-4xl shadow-lg border border-white/20">
+                <img src={navlogo} alt="navlogo" className="scale-125" />
+                <h1 className="font-marker text-white text-2xl flex items-center gap-3">Bluprnt</h1>
               </div>
               <span className="sr-only">Bluprnt.tech</span>
             </a>
-            <h1 className="text-xl font-bold">Welcome to Bluprnt.tech</h1>
+            <h1 className="text-xl font-bold">Welcome to Bluprnt</h1>
             <div className="text-center text-sm">
               Don&apos;t have an account?{" "}
-              <a href="/signup" className="underline underline-offset-4">
+              <a href="/signup" className="underline underline-offset-4 font-bold">
                 Sign up
               </a>
             </div>
           </div>
 
           <div className="flex flex-col gap-6">
-            <div className="grid gap-2">
+            <div className="grid gap-2 ">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="m@example.com"
+                className="text-black"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -92,6 +96,8 @@ export function LoginForm({
                 id="password"
                 type="password"
                 placeholder="Enter your password"
+                className="text-black"
+
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -104,13 +110,13 @@ export function LoginForm({
               </div>
             )}
 
-            <Button type="submit" className="w-full" disabled={isSigningIn}>
+            <Button type="submit" className="w-full bg-primary/90 border-2 border-blue-400 text-white font-extrabold hover:text-white hover:bg-primary hover:border-white hover:border-2 " disabled={isSigningIn}>
               {isSigningIn ? "Signing in..." : "Login"}
             </Button>
           </div>
 
           <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-            <span className="relative z-10 bg-background px-2 text-muted-foreground">
+            <span className="relative z-10 font-bold text-primary bg-background rounded-lg px-2 align-middle">
               Or
             </span>
           </div>
@@ -118,7 +124,7 @@ export function LoginForm({
           <div className="grid gap-4 sm:grid-cols-1">
             <Button
               variant="outline"
-              className="w-full"
+              className="w-full text-white bg-[#ea4236]"
               onClick={onGoogleSignIn}
               disabled={isSigningIn}
               type="button"
@@ -134,9 +140,14 @@ export function LoginForm({
         </div>
       </form>
 
-      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
+      <div className="text-balance text-center p-1 text-xs text-white text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary  ">
+        By clicking continue, you agree to our <a href="#">Terms of Service</a>
         and <a href="#">Privacy Policy</a>.
+      </div>
+
+      <div className="text-center"><b>Test</b>
+        <p>mohdtabishkhan001@gmail.com</p>
+        <p>123456</p>
       </div>
     </div>
   );
