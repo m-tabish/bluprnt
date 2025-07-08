@@ -1,13 +1,12 @@
-/* eslint-disable react/prop-types */
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "./button";
+import { cn } from "@/lib/utils";
+
 const Textarea = React.forwardRef(({ className, ...props }, ref) => {
   return (
     (<textarea
       className={cn(
-        "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base  placeholder:text-muted-foreground focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
         className
       )}
       ref={ref}
@@ -16,13 +15,5 @@ const Textarea = React.forwardRef(({ className, ...props }, ref) => {
 })
 Textarea.displayName = "Textarea"
 
-function TextareaWithButton() {
-  return (
-    <div className="grid w-full gap-2">
-      <Textarea placeholder="Type your message here." />
-      <Button>Send message</Button>
-    </div>
-  )
-}
+export { Textarea };
 
-export { TextareaWithButton , Textarea}

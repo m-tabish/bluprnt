@@ -20,7 +20,7 @@ export default function Error404() {
             </div>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Button asChild>
-                    <NavLink to="/app">
+                    <NavLink to="/">
                         <Home className="mr-2 h-4 w-4" />
                         Back to Home
                     </NavLink>

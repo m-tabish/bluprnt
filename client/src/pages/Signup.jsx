@@ -4,11 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { doSignInWithGoogle, handleSignUp } from "@/firebase/auth";
 import { cn } from "@/lib/utils";
-import { GalleryVerticalEnd, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import "../App.css";
+import navlogo from "../assets/navlogo.png";
 import { useAuth } from "../firebase/authContext/index";
-
 export default function Signup({ className, ...props }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -93,18 +94,20 @@ export default function Signup({ className, ...props }) {
     }
 
     return (
-        <div className={cn("w-screen h-screen flex flex-col gap-6 justify-center items-center text-blue-500", className)} {...props}>
+        <div className={cn("bluprnt-background w-screen h-screen flex flex-col gap-8 justify-center items-center font-jetMono text-white ", className)} {...props}>
             {userLoggedIn && (<Navigate to={"/"} replace={true} />)}
 
             <form onSubmit={handleSubmit}>
-                <div className="flex flex-col gap-6">
-                    <div className="flex flex-col items-center gap-2">
-                        <a href="#" className="flex flex-col items-center gap-2 font-medium">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-md">
-                                <GalleryVerticalEnd className="size-6" />
+                <div className="flex flex-col gap-6 ">
+                    <div className="flex flex-col items-center gap-2 ">
+                        <a href="/" className="flex flex-col items-center gap-2 font-medium">
+                            <div className="flex w-full h-full p-4 items-center justify-center rounded-2xl gap-3 mb-2 bg-white/30 backdrop-blur-4xl shadow-lg border border-white/20">
+                                <img src={navlogo} alt="navlogo" className="scale-125" />
+                                <h1 className="font-marker text-white text-2xl flex items-center gap-3">Bluprnt</h1>
                             </div>
                             <span className="sr-only">Bluprnt.tech</span>
                         </a>
+
                         <h1 className="text-xl font-bold">Create your account</h1>
                         <div className="text-center text-sm">
                             Already have an account?{" "}
@@ -159,21 +162,21 @@ export default function Signup({ className, ...props }) {
                             </div>
                         )}
 
-                        <Button type="submit" className="w-full" disabled={isSigningUp}>
+                        <Button type="submit" className="w-full bg-primary/90 border-2 border-blue-400 text-white font-extrabold hover:text-white hover:bg-primary hover:border-white hover:border-2 " disabled={isSigningUp}>
                             {isSigningUp ? "Creating account..." : "Create Account"}
                         </Button>
                     </div>
 
                     <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                        <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                        <span className="relative z-10 font-bold text-primary bg-background rounded-lg px-2 align-middle">
                             Or
                         </span>
                     </div>
 
-                    <div className="grid gap-4 sm:grid-cols-1">
+                    <div className="grid gap-4 sm:grid-cols-1 ">
                         <Button
-                            variant="outline"
-                            className="w-full"
+                            variant="outline" className="w-full text-white bg-[#ea4236]"
+
                             onClick={onGoogleSignIn}
                             disabled={isSigningUp}
                             type="button"
@@ -188,8 +191,8 @@ export default function Signup({ className, ...props }) {
                     </div>
                 </div>
             </form>
-           
-            <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary ">
+
+            <div className="text-balance text-center p-1 text-xs text-white text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary  ">
                 By clicking continue, you agree to our <a href="#">Terms of Service</a>
                 and <a href="#">Privacy Policy</a>.
             </div>
