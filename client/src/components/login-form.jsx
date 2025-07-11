@@ -55,7 +55,7 @@ export function LoginForm({
 
   return (
     <div className={cn("bluprnt-background text-white font-jetMono w-screen h-screen flex flex-col gap-6 justify-center items-center  ", className)} {...props}>
-      {userLoggedIn && (<Navigate to={"/app/dashboard"} replace={true} />)}
+      {userLoggedIn && (<Navigate to={"/app/"} replace={true} />)}
 
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-6">

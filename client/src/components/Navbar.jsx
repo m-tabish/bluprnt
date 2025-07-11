@@ -62,7 +62,7 @@ function Navbar() {
     }, [])
 
     return (
-        <div className={`fixed top-2 left-1/2 -translate-x-1/2 w-4/5 ${isMobileMenuOpen ? 'rounded-none' : 'rounded-full'} backdrop-blur-md bg-white/10  border-b border-white/10 shadow-[0px_2px_20px_rgba(256,256,256,0.1)]`}>
+        <div className={`fixed top-2 z-50 left-1/2 -translate-x-1/2 w-4/5 ${isMobileMenuOpen ? 'rounded-none' : 'rounded-full'} backdrop-blur-md bg-white/10  border-b border-white/10 shadow-[0px_2px_20px_rgba(256,256,256,0.1)]`}>
             <div className="px-4 sm:px-6 lg:px-8 w-full  ">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo Section */}
