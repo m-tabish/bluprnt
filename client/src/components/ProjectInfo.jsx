@@ -19,45 +19,36 @@ function ProjectInfo({ project, className }) {
     return (
 
 
-        <Card className={cn(`bg-white/70 max-w-sm my-10 h-96 `, className)}>
-            <CardHeader className="m-0 p-0 flex  justify-center">
-                <CardDescription className="m-0 text-sm  px-2 justify-between pr-3  flex items-center ">
-                    <div className="w-14 h-14 flex items-center gap-2  ">
-                        <img src={userImage} alt="" className="bg-contain h-fit" />
+        <Card className={cn("bg-white/70 max-w-sm my-3 h-96 flex flex-col justify-between rounded-lg", className)}>
+            <CardHeader className="p-2">
+                <CardDescription className="flex justify-between items-center">
+                    <div className="flex items-center gap-2 w-full ">
+                        <img src={userImage} alt="" className="w-10 h-10 object-contain border-black/20 border rounded-full m-2 p-0.5" />
+                        <TypographySmall>{project.createdBy || "User"}</TypographySmall>
                     </div>
-                    <TypographySmall className="text-start p-1"> {project.createdBy || "User"}</TypographySmall>        <TypographySmall className=""> {new Date().toLocaleDateString('en-US')}</TypographySmall>
+                    <TypographySmall className="mr-3">{new Date().toLocaleDateString("en-GB")}</TypographySmall>
                 </CardDescription>
             </CardHeader>
 
-            <CardContent className=" mx-6 p-0 mb-2 ">
-                <div className="h-auto overflow-y-clip flex flex-col  text-sm p-1  ">
-                    {/* 1. Description (always clipped to fit) */}
-
-
-                    {/* 2. Invisible spacer or button */}
-                    {project.projectDescription.length >= 200 ? (
-                        <div className="flex flex-col text-balance ">
-                            <TypographyP>{project.projectDescription.slice(0, 200)}...</TypographyP>
-
-                        </div>
-
+            <CardContent className="flex-1 px-4 overflow-hidden">
+                <div className="text-sm max-h-64 overflow-hidden">
+                    {project.projectDescription.length > 200 ? (
+                        <TypographyP>
+                            {project.projectDescription.slice(0, 200)}...
+                        </TypographyP>
                     ) : (
-                        /* even when there's no button, this empty div
-                           takes up the same space so the card height stays identical */
-                        <TypographyP className="flex flex-col text-balance ">{project.projectDescription} </TypographyP>
+                        <TypographyP>{project.projectDescription}</TypographyP>
                     )}
-
                 </div>
-                <Button variant="link" className="text-sm w-full relative justify-end">
-                    Read More
-                </Button>
             </CardContent>
+            <Button variant="link" className="text-sm w-full text-right mt-2">
+                Read More
+            </Button>
 
-            <CardFooter className="flex bg-white h-1/4    rounded-lg py-2      border-primary text-center">
-                <CardTitle className="flex-1 text-lg font-marker text-balance tracking-wider">{project.projectname
-                }</CardTitle>
-                <Button variant="link" className=" min-h-full p-0 m-0 flex-end    ">
-                    <ArrowRightCircle className="text-amber-500 " style={{ minWidth: "2em", minHeight: "2em" }} />
+            <CardFooter className="bg-white py-2 border-t flex justify-between items-center rounded-lg rounded-t-none">
+                <CardTitle className="text-base font-marker text-center w-full text-balance">{project.projectname}</CardTitle>
+                <Button variant="link" className="p-0  m-0">
+                    <ArrowRightCircle className="text-amber-500  " style={{ minWidth: "2rem", minHeight: "2rem" }} />
                 </Button>
             </CardFooter>
         </Card>
