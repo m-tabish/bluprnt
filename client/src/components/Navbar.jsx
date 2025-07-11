@@ -9,14 +9,20 @@ import {
 import { doSignOut } from "@/firebase/auth";
 import { useAuth } from "@/firebase/authContext";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import navlogo from "../assets/navlogo.png";
 import { Button } from "./ui/button";
 
+
+
+
+import axios from "axios";
 function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
 
     const options = [
         { label: "Home", href: "/" },
@@ -37,14 +43,34 @@ function Navbar() {
         setIsMobileMenuOpen(false);
     };
 
+
+    const serverURL = useSelector(state => state.serverURL);
+
+    async function getProjects() {
+        try {
+            const projects = await axios.get(`${serverURL}/projects`)
+            if (!projects) throw new Error("No projects found")
+            else return projects.data
+        } catch (error) {
+            console.error("Error ", error)
+        }
+    }
+
+    useEffect(() => {
+        getProjects().then((result) => { console.log(result); })
+
+    }, [])
+
     return (
         <div className={`fixed top-2 left-1/2 -translate-x-1/2 w-4/5 ${isMobileMenuOpen ? 'rounded-none' : 'rounded-full'} backdrop-blur-md bg-white/10  border-b border-white/10 shadow-[0px_2px_20px_rgba(256,256,256,0.1)]`}>
             <div className="px-4 sm:px-6 lg:px-8 w-full  ">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo Section */}
                     <div className="flex items-center gap-2 sm:gap-3">
-                        <img src={navlogo} alt="navlogo" className="w-full" />
-                        <h1 className="font-marker text-white text-xl sm:text-2xl">Bluprnt</h1>
+                        <Button className="bg-transparent " onClick={() => navigate("/")}>
+                            <img src={navlogo} alt="navlogo" className="w-full" />
+                            <h1 className="font-marker text-white text-xl sm:text-2xl">Bluprnt</h1>
+                        </Button>
                     </div>
 
                     {/* Desktop Navigation */}
