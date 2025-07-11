@@ -13,6 +13,7 @@ import Landing from './pages/Landing.jsx'
 import Signup from './pages/Signup.jsx'
 import Waitlist from './pages/Waitlist.jsx'
 import store from './store/store.js'
+import Dashboard from './pages/Dashboard.jsx'
 
 const router = createBrowserRouter(
   [
@@ -49,6 +50,10 @@ const router = createBrowserRouter(
           element: <App />
         },
 
+        {
+          path: "dashboard",
+          element: <Dashboard />
+        },
         {
           path: "map/:id",
           element: <DagreMap />

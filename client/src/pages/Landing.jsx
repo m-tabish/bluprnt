@@ -1,60 +1,60 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import ProjectInfo from '@/components/ProjectInfo';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/firebase/authContext';
+import { setProjects } from '@/slices/projectSlice';
+import axios from 'axios';
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import { Link } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import "../App.css";
 import logo from "../assets/logo.png";
 import peerlist_spotlight from "../assets/peerlist.png";
-function Landing() {
-    const { userLoggedIn } = useAuth();
-    const [bluprnt, setBluprnt] = useState([
-        {
-            createdBy: "tabish",
-            description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-            title: "Matrix",
-            createdOn: "06/07/25"
-        },
-        {
-            createdBy: "tabish",
-            description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-            title: "Matrix",
-            createdOn: "06/07/25"
-        },
-        {
-            createdBy: "tabish",
-            description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-            title: "Matrix",
-            createdOn: "06/07/25"
-        },
-        {
-            createdBy: "alex",
-            description: "TaskFlow is a productivity tool that helps teams manage their workflow efficiently. Built with React, Node.js, and MongoDB.",
-            title: "TaskFlow",
-            createdOn: "05/12/24"
-        },
-        {
-            createdBy: "sara",
-            description: "EcoTrack is an app for tracking and reducing your carbon footprint. Developed using Flutter and Firebase.",
-            title: "EcoTrack",
-            createdOn: "03/22/24"
-        },
-        {
-            createdBy: "john",
-            description: "FitBuddy is a fitness companion app that provides personalized workout plans. Built with Kotlin and AWS.",
-            title: "FitBuddy",
-            createdOn: "01/15/24"
-        }
-    ]);
 
+function Landing() {
+
+
+    const { userLoggedIn } = useAuth();
     const [users, setUsers] = useState(3);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true)
+    const dispatch = useDispatch()
+
+    const serverURL = useSelector(state => state.serverURL);
+    const bluprnts = useSelector(state => state.projects)
+
+
+    const fetchProjects = async () => {
+        try {
+            // const result = await axios.get(`${serverURL}/projects`)
+            const result = await axios.get(`http://localhost:3000/projects`)
+            if (!result) {
+                console.log("No projects found")
+            }
+            // setProjects(result.data);
+            dispatch(setProjects(result.data))
+            console.log(result.data)
+            setLoading(false)
+            console.log(result.data)
+            return result.data;
+        }
+        catch (e) {
+            console.error(e)
+        }
+
+    };
+
+    useEffect(() => {
+        fetchProjects();
+    }, [])
+
+
 
     if (userLoggedIn) return <Navigate to="/app" replace />;
 
@@ -129,7 +129,7 @@ function Landing() {
             </section>
 
             {/* Bluprnt Library */}
-            <BluprntCarousel className="snap-start" bluprnt={bluprnt} />
+            <BluprntCarousel className="snap-start" bluprnts={bluprnts} />
 
             {/* Featured Section */}
             <section className={`snap-start  mt-36   w-full h-screen flex flex-col justify-center items-center  text-white`}>
@@ -201,10 +201,11 @@ export default Landing;
 
 
 
-function BluprntCarousel({ bluprnt, className }) {
+function BluprntCarousel({ bluprnts, className }) {
     const [sliderRef, slider] = useKeenSlider({
         loop: true,
         slides: {
+      
             perView: 1,
             spacing: 15,
         }
@@ -217,13 +218,11 @@ function BluprntCarousel({ bluprnt, className }) {
             </h1>
 
             <div ref={sliderRef} className="keen-slider w-full max-w-2xl mb-8">
-                {bluprnt.map((project, index) => (
-                    <div key={index} className="keen-slider__slide flex justify-center">
+                {bluprnts.map((bluprnt, index) => (
+                    <div key={index} className=" border keen-slider__slide min-w-full flex justify-center">
+
                         <ProjectInfo
-                            createdBy={project.createdBy}
-                            description={project.description}
-                            title={project.title}
-                            createdOn={project.createdOn}
+                            project={bluprnt}
                         />
                     </div>
                 ))}

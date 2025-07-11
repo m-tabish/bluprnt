@@ -1,51 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowDown } from 'lucide-react';
+import axios from 'axios';
+import { ArrowDown, Loader } from 'lucide-react';
+import { useSelector } from 'react-redux';
 import ProjectInfo from './components/ProjectInfo';
+import { useRef } from 'react';
+
+
 export default function App() {
 
   const [user, setUser] = useState({ username: "Anon" });
-  const [projects, setProjects] = useState([{
-    createdBy: "tabish",
-    description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-    title: "Matrix",
-    createdOn: "06/07/25"
-  }, {
-    createdBy: "tabish",
-    description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-    title: "Matrix",
-    createdOn: "06/07/25"
-  }, {
-    createdBy: "tabish",
-    description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-    title: "Matrix",
-    createdOn: "06/07/25"
-  }, {
-    createdBy: "tabish",
-    description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-    title: "Matrix",
-    createdOn: "06/07/25"
-  }, {
-    createdBy: "tabish",
-    description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-    title: "Matrix",
-    createdOn: "06/07/25"
-  }, {
-    createdBy: "tabish",
-    description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-    title: "Matrix",
-    createdOn: "06/07/25"
-  }, {
-    createdBy: "tabish",
-    description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-    title: "Matrix",
-    createdOn: "06/07/25"
-  }])
+  const [projects, setProjects] = useState([])
+  const [loading, setLoading] = useState(true)
+  const serverURL = useSelector(state => state.serverURL)
+  console.log(serverURL)
 
 
+  const fetchProjects = async () => {
+    try {
+
+      // const result = await axios.get(`${serverURL}/projects`)
+      const result = await axios.get(`http://localhost:3000/projects`)
+      if (!result) {
+        console.log("No projects found")
+      }
+      setProjects(result.data);
+      setLoading(false)
+      console.log(result.data)
+      return result.data;
+    }
+    catch (e) {
+      console.error(e)
+    }
+
+  };
+  useEffect(() => {
+    fetchProjects();
+  }, [serverURL])
 
 
   return (
@@ -58,28 +52,28 @@ export default function App() {
           onInput={(e) => {
             e.target.style.height = 'auto';
             e.target.style.height = e.target.scrollHeight + 'px';
-            }}
-          />
-          <Button
-            className="text-lg sm:text-xl self-center lg:text-2xl p-3 sm:p-4 w-fit mx-auto lg:mx-0 h-auto font-marker   shadow-[12px_19px_30px_-13px_rgba(0,_0,_0,_0.3)] border-2 hover:border-white hover:border-2 hover:text-white  rounded-[40px] active:border-black backdrop-blur-xs bg-white/20 hover:bg-white/20 border-white/20 mt-4 lg:mt-8"
-          >
-            Generate
-          </Button>
+          }}
+        />
+        <Button
+          className="text-lg sm:text-xl self-center lg:text-2xl p-3 sm:p-4 w-fit mx-auto lg:mx-0 h-auto font-marker   shadow-[12px_19px_30px_-13px_rgba(0,_0,_0,_0.3)] border-2 hover:border-white hover:border-2 hover:text-white  rounded-[40px] active:border-black backdrop-blur-xs bg-white/20 hover:bg-white/20 border-white/20 mt-4 lg:mt-8"
+        >
+          Generate
+        </Button>
 
-          <div className='mt-14 text-lg font-jetMono flex flex-col items-center'>
-            or scroll to explore
-            <ArrowDown className='transition-all animate-bounce mt-2' />
-          </div>
-          </section>
-          {/* ______________________________________________- */}
-
-      {/* Explore */}
-      <section className='  flex flex-col items-center  w-screen h-screen gap-10'>
-        <h1 className='mt-14 text-5xl font-marker '>Explore</h1>
-        <div className=" grid grid-cols-1 w-3/5 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {projects.map((project, index) => (<div className='w-full h-full' key={index}><ProjectInfo title={project.title} description={project.description} createdBy={project.createdBy} createdOn={project.createdOn} /></div>))}
+        <div className='mt-14 text-lg font-jetMono flex flex-col items-center'>
+          or scroll to explore
+          <ArrowDown className='transition-all animate-bounce mt-2' />
         </div>
       </section>
+      {/* ______________________________________________- */}
+
+      {/* Explore */}
+      {loading === true ? <Loader className='w-full ' size={30}>Loading</Loader> : <section className='  flex flex-col items-center  w-screen h-screen gap-10'>
+        <h1 className='mt-14 text-5xl font-marker '>Explore</h1>
+        <div className=" grid grid-cols-1 w-3/5 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {projects?.map((project, index) => (<div className='w-full h-full' key={index}><ProjectInfo project={project}  /></div>))}
+        </div>
+      </section>}
 
     </div >
   );
