@@ -3,10 +3,11 @@ const cors = require("cors");
 const app = express();
 const { generateContent } = require("./gemini/index");
 const { Project, Waitlist } = require("./db/mongo");
-const e = require("cors");
+
+
 // const morgan = require('morgan');
 // const rateLimit = require('express-rate-limit');
- 
+
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
@@ -21,11 +22,8 @@ const PORT = process.env.PORT || 3000;
 // });
 // app.use(limiter);
 
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(cors());
+
 
 app.use(express.json({ limit: '10mb' })); // Adjust '10mb' as needed
 
@@ -45,7 +43,7 @@ app.post("/newUser", async (req, res) => {
         const userDetails = req.body;
         console.log(userDetails);
 
-        const waitlist = await Waitlist.create({...userDetails })
+        const waitlist = await Waitlist.create({ ...userDetails })
         if (!waitlist) {
             throw new Error(error.message || "Failed to create waitlist user");
         }
@@ -85,8 +83,12 @@ app.post("/create-project", async (req, res) => {
 
 app.get("/projects", async (req, res) => {
     try {
-
         const projects = await Project.find({})
+        if (!projects) {
+
+            throw new Error("Could not fetch projects")
+        }
+
         res.send(projects)
     }
     catch (e) {
