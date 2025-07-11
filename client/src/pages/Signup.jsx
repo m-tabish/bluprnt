@@ -95,7 +95,7 @@ export default function Signup({ className, ...props }) {
 
     return (
         <div className={cn("bluprnt-background w-screen h-screen flex flex-col gap-8 justify-center items-center font-jetMono text-white ", className)} {...props}>
-            {userLoggedIn && (<Navigate to={"/"} replace={true} />)}
+            {userLoggedIn && (<Navigate to={"/app"} replace={true} />)}
 
             <form onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-6 ">
