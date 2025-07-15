@@ -85,7 +85,6 @@ app.get("/projects", async (req, res) => {
     try {
         const projects = await Project.find({})
         if (!projects) {
-
             throw new Error("Could not fetch projects")
         }
 

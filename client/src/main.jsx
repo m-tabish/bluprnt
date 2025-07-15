@@ -3,18 +3,17 @@ import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App.jsx'
-import DagreMap from "./components/Dagre-Map.jsx"
 import { LoginForm } from './components/login-form.jsx'
 import ProtectedLayout from './components/ProtectedLayout.jsx'
 import { AuthProvider } from './firebase/authContext/index.jsx'
 import './index.css'
+import Dashboard from './pages/Dashboard.jsx'
 import Error404 from './pages/Error404.jsx'
 import Landing from './pages/Landing.jsx'
+import ShowMap from './pages/ShowMap.jsx'
 import Signup from './pages/Signup.jsx'
 import Waitlist from './pages/Waitlist.jsx'
 import store from './store/store.js'
-import Dashboard from './pages/Dashboard.jsx'
-
 const router = createBrowserRouter(
   [
 
@@ -54,9 +53,13 @@ const router = createBrowserRouter(
           path: "dashboard",
           element: <Dashboard />
         },
+        // {
+        //   path: "map/:id",
+        //   element: <DagreMap/>
+        // },
         {
           path: "map/:id",
-          element: <DagreMap />
+          element: <ShowMap />
         }
       ]
     },
