@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { useState } from "react"
 import brush from "../assets/brush.svg"
 import logo from "../assets/logo.png"
+
 function Waitlist() {
   const [submitted, setSubmitted] = useState(false);
   usePageTracking()
