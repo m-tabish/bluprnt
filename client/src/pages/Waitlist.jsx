@@ -1,15 +1,16 @@
 import "@/App.css"
+import { usePageTracking } from "@/components/GoogleAnalytics"
 import ResponsiveDialog from "@/components/ResponsiveDialog"
+import { Analytics } from "@vercel/analytics/react"
 import { useState } from "react"
 import brush from "../assets/brush.svg"
 import logo from "../assets/logo.png"
-
 function Waitlist() {
   const [submitted, setSubmitted] = useState(false);
-
+  usePageTracking()
 
   return (
-    <div className='w-screen absolute -z-20 overflow-y-hidden bg-[#0066cc] blueprint-background text-white flex flex-col items-center justify-center pt-36 lg:gap-0 gap-8'>
+    <div className='w-screen absolute -z-20 overflow-y-hidden bg-[#0066cc] blueprint-background text-white flex flex-col items-center justify-center pt-36 lg:gap-0 gap-8'>     <Analytics />
       <img src={logo} alt="bluprnt logo" className="w-[250px] lg:w-[400px] -mt-36" />
 
       {/*text  */}
