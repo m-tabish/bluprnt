@@ -12,4 +12,3 @@ export function usePageTracking() {
         ReactGA.send({ hitType: "pageview", page: location.pathname });
     }, [location]);
 }
-

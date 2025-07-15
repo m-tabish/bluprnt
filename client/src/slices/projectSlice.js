@@ -8,7 +8,7 @@ const initialState = {
         language: ""
     },
 
-    projects: [],
+    bluprnts: [],
 
     viewProject: "ID 12345",
     // serverURL: import.meta.env.VITE_SERVER_URL,
@@ -28,7 +28,7 @@ const projectSlice = createSlice({
             state.userInput.language = action.payload.language;
         },
 
-        setProjects: (state, action) => { state.projects = action.payload },
+        storeBluprnts: (state, action) => { state.bluprnts = action.payload },
 
         addProjectToList: (state, action) => { state.projects.push(action.payload) },
         viewProject: (state, action) => {
@@ -40,5 +40,5 @@ const projectSlice = createSlice({
     }
 });
 
-export const { addProject, viewProject, colorModeGlobal, addProjectToList, setProjects } = projectSlice.actions;
+export const { addProject, viewProject, colorModeGlobal, addProjectToList, storeBluprnts } = projectSlice.actions;
 export default projectSlice.reducer;

@@ -9,13 +9,13 @@ import {
 } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { ArrowRightCircle } from "lucide-react"
+import "../App.css"
 import userImage from '../assets/navlogo.png'
 import { Button } from "./ui/button"
 import { TypographyP, TypographySmall } from "./ui/typography"
-
-
+import { useNavigate } from "react-router-dom"
 function ProjectInfo({ project, className }) {
-
+    const navigate = useNavigate();
     return (
 
 
@@ -31,14 +31,15 @@ function ProjectInfo({ project, className }) {
             </CardHeader>
 
             <CardContent className="flex-1 px-4 overflow-hidden">
-                <div className="text-sm max-h-64 overflow-hidden">
-                    {project.projectDescription.length > 200 ? (
+                <div className="text-sm max-h-64 overflow-y-scroll scroll-container"  >
+                    {/* {project.projectDescription.length > 200 ? (
                         <TypographyP>
                             {project.projectDescription.slice(0, 200)}...
                         </TypographyP>
                     ) : (
                         <TypographyP>{project.projectDescription}</TypographyP>
-                    )}
+                    )} */}
+                    <TypographyP>{project.projectDescription}</TypographyP>
                 </div>
             </CardContent>
             <Button variant="link" className="text-sm w-full text-right mt-2">
@@ -47,7 +48,7 @@ function ProjectInfo({ project, className }) {
 
             <CardFooter className="bg-white py-2 border-t flex justify-between items-center rounded-lg rounded-t-none">
                 <CardTitle className="text-base font-marker text-center w-full text-balance">{project.projectname}</CardTitle>
-                <Button variant="link" className="p-0  m-0">
+                <Button variant="link" className="p-0  m-0" onClick={() => navigate(`map/${project._id}`)}>
                     <ArrowRightCircle className="text-amber-500  " style={{ minWidth: "2rem", minHeight: "2rem" }} />
                 </Button>
             </CardFooter>

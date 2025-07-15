@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import ProjectInfo from '@/components/ProjectInfo';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/firebase/authContext';
-import { setProjects } from '@/slices/projectSlice';
+import { storeBluprnts } from '@/slices/projectSlice';
 import axios from 'axios';
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
@@ -32,7 +32,7 @@ function Landing() {
         const fetchProjects = async () => {
             try {
                 const result = await axios.get(`${serverURL}/projects`);
-                dispatch(setProjects(result.data))
+                dispatch(storeBluprnts(result.data))
                 setBluprnts(result.data.slice(0, 5))
                 setLoading(false)
             } catch (error) {
