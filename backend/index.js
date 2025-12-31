@@ -5,22 +5,9 @@ const { generateContent } = require("./gemini/index");
 const { Project, Waitlist } = require("./db/mongo");
 
 
-// const morgan = require('morgan');
-// const rateLimit = require('express-rate-limit');
-
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
-// // Logging middleware
-// app.use(morgan('dev'));
-
-// // Rate Limiting middleware
-// const limiter = rateLimit({
-//     windowMs: 1 * 60 * 1000, // 1 minute window
-//     max: 10, // limit each IP to 10 requests per minute
-//     message: 'Too many requests, please try again later.',
-// });
-// app.use(limiter);
 
 app.use(cors());
 
