@@ -1,5 +1,5 @@
 require('dotenv').config();
-async function callLLM() => {
+const callLLM = async () => {
     const result = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -22,4 +22,4 @@ async function callLLM() => {
     const content = response?.choices?.[0]?.message?.content;
     console.log(JSON.stringify(content));
 
-}  
+} 

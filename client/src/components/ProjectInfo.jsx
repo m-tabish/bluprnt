@@ -14,6 +14,8 @@ import userImage from '../assets/navlogo.png'
 import { Button } from "./ui/button"
 import { TypographyP, TypographySmall } from "./ui/typography"
 import { useNavigate } from "react-router-dom"
+
+
 function ProjectInfo({ project, className }) {
     const navigate = useNavigate();
     return (
@@ -23,28 +25,20 @@ function ProjectInfo({ project, className }) {
             <CardHeader className="p-2">
                 <CardDescription className="flex justify-between items-center">
                     <div className="flex items-center gap-2 w-full ">
-                        <img src={userImage} alt="" className="w-10 h-10 object-contain border-black/20 border rounded-full m-2 p-0.5" />
+                        <img src={userImage} alt="" className="w-10 h-10 object-contain  rounded-full m-2 p-0.5" />
                         <TypographySmall>{project.createdBy || "User"}</TypographySmall>
                     </div>
-                    <TypographySmall className="mr-3">{new Date().toLocaleDateString("en-GB")}</TypographySmall>
+                    <TypographySmall className="mr-3">{""}</TypographySmall>
                 </CardDescription>
             </CardHeader>
 
             <CardContent className="flex-1 px-4 overflow-hidden">
                 <div className="text-sm max-h-64 overflow-y-scroll scroll-container"  >
-                    {/* {project.projectDescription.length > 200 ? (
-                        <TypographyP>
-                            {project.projectDescription.slice(0, 200)}...
-                        </TypographyP>
-                    ) : (
-                        <TypographyP>{project.projectDescription}</TypographyP>
-                    )} */}
+                    
                     <TypographyP>{project.projectDescription}</TypographyP>
                 </div>
             </CardContent>
-            <Button variant="link" className="text-sm w-full text-right mt-2">
-                Read More
-            </Button>
+            
 
             <CardFooter className="bg-white py-2 border-t flex justify-between items-center rounded-lg rounded-t-none">
                 <CardTitle className="text-base font-marker text-center w-full text-balance">{project.projectname}</CardTitle>

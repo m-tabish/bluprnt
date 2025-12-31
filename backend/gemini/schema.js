@@ -1,4 +1,4 @@
-const schema = {
+cconst schema = {
     description: `short description of the project `,
     type: "object",
     properties: {
