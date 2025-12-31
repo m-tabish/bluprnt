@@ -114,7 +114,7 @@ Follow these guidelines when generating the roadmap:
 `
 
   let model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash",
+    model: "models/gemini-flash-latest",
     generationConfig: { responseMimeType: "application/json", maxOutputTokens: 20000 }
   });
 
