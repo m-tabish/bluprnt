@@ -78,7 +78,7 @@ app.get("/projects", async (req, res) => {
         res.send(projects)
     }
     catch (e) {
-        res.status(500).send({ msg: e })
+        res.status(500).send({ projects: projects })
     }
 })
 
