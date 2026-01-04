@@ -56,22 +56,31 @@ export default function CustomNode({ data }) {
                     <DialogContent className="max-h-1/2 max-w-2xl ">
                         <DialogHeader>
                             <DialogTitle>Resources</DialogTitle>
-                            <DialogDescription className="max-w-4xl whitespace-pre-wrap  break-words">
-                                {parsedData.resources.length !== 0 ? (
-                                    <a className="text-blue-600 whitespace-pre-wrap underline underline-offset-1 " target="_blank" href={`${parsedData.resources}`}>
-                                        {JSON.stringify(parsedData.resources).slice(0, 50)}...
-                                    </a>
-                                ) : (
-                                    "No resources for this"
-                                )}
-                            </DialogDescription>
+
+                            {parsedData.resources.length !== 0 ? (
+                                <DialogDescription className="max-w-4xl whitespace-pre-wrap  break-words">
+
+                                    {console.log(parsedData.resources)}
+                                    <ul>
+                                        {parsedData.resources.map((res, idx) => (
+                                            <a className="text-blue-600 whitespace-pre-wrap underline underline-offset-1 " target="_blank" href={`${res}`} key={idx}>
+
+                                                {res + "\n"}
+                                            </a>
+                                        ))}
+                                    </ul>
+                                </DialogDescription>
+                            ) : (
+                                "No resources for this"
+                            )}
+
                         </DialogHeader>
                     </DialogContent>
                 </Dialog>
 
                 <Handle type="source" position={Position.Bottom} id="1" />
             </div>
-        </div>
+        </div >
     );
 }
 

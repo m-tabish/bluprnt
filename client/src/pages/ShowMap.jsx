@@ -62,7 +62,6 @@ const getLayoutedElements = (nodes, edges, direction = 'TB') => {
 
 const Map = () => {
     const { id } = useParams()
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -159,7 +158,7 @@ const Map = () => {
 
 export default function ShowMap() {
     return (
-        <ReactFlowProvider initialHeight={1500}>
+        <ReactFlowProvider  >
             <Map />
         </ReactFlowProvider>
     );

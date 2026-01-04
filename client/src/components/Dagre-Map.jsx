@@ -130,7 +130,7 @@ const LayoutFlow = () => {
             >
                 <Background bgColor='#2d66bd' color="#fff" variant={BackgroundVariant.Dots} />
                 <Panel position="top-left" className='text-white'
-                    onClick={() => navigate("/")}>
+                    onClick={() => navigate("/app")}>
                     <Button variant="default" size="icon">
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
