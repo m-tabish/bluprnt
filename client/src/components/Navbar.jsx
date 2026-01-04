@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import { doSignOut } from "@/firebase/auth";
 import { useAuth } from "@/firebase/authContext";
+import { useGithubStars } from "@/hooks/useGithubStars";
+import { ExitIcon, GitHubLogoIcon, StarFilledIcon } from "@radix-ui/react-icons";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -15,9 +17,7 @@ import { useNavigate } from "react-router-dom";
 import "../App.css";
 import navlogo from "../assets/navlogo.png";
 import { Button } from "./ui/button";
-
-
-
+import { NumberTicker } from "./ui/number-ticker";
 
 function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -25,13 +25,16 @@ function Navbar() {
 
     const options = [
         { label: "Home", href: "/" },
-        { label: "Explore", href: "/app/explore" },
-        { label: "Library", href: "/app/library" },
-        { label: "Settings", href: "/app/settings" }
+        { label: "Explore", href: "#" },
+        { label: "Library", href: "#" },
+        { label: "Settings", href: "#" },
     ];
 
     const { userLoggedIn } = useAuth();
+    const serverURL = useSelector(state => state.serverURL);
     const navigate = useNavigate();
+
+    const { stars, error } = useGithubStars(serverURL);
 
     const handleMobileMenuToggle = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -43,8 +46,7 @@ function Navbar() {
     };
 
 
-    const serverURL = useSelector(state => state.serverURL);
-
+    if (error) console.error("Error fetching GitHub stars:", error);
 
 
     return (
@@ -63,8 +65,9 @@ function Navbar() {
                     <div className="hidden md:block">
                         <NavigationMenu>
                             <NavigationMenuList>
-                                {options.map(option => (
-                                    <NavigationMenuItem key={option.href}>
+
+                                {options.map((option, idx) => (
+                                    <NavigationMenuItem key={idx}>
                                         <NavigationMenuTrigger className="text-md font-jetMono bg-transparent text-white hover:text-white/80 data-[active]:bg-white/10 data-[state=open]:bg-white/10">
                                             {option.label}
                                         </NavigationMenuTrigger>
@@ -73,7 +76,9 @@ function Navbar() {
                                                 href={option.href}
                                                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                                             >
+
                                                 {option.label}
+
                                             </NavigationMenuLink>
                                         </NavigationMenuContent>
                                     </NavigationMenuItem>
@@ -82,8 +87,16 @@ function Navbar() {
                         </NavigationMenu>
                     </div>
 
-                    {/* Desktop Auth Buttons */}
+                    {/* right side Buttons */}
                     <div className="hidden md:flex gap-3">
+                        <Button className="bg-transparent  m-auto" onClick={() =>
+                            window.open("https://github.com/m-tabish/bluprnt", "_blank")
+                        }>
+
+                            <GitHubLogoIcon className="w-full h-full " />
+                            <NumberTicker value={stars} className="font-jetMono font-black" />
+                            <StarFilledIcon color="gold" />
+                        </Button>
                         {!userLoggedIn ? (
                             <>
                                 <Button
@@ -96,7 +109,7 @@ function Navbar() {
                                     onClick={() => navigate("/signup")}
                                     className="bg-primary text-white hover:bg-primary/90"
                                 >
-                                    Get Started
+                                    Get Startedf
                                 </Button>
                             </>
                         ) : (
@@ -105,6 +118,7 @@ function Navbar() {
                                 onClick={() => doSignOut()}
                             >
                                 Logout
+                                <ExitIcon />
                             </Button>
                         )}
                     </div>
@@ -124,59 +138,63 @@ function Navbar() {
             </div>
 
             {/* Mobile Menu */}
-            {isMobileMenuOpen && (
-                <div className="lg:hidden bg-white/10 backdrop-blur-md border-t border-white/20">
-                    <div className="px-4 py-2 space-y-1">
-                        {/* Mobile Navigation Links */}
-                        {options.map(option => (
-                            <button
-                                key={option.href}
-                                onClick={() => handleMobileNavigation(option.href)}
-                                className="block w-full text-left px-3 py-2 text-white font-jetMono hover:bg-white/10 rounded-md transition-colors"
-                            >
-                                {option.label}
-                            </button>
-                        ))}
-
-                        {/* Mobile Auth Buttons */}
-                        <div className="pt-4 pb-2 space-y-2">
-                            {!userLoggedIn ? (
-                                <>
-                                    <Button
-                                        className="w-full bg-white text-primary font-bold hover:bg-white/90"
-                                        onClick={() => {
-                                            navigate("/login");
-                                            setIsMobileMenuOpen(false);
-                                        }}
-                                    >
-                                        Login
-                                    </Button>
-                                    <Button
-                                        className="w-full bg-primary text-white hover:bg-primary/90"
-                                        onClick={() => {
-                                            navigate("/signup");
-                                            setIsMobileMenuOpen(false);
-                                        }}
-                                    >
-                                        Get Started
-                                    </Button>
-                                </>
-                            ) : (
-                                <Button
-                                    className="w-full bg-white text-primary font-bold hover:bg-white/90"
-                                    onClick={() => {
-                                        doSignOut();
-                                        setIsMobileMenuOpen(false);
-                                    }}
+            {
+                isMobileMenuOpen && (
+                    <div className="lg:hidden bg-white/10 backdrop-blur-md border-t border-white/20">
+                        <div className="px-4 py-2 space-y-1">
+                            {/* Mobile Navigation Links */}
+                            {options.map(option => (
+                                <button
+                                    key={option.href}
+                                    onClick={() => handleMobileNavigation(option.href)}
+                                    className="block w-full text-left px-3 py-2 text-white font-jetMono hover:bg-white/10 rounded-md transition-colors"
                                 >
-                                    Logout
-                                </Button>
-                            )}
+                                    {option.label}
+                                </button>
+                            ))}
+
+                            {/* Mobile Auth Buttons */}
+                            <div className="pt-4 pb-2 space-y-2">
+                                {!userLoggedIn ? (
+                                    <>
+                                        <Button
+                                            className="w-full bg-white text-primary font-bold hover:bg-white/90"
+                                            onClick={() => {
+                                                navigate("/login");
+                                                setIsMobileMenuOpen(false);
+                                            }}
+                                        >
+                                            <small className="text-sm leading-none font-medium">Logout</small>
+
+                                        </Button>
+                                        <Button
+                                            className="w-full bg-primary text-white hover:bg-primary/90"
+                                            onClick={() => {
+                                                navigate("/signup");
+                                                setIsMobileMenuOpen(false);
+                                            }}
+                                        >
+                                            Get Started
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <Button
+                                        className="w-full bg-white text-primary font-bold hover:bg-white/90 flex "
+                                        onClick={() => {
+                                            doSignOut();
+                                            setIsMobileMenuOpen(false);
+                                        }}
+                                    >
+                                        <small className="text-sm leading-none font-medium">Logout</small>
+
+                                    </Button>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 }
 

@@ -12,7 +12,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import "../App.css";
 import logo from "../assets/logo.png";
 import peerlist_spotlight from "../assets/peerlist.png";
-function Landing() {
+function NewLanding() {
     const { userLoggedIn } = useAuth();
     const [bluprnt, setBluprnt] = useState([
         {
@@ -22,19 +22,19 @@ function Landing() {
             createdOn: "06/07/25"
         },
         {
-            createdBy: "tabish",
+            createdBy: "aron",
             description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
             title: "Matrix",
             createdOn: "06/07/25"
         },
         {
-            createdBy: "tabish",
+            createdBy: "shubham",
             description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
             title: "Matrix",
             createdOn: "06/07/25"
         },
         {
-            createdBy: "alex",
+            createdBy: "alien",
             description: "TaskFlow is a productivity tool that helps teams manage their workflow efficiently. Built with React, Node.js, and MongoDB.",
             title: "TaskFlow",
             createdOn: "05/12/24"
@@ -196,7 +196,7 @@ function Landing() {
     );
 }
 
-export default Landing;
+export default NewLanding;
 
 
 

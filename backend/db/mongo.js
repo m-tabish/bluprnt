@@ -26,9 +26,24 @@ const projectSchema = new mongoose.Schema({
     required: true,
   },
   steps: {
-    type: Object,
-    required: true,
-  },
+    nodes: [
+      {
+        nodeId: String,
+        process: String,
+        description: String,
+        code: String,
+        resources: [String],
+        target: [String]
+      }
+    ],
+    edges: [
+      {
+        source: String,
+        target: String,
+        label: String
+      }
+    ]
+  }
 
 });
 

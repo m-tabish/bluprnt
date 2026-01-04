@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card";
 import { viewProject } from "@/slices/projectSlice";
 import axios from "axios";
-import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +24,7 @@ function AllProjects({ deleteFunction, className, project }) {
 
     function clickedView(id) {
         dispatch(viewProject(id))
-        navigate("/map/" + id)
+        navigate("map/" + id)
     }
 
     useEffect(() => {
@@ -47,7 +46,7 @@ function AllProjects({ deleteFunction, className, project }) {
     }, [deleteId, setDeleteId])
 
     return (
-        <Card className={`${className}  bg-transparent w-screen flex p-4 rounded  outline-none  border-none  `}  >
+        <Card className={`${className}    bg-transparent w-screen flex p-4 rounded  outline-none  border-none   `}  >
             <CardHeader className="w-1/2 text-right flex text-white ">
                 <CardTitle className=" text-lg flex flex-col gap-2 font-semibold  border-none outline-none">{project.projectname}
                     <div className="flex-end  ">

@@ -5,19 +5,19 @@ import { ArrowDown, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import bg from "./assets/2.jpg";
-import logo from "./assets/logo.png";
-import AllProjects from "./components/AllProjects";
-import Socials from "./components/Socials";
-import { Button } from "./components/ui/button";
-import { Input } from "./components/ui/input";
+import bg from "@/assets/2.jpg";
+import logo from "@/assets/logo.png";
+import AllProjects from "../components/AllProjects";
+import Socials from "@/components/Socials";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import { useCreateProject } from "@/hooks/useCreateProject";
 import { useProjects } from "@/hooks/useProjects";
-import NavigationBar from "./components/NavigationMenu";
-import { Textarea } from "./components/ui/textarea";
-import { useAuth } from "./firebase/authContext";
-import { addProject } from "./slices/projectSlice";
+import NavigationBar from "@/components/NavigationMenu";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/firebase/authContext";
+import { addProject } from "@/slices/projectSlice";
 
 
 function App() {
@@ -53,7 +53,6 @@ function App() {
     }
 
 
-    if (!userLoggedIn) return (<Navigate to={'/login'} replace={true} />)
 
     return (
 

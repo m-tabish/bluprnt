@@ -3,14 +3,14 @@ const cors = require("cors");
 const app = express();
 const { generateContent } = require("./gemini/index");
 const { Project, Waitlist } = require("./db/mongo");
-
+const { getRepoStars } = require('./lib/githubStars.js');
 
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
 
 app.use(cors());
-
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json({ limit: '10mb' })); // Adjust '10mb' as needed
 
@@ -48,17 +48,27 @@ app.post("/create-project", async (req, res) => {
         const result = await generateContent(req.body);
 
         // Parse the response
-        const response = JSON.parse(result);
+        let response;
+        try {
 
-        var { projectname, projectDescription, language } = req.body;
+            response = JSON.parse(result);
+
+
+        } catch (error) {
+            res.status(500).join({
+                msg: "Error parsing JSON response from GenAI: " + error.message
+            })
+        }
+
+        let { projectname, projectDescription, language } = req.body;
         const technologies = response.technologies;
-        projectDescription = response.description;
+        const aiDesc = response.description;
         const steps = response.steps;
 
         // console.log(JSON.stringify(response));
 
         // Create the project with all necessary fields
-        const project = await Project.create({ projectname, technologies, projectDescription, language, steps });
+        const project = await Project.create({ projectname, technologies, projectDescription: aiDesc, language, steps });
         res.status(201).json(project);
     } catch (e) {
         res.status(500).send({ msg: "Response not generated server index :" + e });
@@ -120,7 +130,17 @@ app.delete('/delete-project/:id', async (req, res) => {
 });
 
 //---------------------------------LISTEN---------------------------------------//
+app.get("/github-stars", async (req, res) => {
 
+    try {
+        const stars = await getRepoStars();
+
+        res.json({ stars });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+// ______________________________________________________
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT} `);
 });

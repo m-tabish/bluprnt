@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchProjects } from "@/lib/projectService";
 
 export const useProjects = (serverURL, reloadTrigger) => {
-
     const [projects, setProjects] = useState([])
     const [error, setError] = useState(null);
 
