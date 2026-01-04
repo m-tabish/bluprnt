@@ -65,18 +65,21 @@ export default function Signup({ className, ...props }) {
         return (
             <div className={cn("w-screen h-screen flex flex-col gap-6 justify-center items-center text-blue-500", className)} {...props}>
                 <div className="flex flex-col items-center gap-4 max-w-md text-center">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-                        <Mail className="size-8 text-green-600" />
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+                        <Mail className="size-8 text-blue-600" />
                     </div>
                     <h1 className="text-2xl font-bold">Check Your Email</h1>
                     <p className="text-gray-600">
-                        We&apos;ve sent a verification link to <strong>{email}</strong>.
+                        We&apos;ve sent a verification link to <strong>{email}</strong>. <br />
+                        Try checking spam folders too.
+                        <br />
                         Click the link in the email to verify your account.
                     </p>
-                    <div className="flex flex-col gap-2 w-full">
+                    <div className="flex flex-col gap-2 w-full ">
                         <Button
                             onClick={() => window.location.href = '/login'}
-                            className="w-full"
+                            className="w-full bg-primary text-white hover:text-primary hover:bg-white hover:border-primary border"
+                            variant="default  "
                         >
                             Go to Sign In
                         </Button>
@@ -127,6 +130,7 @@ export default function Signup({ className, ...props }) {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                className="text-black"
                             />
                         </div>
 
@@ -138,19 +142,22 @@ export default function Signup({ className, ...props }) {
                                 placeholder="Create a password (min 6 characters)"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                className="text-black"
                                 required
                                 minLength={6}
                             />
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="confirmPassword">Confirm Password</Label>
+                            <Label htmlFor="confirmPassword"
+                            >Confirm Password</Label>
                             <Input
                                 id="confirmPassword"
                                 type="password"
                                 placeholder="Confirm your password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
+                                className="text-black"
                                 required
                                 minLength={6}
                             />
@@ -192,10 +199,7 @@ export default function Signup({ className, ...props }) {
                 </div>
             </form>
 
-            <div className="text-balance text-center p-1 text-xs text-white text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary  ">
-                By clicking continue, you agree to our <a href="#">Terms of Service</a>
-                and <a href="#">Privacy Policy</a>.
-            </div>
+
         </div>
     );
 }

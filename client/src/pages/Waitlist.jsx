@@ -7,9 +7,8 @@ import logo from "../assets/logo.png"
 function Waitlist() {
   const [submitted, setSubmitted] = useState(false);
 
-
   return (
-    <div className='w-screen absolute -z-20 overflow-y-hidden bg-[#0066cc] blueprint-background text-white flex flex-col items-center justify-center pt-36 lg:gap-0 gap-8'>
+    <div className='max-w-screen absolute -z-20 overflow-y-hidden bg-[#0066cc] blueprint-background text-white flex flex-col items-center justify-center pt-36 lg:gap-0 gap-8'>
       <img src={logo} alt="bluprnt logo" className="w-[250px] lg:w-[400px] -mt-36" />
 
       {/*text  */}
