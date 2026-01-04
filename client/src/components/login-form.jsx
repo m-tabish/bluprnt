@@ -1,28 +1,27 @@
 /* eslint-disable react/prop-types */
-import {Button} from "@/components/ui/button"
-import {Input} from "@/components/ui/input"
-import {Label} from "@/components/ui/label"
-import {doSignInwithEmailandPassword, doSignInWithGoogle} from "@/firebase/auth"
-import {cn} from "@/lib/utils"
-import {useState} from "react"
-import {Navigate} from "react-router-dom"
+import brush from "@/assets/brush.svg"
+import logo from "@/assets/logo.png"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { doSignInwithEmailandPassword, doSignInWithGoogle } from "@/firebase/auth"
+import { cn } from "@/lib/utils"
+import { useState } from "react"
+import { Navigate } from "react-router-dom"
 import "../App.css"
 import navlogo from "../assets/navlogo.png"
-import {useAuth} from "../firebase/authContext/index"
-import Waitlist from "@/pages/Waitlist.jsx";
-import logo from "@/assets/logo.png";
-import brush from "@/assets/brush.svg";
+import { useAuth } from "../firebase/authContext/index"
 
 export function LoginForm({
-                              className,
-                              ...props
-                          }) {
+    className,
+    ...props
+}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isSigningIn, setIsSigningIn] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    const {userLoggedIn} = useAuth();
+    const { userLoggedIn } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -53,29 +52,26 @@ export function LoginForm({
     }
 
     if (!userLoggedIn) {
-        <Navigate to={"/signup"} replace={true}/>
+        <Navigate to={"/signup"} replace={true} />
     }
 
 
     return (
         <div
             className={cn("bluprnt-background text-white divide-x-2 font-jetMono  h-screen flex  justify-between items-center w-screen px-[5%]  mx-auto", className)} {...props}>
-            {userLoggedIn && (<Navigate to={"/app/"} replace={true}/>)}
+            {userLoggedIn && (<Navigate to={"/app/"} replace={true} />)}
 
             <section className="mx-auto  w-[70%] flex flex-col  items-end justify-end pl-10">
 
                 <img src={logo} alt="bluprnt logo" className="w-[250px] lg:w-[400px] -mt-36 mx-auto" />
-                <div className="flex flex-col items-center justify-center lg:mt-6 gap-2 lg:gap-5 min-h-full">
+                <div className="w-full flex flex-col items-center justify-center lg:mt-6 gap-2 lg:gap-5 min-h-full">
                     <h1 className="lg:text-5xl min-h-full text-3xl text-center font-marker px-4">
                         &quot;Architect Your Software Projects
-                        <span className="text-primary relative inline-block ">
-            <img
-                src={brush}
-                alt="brush stroke "
-                className="absolute w-full top-1/5 lg:h-[70px] h-full object-cover -z-10 opacity-100 ml-1"
-            />
-            <span className="relative px-3"> in Minutes</span>
-          </span>
+                        <span className="text-primary relative inline-block  mt-3">
+
+                            <span className=" relative z-10    mx-0.5 -py-1 px-3 underline" style={{ backgroundImage: `url(${brush})`, backgroundSize: "cover", backgroundRepeat: "no-repeat" }}> in Minutes {""}
+                            </span>
+                        </span>
                         &quot;
                     </h1>
                     <h3 className="text-md lg:text-lg lg:w-2/3  mt-4 text-white opacity-80 font-jetMono text-center mb-8 text-balance">
@@ -92,7 +88,7 @@ export function LoginForm({
                         <a href="/" className="flex flex-col items-center gap-2 font-medium">
                             <div
                                 className="flex w-full h-full p-4 items-center justify-center rounded-2xl gap-3 mb-2 bg-white/30 backdrop-blur-4xl shadow-lg border border-white/20">
-                                <img src={navlogo} alt="navlogo" className="scale-125"/>
+                                <img src={navlogo} alt="navlogo" className="scale-125" />
                                 <h1 className="font-marker text-white text-2xl flex items-center gap-3">Bluprnt</h1>
                             </div>
                             <span className="sr-only">Bluprnt.tech</span>
@@ -112,7 +108,7 @@ export function LoginForm({
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="m@example.com"
+                                placeholder="johndoe@example.com"
                                 className="text-black"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -141,17 +137,17 @@ export function LoginForm({
                         )}
 
                         <Button type="submit"
-                                className="w-full bg-primary/90 border-2 border-blue-400 text-white font-extrabold hover:text-white hover:bg-primary hover:border-white hover:border-2 "
-                                disabled={isSigningIn}>
+                            className="w-full bg-primary/90 border-2 border-blue-400 text-white font-extrabold hover:text-white hover:bg-primary hover:border-white hover:border-2 "
+                            disabled={isSigningIn}>
                             {isSigningIn ? "Signing in..." : "Login"}
                         </Button>
                     </div>
 
                     <div
                         className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-            <span className="relative z-10 font-bold text-primary bg-background rounded-lg px-2 align-middle">
-              Or
-            </span>
+                        <span className="relative z-10 font-bold text-primary bg-background rounded-lg px-2 align-middle">
+                            Or
+                        </span>
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-1">
@@ -165,14 +161,10 @@ export function LoginForm({
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 mr-2">
                                 <path
                                     d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
-                                    fill="currentColor"/>
+                                    fill="currentColor" />
                             </svg>
                             {isSigningIn ? "Signing in..." : "Continue with Google"}
                         </Button>
-                    </div>
-                    <div className="text-center"><b>Test</b>
-                        <p>mohdtabishkhan001@gmail.com</p>
-                        <p>123456</p>
                     </div>
                 </div>
 
