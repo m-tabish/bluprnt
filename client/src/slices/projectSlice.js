@@ -11,13 +11,14 @@ const initialState = {
     projects: [],
 
     viewProject: "ID 12345",
-    // serverURL: import.meta.env.VITE_SERVER_URL,
-    serverURL: "http://localhost:3000"
+    serverURL: import.meta.env.VITE_SERVER_URL,
+
 
 
 
 };
 
+console.log(import.meta.env.VITE_SERVER_URL)
 
 const projectSlice = createSlice({
     name: "project",
