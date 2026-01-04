@@ -126,7 +126,7 @@ export default function Signup({ className, ...props }) {
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="m@example.com"
+                                placeholder="johndoe@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -139,7 +139,7 @@ export default function Signup({ className, ...props }) {
                             <Input
                                 id="password"
                                 type="password"
-                                placeholder="Create a password (min 6 characters)"
+                                placeholder="Create a password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="text-black"

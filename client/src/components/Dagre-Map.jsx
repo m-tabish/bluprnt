@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { InfoCircledIcon } from '@radix-ui/react-icons';
 import {
     addEdge,
     Background, BackgroundVariant,
@@ -11,15 +12,13 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import dagre from 'dagre';
-import { ChevronLeft, KeyboardIcon, MessageCircle } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import getData from "../Flow/nodes-edges";
 import CustomNode from './Custom-node';
 import { Button } from './ui/button';
-
-
 // Function to layout nodes and edges using Dagre
 
 const nodeWidth = 1000;
@@ -134,6 +133,31 @@ const LayoutFlow = () => {
                     <Button variant="default" size="icon">
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
+                </Panel>
+
+                <Panel position="bottom-left" className='text-white flex items-center gap-2'>
+                    <InfoCircledIcon />
+                    <small>     Use CTRL + Mouse Wheel to Zoom In/Out</small>
+                    {/* <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Button variant="default" size="icon">
+                                    <InfoCircledIcon>
+                                    </InfoCircledIcon>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>
+                                    Use {""}
+                                    <KbdGroup>
+                                        <Kbd>Ctrl + </Kbd>
+                                    </KbdGroup>{" "}
+                                    Mouse Wheel Scroll to Zoom In/Out
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider> */}
+
                 </Panel>
 
             </ReactFlow>

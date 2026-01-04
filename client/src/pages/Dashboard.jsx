@@ -6,7 +6,6 @@ import { Analytics } from "@vercel/analytics/react";
 import bg from "@/assets/2.jpg";
 import logo from "@/assets/logo.png";
 import AllProjects from "@/components/AllProjects";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -51,21 +50,17 @@ function Dashboard() {
     if (!userLoggedIn) return (<Navigate to={'/login'} replace={true} />)
 
     return (
-        <div className={`h-screen bg-cover bg-fixed bg-center m-auto bg-black/10 text-white overflow-none shadow-none bg-no-repeat overflow-x-hidden items-center flex flex-col`}>
+        <div className={`h-screen bg-cover bg-fixed bg-center m-auto bg-black/10 text-white overflow-none shadow-none bg-no-repeat overflow-x-hidden items-center flex flex-col `} style={{ backgroundColor: "black", backgroundImage: `url(${bg})`, backgroundBlendMode: 'hard-light', opacity: "90%" }}>
             <Analytics />
 
-            <div className=" fixed -z-20 inset-0 bg-cover bg-center " style={{ backgroundColor: "black", backgroundImage: `url(${bg})`, backgroundBlendMode: 'hard-light', opacity: "90%" }}>
-
-            </div>
-
-            <div className='h-screen mt-24 flex flex-col min-w-screen justify-center items-center overflow-visible overscroll-contain'>
+            <div className='h-screen sm:mt-36 flex flex-col min-w-screen justify-center items-center overflow-visible overscroll-contain'>
                 <div className="flex flex-col gap-3 scroll-my-0">
 
                     <div className='text-center flex flex-col text-black tracking-wider mb-10 flex-wrap items-center'>
                         <div className="hover:underline text-transparent h-24 mx-auto bg-center font-extrabold justify-end w-3/4 flex items-center gap-10 z-10 text-3xl " target="_blank" rel="noopener noreferrer " style={{ backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }}>
                         </div>
                         <div className="text-2xl font-semibold text-white">Generate a Roadmap for your next project.</div>
-                        <div className="text-base font-semibold text-white/80">made with 💙 by <a href="https://www.tabishcodes.me" className="underline text-white">Tabish</a> <ArrowDown size={"1em"} className=" inline animate-bounce" />
+                        <div className="text-base  text-white font-bold">made with 💙 by <a href="https://www.tabishcodes.me" className="underline text-white">Tabish</a> <ArrowDown size={"1em"} className=" inline animate-bounce" />
                         </div>
                     </div>
 
@@ -140,7 +135,6 @@ function Dashboard() {
             ))) : (<div>No projects found</div>)}
 
 
-            <Footer />
         </div >
     );
 }
