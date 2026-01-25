@@ -1,3 +1,7 @@
+import navlogo from "@/assets/navlogo.png";
+
+import { AvatarDemo } from '@/components/AvatarDemo';
+import { Button } from "@/components/ui/button";
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -6,6 +10,7 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
+import { NumberTicker } from "@/components/ui/number-ticker";
 import { doSignOut } from "@/firebase/auth";
 import { useAuth } from "@/firebase/authContext";
 import { useGithubStars } from "@/hooks/useGithubStars";
@@ -15,10 +20,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
-import navlogo from "../assets/navlogo.png";
-import { Button } from "./ui/button";
-import { NumberTicker } from "./ui/number-ticker";
-
+import Settings from "./Settings";
 function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -27,7 +29,7 @@ function Navbar() {
         { label: "Home", href: "/" },
         { label: "Explore", href: "#" },
         { label: "Library", href: "#" },
-        { label: "Settings", href: "#" },
+        { label: "Settings", component: <Settings />, href: "#" },
     ];
 
     const { userLoggedIn } = useAuth();
@@ -44,7 +46,7 @@ function Navbar() {
         navigate(href);
         setIsMobileMenuOpen(false);
     };
-
+    const { currentUser } = useAuth();
 
     if (error) console.error("Error fetching GitHub stars:", error);
 
@@ -62,23 +64,21 @@ function Navbar() {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden md:block">
+                    <div className="hidden md:block bg-transparent" >
                         <NavigationMenu>
                             <NavigationMenuList>
 
                                 {options.map((option, idx) => (
                                     <NavigationMenuItem key={idx}>
-                                        <NavigationMenuTrigger className="text-md font-jetMono bg-transparent text-white hover:text-white/80 data-[active]:bg-white/10 data-[state=open]:bg-white/10">
+                                        <NavigationMenuTrigger className="text-md font-jetMono  bg-transparent text-white hover:text-white/80 data-[active]:bg-white/10 data-[state=open]:bg-white/10">
                                             {option.label}
                                         </NavigationMenuTrigger>
                                         <NavigationMenuContent>
                                             <NavigationMenuLink
                                                 href={option.href}
-                                                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                                className="block w-[300px] bg-transparent select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                                             >
-
-                                                {option.label}
-
+                                                {option.component ? option.component : option.label}
                                             </NavigationMenuLink>
                                         </NavigationMenuContent>
                                     </NavigationMenuItem>
@@ -92,7 +92,7 @@ function Navbar() {
                         <Button className="bg-transparent  m-auto" onClick={() =>
                             window.open("https://github.com/m-tabish/bluprnt", "_blank")
                         }>
-
+                            <AvatarDemo />
                             <GitHubLogoIcon className="w-full h-full " />
                             <NumberTicker value={stars} className="font-jetMono font-black" />
                             <StarFilledIcon color="gold" />
@@ -109,7 +109,7 @@ function Navbar() {
                                     onClick={() => navigate("/signup")}
                                     className="bg-primary text-white hover:bg-primary/90"
                                 >
-                                    Get Startedf
+                                    Get Started
                                 </Button>
                             </>
                         ) : (
