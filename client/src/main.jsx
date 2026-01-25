@@ -22,7 +22,6 @@ const router = createBrowserRouter(
             path: "/waitlist/*",
             element: <Waitlist />
         },
-
         {
             path: "/login",
             // element: <App />
