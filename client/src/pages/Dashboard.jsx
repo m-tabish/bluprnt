@@ -68,10 +68,10 @@ function Dashboard() {
 
                     <form onSubmit={handleSubmit} className='flex flex-col w-3/4 m-auto p-auto gap-3'>
                         <span className="flex flex-col gap-2">
-                            <label className="text-lg w-auto font-bold active:border ">Project Name</label>
+                            <label className="text-lg w-auto font-bold ">Project Name</label>
                             <Input
                                 type="text"
-                                className=' text-black outline-none bg-white/90 placeholder:text-black/30 focus:outline-none active:outline-none active:ring-0 focus:ring-0'
+                                className=' text-black outline-none bg-white/90 placeholder:text-black focus:outline-none active:outline-none active:ring-0 focus:ring-0'
                                 value={input.project}
                                 onChange={(e) => setInput({ ...input, project: e.target.value })}
                                 placeholder="Project Name"
@@ -82,7 +82,7 @@ function Dashboard() {
                             <label className="text-lg font-bold ">Project Description</label>
                             <Textarea
                                 type="text"
-                                className=' text-black outline-none active:border bg-white/90 placeholder:text-black/30'
+                                className=' text-black outline-none active:border bg-white/90 placeholder:text-black'
                                 onChange={(e) => setInput({ ...input, projectDescription: e.target.value })}
                                 placeholder="Description of your project"
                                 value={input.projectDescription}
@@ -94,7 +94,7 @@ function Dashboard() {
                             <label className="text-lg font-bold ">Language and Frameworks</label>
                             <Input
                                 type="text"
-                                className=' text-black outline-none active:border focus:ring-0 bg-white/90 placeholder:text-black/30 border-none'
+                                className=' text-black outline-none active:border focus:ring-0 bg-white/90 placeholder:text-black border-none'
                                 onChange={(e) => setInput({ ...input, language: e.target.value })}
                                 placeholder="Javascript..."
                                 value={input.language}

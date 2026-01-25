@@ -9,17 +9,21 @@ This project follows Semantic Versioning.
 - Switch to Postgres
 - Shareable Link
 - Save as PNG/JPG
-- Add 'i' button in maps for easier navigation
 - Add User info and create profile page.
 - Add pagination
 - Forgot password
+- Add Mobile Friendly version
+- change the logout button in nav open menu with user details and logout
 
-
+## [1.2.1] - 2026-01-26
+### Added
+- profile picture , name and email of user
 
 ## [1.2.0] - 2026-01-04
 ### Added
 - Add 2 column login page from shadcn
 - Add github repo button with stars
+- Add 'i' button in maps for easier navigation
 
 ### Changed
 - Switched Gemini model to Flash Latest

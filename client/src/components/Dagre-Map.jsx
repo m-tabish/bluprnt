@@ -138,25 +138,7 @@ const LayoutFlow = () => {
                 <Panel position="bottom-left" className='text-white flex items-center gap-2'>
                     <InfoCircledIcon />
                     <small>     Use CTRL + Mouse Wheel to Zoom In/Out</small>
-                    {/* <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <Button variant="default" size="icon">
-                                    <InfoCircledIcon>
-                                    </InfoCircledIcon>
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>
-                                    Use {""}
-                                    <KbdGroup>
-                                        <Kbd>Ctrl + </Kbd>
-                                    </KbdGroup>{" "}
-                                    Mouse Wheel Scroll to Zoom In/Out
-                                </p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider> */}
+
 
                 </Panel>
 

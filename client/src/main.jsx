@@ -2,20 +2,21 @@ import DagreMap from "@/components/Dagre-Map.jsx"
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { LoginForm } from './components/login-form.jsx'
 import ProtectedLayout from './components/ProtectedLayout.jsx'
 import { AuthProvider } from './firebase/authContext/index.jsx'
 import './index.css'
 import Dashboard from './pages/Dashboard.jsx'
 import Error404 from './pages/Error404.jsx'
-import Signup from './pages/Signup.jsx'
+import Landing from './pages/Landing.jsx'
+import LoginPage from "./pages/LoginPage.jsx"
+import SignupPage from "./pages/SignupPage.jsx"
 import Waitlist from './pages/Waitlist.jsx'
 import store from './store/store.js'
 const router = createBrowserRouter(
     [
         {
             path: "/",
-            element: <LoginForm />,
+            element: <LoginPage />,
         },
         {
             path: "/waitlist/*",
@@ -25,13 +26,17 @@ const router = createBrowserRouter(
         {
             path: "/login",
             // element: <App />
-            element: <LoginForm />
+            element: <LoginPage />
         },
 
         {
             path: "/signup",
             // element: <App />
-            element: <Signup />
+            element: <SignupPage />
+        },
+        {
+            path: "landing",
+            element: <Landing />
         },
 
         // Protected Routes with Layout
@@ -39,6 +44,7 @@ const router = createBrowserRouter(
             path: "/app",
             element: <ProtectedLayout />,
             children: [
+
 
                 {
                     path: "",

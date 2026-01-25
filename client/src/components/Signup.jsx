@@ -63,41 +63,12 @@ export default function Signup({ className, ...props }) {
     // Show email verification message
     if (emailSent) {
         return (
-            <div className={cn("w-screen h-screen flex flex-col gap-6 justify-center items-center text-blue-500", className)} {...props}>
-                <div className="flex flex-col items-center gap-4 max-w-md text-center">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
-                        <Mail className="size-8 text-blue-600" />
-                    </div>
-                    <h1 className="text-2xl font-bold">Check Your Email</h1>
-                    <p className="text-gray-600">
-                        We&apos;ve sent a verification link to <strong>{email}</strong>. <br />
-                        Try checking spam folders too.
-                        <br />
-                        Click the link in the email to verify your account.
-                    </p>
-                    <div className="flex flex-col gap-2 w-full ">
-                        <Button
-                            onClick={() => window.location.href = '/login'}
-                            className="w-full bg-primary text-white hover:text-primary hover:bg-white hover:border-primary border"
-                            variant="default  "
-                        >
-                            Go to Sign In
-                        </Button>
-                        <Button
-                            variant="outline"
-                            onClick={() => setEmailSent(false)}
-                            className="w-full"
-                        >
-                            Back to Sign Up
-                        </Button>
-                    </div>
-                </div>
-            </div>
+            <CheckYourEmail email={email} setEmailSent={setEmailSent} />
         );
     }
 
     return (
-        <div className={cn("bluprnt-background w-screen h-screen flex flex-col gap-8 justify-center items-center font-jetMono text-white ", className)} {...props}>
+        <div className={cn("overscroll-y-nonebluprnt-background  flex flex-col gap-8 justify-center items-center font-jetMono text-white ", className)} {...props}>
             {userLoggedIn && (<Navigate to={"/app"} replace={true} />)}
 
             <form onSubmit={handleSubmit}>
@@ -202,4 +173,39 @@ export default function Signup({ className, ...props }) {
 
         </div>
     );
+}
+
+const CheckYourEmail = ({ className, ...props }) => {
+    return (
+        <div className={cn("flex flex-col gap-6 justify-center items-center text-blue-500", className)} {...props}>
+            <div className="flex flex-col items-center gap-4 max-w-md text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+                    <Mail className="size-8 text-blue-600" />
+                </div>
+                <h1 className="text-2xl font-bold">Check Your Email</h1>
+                <p className="text-gray-600">
+                    We&apos;ve sent a verification link to <strong>{email}</strong>. <br />
+                    Try checking spam folders too.
+                    <br />
+                    Click the link in the email to verify your account.
+                </p>
+                <div className="flex flex-col gap-2 w-full ">
+                    <Button
+                        onClick={() => window.location.href = '/login'}
+                        className="w-full bg-primary text-white hover:text-primary hover:bg-white hover:border-primary border"
+                        variant="default  "
+                    >
+                        Go to Sign In
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={() => setEmailSent(false)}
+                        className="w-full"
+                    >
+                        Back to Sign Up
+                    </Button>
+                </div>
+            </div>
+        </div>
+    )
 }

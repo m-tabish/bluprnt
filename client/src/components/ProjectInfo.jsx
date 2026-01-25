@@ -51,4 +51,4 @@ function ProjectInfo({ project, className }) {
     )
 }
 
-export default ProjectInfo  
+export default ProjectInfo

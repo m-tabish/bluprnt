@@ -1,20 +1,21 @@
 /* eslint-disable react/prop-types */
 import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
-import ProjectInfo from '@/components/ProjectInfo';
+// import ProjectInfo from '@/components/ProjectInfo';
+import ProjectInfo from '@/components/ProjectInfo.jsx';
+import RippleGrid from '@/components/RippleGrid.jsx';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/firebase/authContext';
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import { Link } from 'lucide-react';
 import { useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import "../App.css";
 import logo from "../assets/logo.png";
 import peerlist_spotlight from "../assets/peerlist.png";
-function NewLanding() {
+export default function Landing() {
     const { userLoggedIn } = useAuth();
-    const [bluprnt, setBluprnt] = useState([
+    const [project, setProject] = useState([
         {
             createdBy: "tabish",
             description: "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
@@ -56,80 +57,94 @@ function NewLanding() {
     const [users, setUsers] = useState(3);
     const navigate = useNavigate();
 
-    if (userLoggedIn) return <Navigate to="/app" replace />;
+    // if (userLoggedIn) return <Navigate to="/app" replace />;
 
     return (
-        <div className="bluprnt-background relative w-screen pt-36 font-jetMono text-white ">
-            <Navbar />
-
+        <div className=" bg-black relative w-screen min-h-screen font-jetMono text-white ">
             {/* Hero Section */}
             <section className='relative w-4/5 mx-auto -top-10 snap-start ic  h-screen flex flex-col justify-center items-center overflow-hidden'>
-                {/* Logo - Responsive positioning */}
-                <img
-                    src={logo}
-                    alt="bluprnt logo"
-                    className='absolute w-60 sm:w-80 md:w-96 lg:w-[500px] left-4 sm:left-8 md:left-16 lg:left-40 top-16 sm:top-20'
+
+                <RippleGrid
+                    enableRainbow={false}
+                    gridColor="#ffffff"
+                    rippleIntensity={0.05}
+                    gridSize={10}
+                    gridThickness={20}
+                    mouseInteraction={false}
+                    mouseInteractionRadius={1.2}
+                    opacity={0.8}
                 />
+                <p>Architect your projects</p>
+                {/* Logo - Responsive positioning */}
+                <div style={{ position: 'absolute', height: '100vh', overflow: 'hidden' }}>
 
-                {/* Nodes - Hidden on mobile for cleaner look */}
-                <div className="hidden lg:block">
-                    {/* Node 1 */}
-                    <div className={`absolute left-24 top-96 w-48 h-24 border rounded-lg flex items-center shadow-[1px_1px_20px_#00ff0020]`}>
-                        <div className='w-1/4 border-r h-full  flex flex-col items-center justify-around text-white bg-blue-800 rounded-tl-lg rounded-bl-lg'>
-                            <p className='text-xl font-bold '>1</p>
-                            <p>{"</>"}</p>
+
+                    <img
+                        src={logo}
+                        alt="bluprnt logo"
+                        className='absolute w-60 sm:w-80 md:w-96 lg:w-[500px] left-4 sm:left-8 md:left-16 lg:left-40 top-16 sm:top-20'
+                    />
+
+                    {/* Nodes - Hidden on mobile for cleaner look */}
+                    <div className="hidden lg:block">
+                        {/* Node 1 */}
+                        <div className={`absolute left-24 top-96 w-48 h-24 border rounded-lg flex items-center shadow-[1px_1px_20px_#00ff0020]`}>
+                            <div className='w-1/4 border-r h-full  flex flex-col items-center justify-around text-white bg-blue-800 rounded-tl-lg rounded-bl-lg'>
+                                <p className='text-xl font-bold '>1</p>
+                                <p>{"</>"}</p>
+                            </div>
+                            <div className='mx-auto font-bold text-3xl text-center bg-white/25 w-full h-full justify-center items-center flex flex-col'>
+                                <p className='    tracking-widest '>{users}+</p>
+                                <p className='text-xs '>Bluprnts Generated</p>
+                            </div>
                         </div>
-                        <div className='mx-auto font-bold text-3xl text-center bg-white/25 w-full h-full justify-center items-center flex flex-col'>
-                            <p className='    tracking-widest '>{users}+</p>
-                            <p className='text-xs '>Bluprnts Generated</p>
+
+                        {/* Node 2 */}
+                        <div className={`absolute left-96 top-[550px] w-48 h-24 border rounded-lg flex items-center shadow-[1px_1px_20px_#00ff0020]`}>
+                            <div className='w-1/4 border-r h-full flex flex-col items-center justify-around text-white bg-blue-800 rounded-tl-lg rounded-bl-lg'>
+                                <p className='text-xl font-bold '>1</p>
+                                <p>{"</>"}</p>
+                            </div>
+                            <div className='mx-auto font-bold text-3xl text-center bg-white/25 w-full h-full justify-center items-center flex flex-col'>
+                                <p className='  tracking-widest'>{users}+</p>
+                                <p className='text-xs '>Builders strong</p>
+                            </div>
                         </div>
+
+                        <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                            <path
+                                d="M 380 600 C 300 600, 380 440, 288 440"
+                                stroke="white"
+                                strokeWidth="1"
+                                fill="none"
+                                strokeDasharray={"5,5"}
+                            />
+                        </svg>
                     </div>
 
-                    {/* Node 2 */}
-                    <div className={`absolute left-96 top-[550px] w-48 h-24 border rounded-lg flex items-center shadow-[1px_1px_20px_#00ff0020]`}>
-                        <div className='w-1/4 border-r h-full flex flex-col items-center justify-around text-white bg-blue-800 rounded-tl-lg rounded-bl-lg'>
-                            <p className='text-xl font-bold '>1</p>
-                            <p>{"</>"}</p>
-                        </div>
-                        <div className='mx-auto font-bold text-3xl text-center bg-white/25 w-full h-full justify-center items-center flex flex-col'>
-                            <p className='  tracking-widest'>{users}+</p>
-                            <p className='text-xs '>Builders strong</p>
-                        </div>
+                    {/* Hero Text and Button - Responsive positioning */}
+                    <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 lg:top-56 lg:right-8 xl:right-48 lg:left-auto lg:transform-none flex flex-col justify-center items-center lg:items-start h-auto lg:h-1/2 text-center lg:text-left px-4'>
+                        <h1 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-marker text-white/60 mb-8 lg:mb-0 tracking-wider'>
+                            Generate <span className='text-primary stroke-white drop-shadow-[0px_2px_0px_rgba(256,256,256,1)]'>Bluprnts</span> for <br /> projects effortlessly
+                        </h1>
+
+                        <Button
+                            className="text-lg sm:text-xl self-center lg:text-2xl p-3 sm:p-4 w-fit mx-auto lg:mx-0 h-auto font-marker rounded-md shadow-[12px_19px_30px_-13px_rgba(0,_0,_0,_0.3)] border-2 hover:border-white hover:border-2 hover:text-white hover:rounded-[40px] active:border-black backdrop-blur-xs bg-white/20 hover:bg-white/0 border-white/20 mt-4 lg:mt-8"
+                            style={{
+                                transitionProperty: "border-radius",
+                                transitionDuration: "300ms",
+                                transitionTimingFunction: "ease-in-out",
+                            }}
+                            onClick={() => navigate("/app/dashboard")}
+                        >
+                            Create Bluprnt
+                        </Button>
                     </div>
-
-                    <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
-                        <path
-                            d="M 380 600 C 300 600, 380 440, 288 440"
-                            stroke="white"
-                            strokeWidth="1"
-                            fill="none"
-                            strokeDasharray={"5,5"}
-                        />
-                    </svg>
-                </div>
-
-                {/* Hero Text and Button - Responsive positioning */}
-                <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 lg:top-56 lg:right-8 xl:right-48 lg:left-auto lg:transform-none flex flex-col justify-center items-center lg:items-start h-auto lg:h-1/2 text-center lg:text-left px-4'>
-                    <h1 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-marker text-white/60 mb-8 lg:mb-0 tracking-wider'>
-                        Generate <span className='text-primary stroke-white drop-shadow-[0px_2px_0px_rgba(256,256,256,1)]'>Bluprnts</span> for <br /> projects effortlessly
-                    </h1>
-
-                    <Button
-                        className="text-lg sm:text-xl self-center lg:text-2xl p-3 sm:p-4 w-fit mx-auto lg:mx-0 h-auto font-marker rounded-md shadow-[12px_19px_30px_-13px_rgba(0,_0,_0,_0.3)] border-2 hover:border-white hover:border-2 hover:text-white hover:rounded-[40px] active:border-black backdrop-blur-xs bg-white/20 hover:bg-white/0 border-white/20 mt-4 lg:mt-8"
-                        style={{
-                            transitionProperty: "border-radius",
-                            transitionDuration: "300ms",
-                            transitionTimingFunction: "ease-in-out",
-                        }}
-                        onClick={() => navigate("/app/dashboard")}
-                    >
-                        Create Bluprnt
-                    </Button>
                 </div>
             </section>
 
             {/* Bluprnt Library */}
-            <BluprntCarousel className="snap-start" bluprnt={bluprnt} />
+            <BluprntCarousel className="snap-start" bluprnt={project} />
 
             {/* Featured Section */}
             <section className={`snap-start  mt-36   w-full h-screen flex flex-col justify-center items-center  text-white`}>
@@ -166,7 +181,7 @@ function NewLanding() {
                         </div> */}
 
                         {/* <div className='tweet-customizer-wrapper max-h-1/5 w-auto'>
-                            <Tweet id="1840646848270492084"></Tweet> 
+                            <Tweet id="1840646848270492084"></Tweet>
                         </div> */}
                         <iframe width="600" height="315"
                             src="https://www.youtube.com/embed/BzTPJ4Mutww">
@@ -196,7 +211,6 @@ function NewLanding() {
     );
 }
 
-export default NewLanding;
 
 
 
@@ -219,12 +233,7 @@ function BluprntCarousel({ bluprnt, className }) {
             <div ref={sliderRef} className="keen-slider w-full max-w-2xl mb-8">
                 {bluprnt.map((project, index) => (
                     <div key={index} className="keen-slider__slide flex  justify-center">
-                        <ProjectInfo
-                            createdBy={project.createdBy}
-                            description={project.description}
-                            title={project.title}
-                            createdOn={project.createdOn}
-                        />
+                        <ProjectInfo project={project} />
                     </div>
                 ))}
             </div>
@@ -251,55 +260,53 @@ function BluprntCarousel({ bluprnt, className }) {
 
 
 
-function ProjectInfo({
-    createdBy = "tabish",
-    description = "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
-    title = "Matrix",
-    createdOn = "06/07/25"
-}) {
-    return (
-        <div className="font-jetMono">
+// function ProjectInfo({
+//     createdBy = "tabish",
+//     description = "Mirai is an application designed to keep users updated on the latest research advancements. It utilizes Python, Hugging Face Transformers, and Streamlit to fetch, process, and present information from research papers and publications.",
+//     title = "Matrix",
+//     createdOn = "06/07/25"
+// }) {
+//     return (
+//         <div className="font-jetMono">
 
-            <Card className="  max-w-sm bg-white/70">
-                <CardHeader className="m-0 p-0 flex justify-center">
-                    <CardDescription className="m-0 text-sm  px-2 justify-between pr-3  flex items-center ">
-                        <div className="w-14 h-14 flex items-center gap-2  ">
-                            <img src={userImage} alt="" className="bg-contain h-fit" />
-                            <h1 className="">{createdBy.toUpperCase()}</h1>
-                        </div>
-                        <h1>{createdOn}</h1>
-                    </CardDescription>
-                </CardHeader>
+//             <Card className="  max-w-sm bg-white/70">
+//                 <CardHeader className="m-0 p-0 flex justify-center">
+//                     <CardDescription className="m-0 text-sm  px-2 justify-between pr-3  flex items-center ">
+//                         <div className="w-14 h-14 flex items-center gap-2  ">
+//                             <img src={userImage} alt="" className="bg-contain h-fit" />
+//                             <h1 className="">{createdBy.toUpperCase()}</h1>
+//                         </div>
+//                         <h1>{createdOn}</h1>
+//                     </CardDescription>
+//                 </CardHeader>
 
-                <CardContent className=" mx-6 p-0 mb-2 ">
-                    <div className="h-52 overflow-hidden  flex flex-col  p-1 ">
-                        {/* 1. Description (always clipped to fit) */}
+//                 <CardContent className=" mx-6 p-0 mb-2 ">
+//                     <div className="h-52 overflow-hidden  flex flex-col  p-1 ">
+//                         {/* 1. Description (always clipped to fit) */}
 
 
-                        {/* 2. Invisible spacer or button */}
-                        {description.length >= 200 ? (
-                            <div className="flex flex-col"><p>{description.slice(0, 200)}...</p><Button variant="link" className="text-sm self-end">
-                                Read More
-                            </Button></div>
-                        ) : (
-                            /* even when there's no button, this empty div
-                               takes up the same space so the card height stays identical */
-                            <div className="flex flex-col">{description} <div className="h-14"></div></div>
-                        )}
-                    </div>
-                </CardContent>
-                <CardFooter className="flex bg-white   py-2   items-center justify-center border-t-2 border-primary text-center">
-                    <CardTitle className="flex-1 min-h-full pl-14 font-marker ">{title}</CardTitle>
-                    <Button variant="link" className="w-1/6 min-h-full p-0 m-0 flex-end  ">
-                        <ArrowRightCircle className="text-amber-500 m-0 p-0" style={{ width: "2rem", height: "2rem" }} />
-                    </Button>
-                </CardFooter>
-            </Card>
-        </div>
-    )
-}
-
-export default ProjectInfo
+//                         {/* 2. Invisible spacer or button */}
+//                         {description.length >= 200 ? (
+//                             <div className="flex flex-col"><p>{description.slice(0, 200)}...</p><Button variant="link" className="text-sm self-end">
+//                                 Read More
+//                             </Button></div>
+//                         ) : (
+//                             /* even when there's no button, this empty div
+//                                takes up the same space so the card height stays identical */
+//                             <div className="flex flex-col">{description} <div className="h-14"></div></div>
+//                         )}
+//                     </div>
+//                 </CardContent>
+//                 <CardFooter className="flex bg-white   py-2   items-center justify-center border-t-2 border-primary text-center">
+//                     <CardTitle className="flex-1 min-h-full pl-14 font-marker ">{title}</CardTitle>
+//                     <Button variant="link" className="w-1/6 min-h-full p-0 m-0 flex-end  ">
+//                         <ArrowRightCircle className="text-amber-500 m-0 p-0" style={{ width: "2rem", height: "2rem" }} />
+//                     </Button>
+//                 </CardFooter>
+//             </Card>
+//         </div>
+//     )
+// }
 
 
 
