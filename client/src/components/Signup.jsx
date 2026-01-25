@@ -175,14 +175,14 @@ export default function Signup({ className, ...props }) {
 const CheckYourEmail = ({ className, ...props }) => {
     const { email, setEmailSent } = props;
     return (
-        <div className={cn("flex flex-col gap-6 justify-center items-center text-blue-500", className)} {...props}>
+        <div className={cn("flex flex-col gap-6 justify-center items-center text-white", className)} {...props}>
             <div className="flex flex-col items-center gap-4 max-w-md text-center">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
                     <Mail className="size-8 text-blue-600" />
                 </div>
                 <h1 className="text-2xl font-bold">Check Your Email</h1>
-                <p className="text-gray-600">
-                    We&apos;ve sent a verification link to <strong>{email}</strong>. <br />
+                <p className="text-white">
+                    We&apos;ve sent a verification link to <strong className="underline underline-offset-2">{email}</strong>. <br />
                     Try checking spam folders too.
                     <br />
                     Click the link in the email to verify your account.
@@ -198,7 +198,7 @@ const CheckYourEmail = ({ className, ...props }) => {
                     <Button
                         variant="outline"
                         onClick={() => setEmailSent(false)}
-                        className="w-full"
+                        className="w-full bg-primary/90 text-white hover:text-primary hover:bg-white hover:border-primary border"
                     >
                         Back to Sign Up
                     </Button>
