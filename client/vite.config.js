@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 const __dirname = path.resolve(); // or use `process.cwd()`
 
 export default defineConfig({
+  base: "/",
   plugins: [react()],
   resolve: {
     alias: {

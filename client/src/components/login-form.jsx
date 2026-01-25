@@ -5,9 +5,9 @@ import { Label } from "@/components/ui/label"
 import { doSignInwithEmailandPassword, doSignInWithGoogle } from "@/firebase/auth"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
-import { Navigate } from "react-router-dom"
-import { useAuth } from "../firebase/authContext"
+import { Link, Navigate } from "react-router-dom"
 import navlogo from "../assets/navlogo.png"
+import { useAuth } from "../firebase/authContext"
 export function LoginForm({
   // eslint-disable-next-line react/prop-types
   className,
@@ -134,9 +134,9 @@ export function LoginForm({
       </div>
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
-        <a href="/signup" className="underline underline-offset-4">
+        <Link to="/signup" className="underline underline-offset-4">
           Sign up
-        </a>
+        </Link>
       </div>
     </form>
   );
