@@ -7,7 +7,9 @@ import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { Navigate } from "react-router-dom"
 import { useAuth } from "../firebase/authContext"
+import navlogo from "../assets/navlogo.png"
 export function LoginForm({
+  // eslint-disable-next-line react/prop-types
   className,
   ...props
 }) {
@@ -61,6 +63,13 @@ export function LoginForm({
   return (
     <form onSubmit={handleSubmit} className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
+        <a href="/" className="flex flex-col items-center gap-2 font-medium">
+          <div className="flex w-full h-full p-4 items-center justify-center rounded-2xl gap-3 mb-2 bg-white/30 backdrop-blur-4xl shadow-lg border border-white/20">
+            <img src={navlogo} alt="navlogo" className="scale-125" />
+            <h1 className="font-marker text-white text-2xl flex items-center gap-3">Bluprnt</h1>
+          </div>
+          <span className="sr-only">Bluprnt.tech</span>
+        </a>
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-balance text-sm text-white">
           Enter your email below to login to your account
