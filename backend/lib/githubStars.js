@@ -7,7 +7,7 @@ const query = `
           }
         }
       `
-export async function getRepoStars() {
+const getRepoStars = async () => {
   const response = await fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: {
@@ -18,12 +18,13 @@ export async function getRepoStars() {
   });
 
   const result = await response.json();
-  
+
   // 🔥 IMPORTANT SAFETY CHECK
   if (result.errors) {
     console.error("GitHub GraphQL errors:", result.errors);
     throw new Error(result.errors[0].message);
   }
- 
+
   return result.data.repository.stargazers.totalCount;
 }
+module.exports = { getRepoStars }

@@ -2,7 +2,6 @@
 import { Analytics } from "@vercel/analytics/react";
 // Remove axios import, it is handled in your hook service
 // import axios from "axios";
-
 import bg from "@/assets/2.jpg";
 import logo from "@/assets/logo.png";
 import AllProjects from "@/components/AllProjects";
@@ -11,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/firebase/authContext";
 import { useCreateProject } from "@/hooks/useCreateProject";
+import { usePollProjectStatus } from "@/hooks/usePollProjectStatus";
 import { useProjects } from "@/hooks/useProjects";
 import { ArrowDown, Loader2 } from "lucide-react";
 import { useState } from "react"; // Added useEffect if you need to react to status changes
@@ -21,31 +21,40 @@ function Dashboard() {
     const { userLoggedIn } = useAuth();
     const serverURL = useSelector(state => state.serverURL);
     const [reloadTrigger, setReloadTrigger] = useState(0);
-
-    const { projects, error } = useProjects(serverURL, reloadTrigger);
-    const { submitProject, loading, status } = useCreateProject(serverURL);
-
+    const [activeProjectId, setActiveProjectId] = useState(null);
+    const { projects, loading: projectsLoading, hasMore, loadMore } = useProjects(serverURL, reloadTrigger);
+    const { submitProject, loading: isSubmitting, status } = useCreateProject(serverURL);
     const [input, setInput] = useState({
         project: "",
         projectDescription: "",
         language: ""
     });
 
-    if (!projects) {
-        console.log("No projects found" + error);
-    }
+
+
+
+    const { isPolling } = usePollProjectStatus(serverURL, activeProjectId, () => {
+        // When polling completes, refresh the list
+        setReloadTrigger(prev => prev + 1);
+        setActiveProjectId(null); // Stop polling
+    });
+
+
     // Submit button function
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         // 2. Use the variables from the hook, not local state
-        if (!loading && input.project && input.projectDescription && input.language) {
+        if (!projectsLoading && input.project && input.projectDescription && input.language) {
 
             // 3. Call the function exposed by your hook
             await submitProject(input);
             setReloadTrigger(prev => prev + 1);
         }
     };
+
+
+
 
     if (!userLoggedIn) return (<Navigate to={'/login'} replace={true} />)
 
@@ -60,7 +69,7 @@ function Dashboard() {
                         <div className="hover:underline text-transparent h-24 mx-auto bg-center font-extrabold justify-end w-3/4 flex items-center gap-10 z-10 text-3xl " target="_blank" rel="noopener noreferrer " style={{ backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }}>
                         </div>
                         <div className="text-2xl font-semibold text-white">Generate a Roadmap for your next project.</div>
-                        <div className="text-base  text-white font-bold">made with 💙 by <a href="https://www.tabishcodes.me" className="underline text-white">Tabish</a> <ArrowDown size={"1em"} className=" inline animate-bounce" />
+                        <div className="text-base  text-white font-bold">made with 💙 by <a href="https://www.tabishcodes.site" className="underline text-white">Tabish</a> <ArrowDown size={"1em"} className=" inline animate-bounce" />
                         </div>
                     </div>
 
@@ -101,25 +110,19 @@ function Dashboard() {
                                 required
                                 minLength={1}
                             />
-                            <Button
-                                type='submit'
-                                className=' bg-transparent hover:border-1 hover:border-black shadow-lg hover:bg-blue-200 hover:text-blue-600 shadow-blue-600 text-2xl font-bold text-white p-1 mt-10 '
-                                variant="outline"
-                                disabled={loading} // Good practice to disable button while loading
-                            >
-                                {loading ?
-                                    (<Loader2 className="mr-2 h-4 w-4 animate-spin " />) :
-                                    ('Submit')
+                            <Button type='submit' disabled={isSubmitting || isPolling}>
+                                {isSubmitting || isPolling ?
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin " /> :
+                                    'Submit'
                                 }
                             </Button>
 
-                            {/* 4. Use status from the hook for UI Feedback */}
-                            {status === "failed" ?
-                                (<div className="text-red-600 font-semibold w-full text-sm text-center"> Error Generating content. Please refresh the page and try again.</div>)
-                                : status === "success" ?
-                                    (<div className="text-teal-300 font-semibold w-full text-sm text-center"> Successfully Generated your roadmap. Scroll to find it.</div>)
-                                    : (<div className="text-white font-semibold w-full text-sm text-center">Click to Generate</div>)
-                            }
+
+                            {isPolling && (
+                                <div className="text-blue-400 font-semibold w-full text-sm text-center animate-pulse">
+                                    AI is crunching your data... Your roadmap will appear below shortly.
+                                </div>
+                            )}
 
                         </span>
                     </form>
@@ -130,9 +133,22 @@ function Dashboard() {
             <div className=" w-full text-center text-4xl mt-[10%] font-mono text-white/80">Check out what people have made <ArrowDown className="hover:translate-y-3 inline animate-bounce" /></div>
 
 
-            {Array.isArray(projects) && projects.length > 0 ? (([...projects].reverse()).map((project, index) => (
+            {Array.isArray(projects) && projects.length > 0 ? (projects.map((project, index) => (
                 <AllProjects className={" text-white relative  -z-1  "} project={project} key={project._id} />
             ))) : (<div>No projects found</div>)}
+
+            {hasMore && (
+                <div className="flex justify-center my-8">
+                    <Button
+                        onClick={loadMore}
+                        disabled={projectsLoading}
+                        className="bg-white/20 hover:bg-white/30 text-white border-white/20"
+                    >
+                        {projectsLoading ? <Loader2 className="animate-spin mr-2" /> : null}
+                        {projectsLoading ? "Loading..." : "Load More"}
+                    </Button>
+                </div>
+            )}
 
 
         </div >

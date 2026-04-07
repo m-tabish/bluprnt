@@ -2,11 +2,10 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
+// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 async function generateContent({ projectname, projectDescription, language }) {
 
-    const prompt = `
+  const prompt = `
 You are an API that returns ONLY valid JSON.
 Do NOT include explanations, markdown, or comments outside JSON.
 
@@ -59,22 +58,26 @@ Rules:
 - MAXIMUM 5000 TOKENS OR MORE ONLY IF COMPLETE JSON CAN BE STRICTLY PARSED.
 `;
 
-    const model = genAI.getGenerativeModel({
-        model: "models/gemini-flash-latest",
-        generationConfig: {
-            responseMimeType: "application/json",
-        }
-    });
- 
-    try {
-        const result = await model.generateContent(prompt);
-        const response = result.response.text()
-        console.log(response)
-        return response; // already JSON string
-    } catch (error) {
-        console.error("Error generating content:", error);
-        throw error;
+  const model = genAI.getGenerativeModel({
+    model: "models/gemini-flash-latest",
+    generationConfig: {
+      responseMimeType: "application/json",
     }
+  });
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = result.response.text()
+    console.log(response)
+    return response; // already JSON string
+  } catch (error) {
+    console.error("Error generating content:", error.message);
+    console.log(process.env.GEMINI_API_KEY)
+  }
 }
 
-module.exports = { generateContent };
+// const requestBody = {
+//   projectname: "testing wizard", projectDescription: "input url of webstie and run automated tests ", language: " javascript"
+// }
+// generateContent({ ...requestBody })
+// module.exports = { generateContent };

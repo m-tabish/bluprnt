@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import CustomNode from '@/components/Custom-node';
-import getData from '@/Flow/nodes-edges';
+import getData from '@/services/nodes-edges';
 import {
     addEdge,
     Background,
@@ -15,12 +15,13 @@ import '@xyflow/react/dist/style.css';
 import dagre from 'dagre';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import "../App.css";
 // Function to layout nodes and edges using Dagre
 import { TypographyH1 } from '@/components/ui/typography';
 const nodeWidth = 1000;
 const nodeHeight = 100;
+
 const getLayoutedElements = (nodes, edges, direction = 'TB') => {
     const dagreGraph = new dagre.graphlib.Graph();
     const isHorizontal = direction === 'LR';
@@ -131,7 +132,7 @@ const Map = () => {
                         minZoom: 0,
                         maxZoom: 1,
                         duration: 200,
-                    
+
                     }}
 
                     panOnDrag={true}
