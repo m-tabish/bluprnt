@@ -1,4 +1,4 @@
-import { createProject } from "@/lib/projectService";
+import { createProject } from "@/services/projectService";
 import { useState } from "react";
 
 

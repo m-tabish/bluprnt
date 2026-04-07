@@ -1,18 +1,32 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const { generateContent } = require("./gemini/index");
-const { Project, Waitlist } = require("./db/mongo");
-const { getRepoStars } = require('./lib/githubStars.js');
 
+const { Project, Waitlist } = require("./db/mongo.js");
+const { getRepoStars } = require('./lib/githubStars.js');
 require('dotenv').config();
+const { connectDB } = require("./db/mongo.js")
 const PORT = process.env.PORT || 3000;
+const connectRabbitMQ = require("./lib/connectRabbitMQ.js");
+
 
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json({ limit: '10mb' })); // Adjust '10mb' as needed
+
+// Connecting to Rabbit MQ
+connectRabbitMQ()
+    .then((ch) => {
+        channel = ch; // Assign the returned channel to our global variable
+        console.log("🚀 Channel assigned to global variable");
+    })
+    .catch(err => console.error("Failed to init RabbitMQ:", err));
+
+// Connect to DB
+connectDB().then().catch((err) => { console.error("Failed to connnect MongoDB") })
+
 
 app.get("/", (req, res) => {
     console.log("home");
@@ -44,34 +58,30 @@ app.post("/newUser", async (req, res) => {
 
 app.post("/create-project", async (req, res) => {
     try {
-        // Generate content using your GenAI API
-        const result = await generateContent(req.body);
+        const project = await Project.create({ ...req.body, status: "PENDING" })
 
-        // Parse the response
-        let response;
-        try {
-
-            response = JSON.parse(result);
-
-
-        } catch (error) {
-            res.status(500).join({
-                msg: "Error parsing JSON response from GenAI: " + error.message
-            })
+        const taskData = {
+            projectId: project._id,
+            body: req.body
         }
 
-        let { projectname, projectDescription, language } = req.body;
-        const technologies = response.technologies;
-        const aiDesc = response.description;
-        const steps = response.steps;
+        channel.sendToQueue('roadmap_queue',
+            Buffer.from(JSON.stringify(taskData)),
+            { persistent: true }
+        );
 
-        // console.log(JSON.stringify(response));
+        // Parsing the response and sending immediate ack
+        res.status(202).json({
+            msg: "Project generation started",
+            projectId: project._id,
+            projectStatus: project.status
+        });
 
-        // Create the project with all necessary fields
-        const project = await Project.create({ projectname, technologies, projectDescription: aiDesc, language, steps });
-        res.status(201).json(project);
     } catch (e) {
-        res.status(500).send({ msg: "Response not generated server index :" + e });
+        res.status(500).json({
+            msg: "Failed to create project", error: e.message
+        },
+        )
     }
 });
 
@@ -80,15 +90,30 @@ app.post("/create-project", async (req, res) => {
 
 app.get("/projects", async (req, res) => {
     try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 6;
+        const skipIndex = (page - 1) * limit;
+
         const projects = await Project.find({})
+            .sort({ _id: -1 }) // Get newest first
+            .skip(skipIndex)
+            .limit(limit);
+
+        const totalProjects = await Project.countDocuments();
+
         if (!projects) {
             throw new Error("Could not fetch projects")
         }
 
-        res.send(projects)
+        res.json({
+            projects,
+            currentPage: page,
+            totalPages: Math.ceil(totalProjects / limit),
+            totalProjects
+        });
     }
     catch (e) {
-        res.status(500).send({ projects: projects })
+        res.status(500).json({ msg: e.message || "Error fetching projects" });
     }
 })
 

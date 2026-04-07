@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
-import Edge from "./Edge-class";
-import Node from "./Node-class";
+import Edge from "../models/Edge";
+import Node from "../models/Node";
 let DBnodes;
 let labels;
 async function Nodes() {
@@ -11,11 +11,11 @@ async function Nodes() {
     //Edge style
     const edgeStyle = { stroke: '#00ff00', strokeWidth: 2 }
 
-    //Extracting steps from result 
+    //Extracting steps from result
     labels = DBnodes.data[0].steps.steps
 
 
-    // Create Node 
+    // Create Node
     labels.forEach((node, index) => {
         nodes.push(new Node(
             (index + 1).toString(),

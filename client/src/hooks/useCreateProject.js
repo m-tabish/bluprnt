@@ -1,8 +1,8 @@
-import { createProject } from "@/lib/projectService";
+import { createProject } from "@/services/projectService";
 import { useState } from "react";
 
 
-export const useCreateProject = (serverURL) => {
+export const useCreateProject = (serverURL, projectId) => {
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState([]);
 
@@ -16,9 +16,7 @@ export const useCreateProject = (serverURL) => {
                 projectname: input.project,
                 projectDescription: input.projectDescription,
                 language: input.language
-
             })
-
             setStatus('success');
 
         } catch (error) {
