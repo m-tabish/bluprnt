@@ -23,7 +23,7 @@ function Dashboard() {
     const [reloadTrigger, setReloadTrigger] = useState(0);
     const [activeProjectId, setActiveProjectId] = useState(null);
     const { projects, loading: projectsLoading, hasMore, loadMore } = useProjects(serverURL, reloadTrigger);
-    const { submitProject, loading: isSubmitting, status } = useCreateProject(serverURL);
+    const { submitProject, loading: isSubmitting, status, createdProjectId } = useCreateProject(serverURL);
     const [input, setInput] = useState({
         project: "",
         projectDescription: "",
@@ -33,8 +33,8 @@ function Dashboard() {
 
 
 
-    const { isPolling } = usePollProjectStatus(serverURL, activeProjectId, () => {
-        // When polling completes, refresh the list
+    const { isPolling, pollError } = usePollProjectStatus(serverURL, activeProjectId, () => {
+        // When polling completes (success or failure), refresh the list
         setReloadTrigger(prev => prev + 1);
         setActiveProjectId(null); // Stop polling
     });
@@ -44,12 +44,20 @@ function Dashboard() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // 2. Use the variables from the hook, not local state
-        if (!projectsLoading && input.project && input.projectDescription && input.language) {
+        if (input.project && input.projectDescription && input.language && !isSubmitting) {
+            const projectId = await submitProject(input);
 
-            // 3. Call the function exposed by your hook
-            await submitProject(input);
-            setReloadTrigger(prev => prev + 1);
+            if (projectId) {
+                // Set active project ID to trigger polling (don't reload immediately)
+                setActiveProjectId(projectId);
+            }
+
+            // Clear inputs after successful submission
+            setInput({
+                project: "",
+                projectDescription: "",
+                language: ""
+            });
         }
     };
 
@@ -121,6 +129,24 @@ function Dashboard() {
                             {isPolling && (
                                 <div className="text-blue-400 font-semibold w-full text-sm text-center animate-pulse">
                                     AI is crunching your data... Your roadmap will appear below shortly.
+                                </div>
+                            )}
+
+                            {status === 'success' && !isPolling && !pollError && (
+                                <div className="text-green-400 font-semibold w-full text-sm text-center">
+                                    ✓ Project created successfully! Processing has started...
+                                </div>
+                            )}
+
+                            {status === 'failed' && !isPolling && (
+                                <div className="text-red-400 font-semibold w-full text-sm text-center">
+                                    ✗ Failed to create project. Please try again.
+                                </div>
+                            )}
+
+                            {pollError && (
+                                <div className="text-red-400 font-semibold w-full text-sm text-center">
+                                    ✗ Processing failed: {pollError}
                                 </div>
                             )}
 

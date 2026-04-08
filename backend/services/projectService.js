@@ -12,7 +12,7 @@ const updateProject = async (projectId, project) => {
     }
     catch (error) {
         // Log the error to the terminal instead of trying to send it to a browser
-        console.error("❌ Database Update Error:", error.message);
+        console.error("  Database Update Error:", error.message);
         throw error; // Re-throw so the worker's catch block can handle it
 
     }

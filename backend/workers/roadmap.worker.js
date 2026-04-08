@@ -1,14 +1,13 @@
 const amqp = require('amqplib');
-const mongoose = require('mongoose'); // 1. ADD THIS
-const { generateContent } = require("../gemini/nindex");
 const { updateProject } = require('../services/projectService');
+const { connectDB } = require("../db/mongo");
 require('dotenv').config();
-const { connectDB } = require("../db/mongo")
-const mock_data = require("./mock_data")
-connectDB().then()
-
+const { generateContent } = require("../gemini/nindex")
+const mock_data = require('./mock_data')
 async function startWorker() {
     try {
+        await connectDB();
+
         const connection = await amqp.connect(process.env.RABBITMQ_URL || 'amqp://localhost');
         const channel = await connection.createChannel();
         const queue = 'roadmap_queue';
@@ -16,35 +15,52 @@ async function startWorker() {
         await channel.assertQueue(queue, { durable: true });
         channel.prefetch(1);
 
-        console.log("👷 Worker waiting for tasks...");
+        console.log("🚀 Worker waiting for tasks...");
 
         channel.consume(queue, async (msg) => {
-            if (msg === null) return;
+            if (!msg) return;
 
-            const { projectId, body } = JSON.parse(msg.content.toString());
+            const content = JSON.parse(msg.content.toString());
+            const { projectId, body } = content;
 
             try {
-                console.log(`🚀 Processing: ${projectId}`);
+                console.log(`[${new Date().toISOString()}] Processing: ${projectId}`);
 
-                // 3. The REAL Gemini call
+                // 1. Logic for Gemini
+                const result = await generateContent(body);
 
-                // const result = await generateContent(body);
-                // const parsedResult = JSON.parse(result);
 
-                // 4. Update the DB
-                await updateProject(projectId, mock_data);
+                await updateProject(projectId, { ...result, status: 'COMPLETED' });
 
-                console.log(`✅ Finished: ${projectId}`);
+                console.log(`  Finished: ${projectId}`);
                 channel.ack(msg);
 
             } catch (error) {
-                console.error(`❌ Error on Project ${projectId}:`, error.message);
-                // If it fails, put it back in the queue to try again
-                channel.nack(msg, false, true);
+                console.error(`  Error on Project ${projectId}:`, error.message);
+
+                // Get the current retry count from message headers
+                const retryCount = (msg.properties.headers?.['x-death']?.length || 0);
+                const MAX_RETRIES = 3;
+
+                // If max retries exceeded, mark as FAILED and acknowledge the message
+                if (retryCount >= MAX_RETRIES) {
+                    console.error(`  Max retries (${MAX_RETRIES}) exceeded for ${projectId}. Marking as FAILED.`);
+                    await updateProject(projectId, {
+                        status: 'FAILED',
+                        error: error.message
+                    });
+                    channel.ack(msg);
+                } else {
+                    // Requeue if it's a temporary error (not a validation error)
+                    const shouldRequeue = !error.message.includes("validation failed");
+                    channel.nack(msg, false, shouldRequeue);
+                }
             }
-        });
+        }, { noAck: false });
+
     } catch (err) {
-        console.error("Worker failed to start", err);
+        console.error("FATAL: Worker failed to start", err);
+        process.exit(1);
     }
 }
 

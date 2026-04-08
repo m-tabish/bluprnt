@@ -27,7 +27,7 @@ const roadmapSchema = z.object({
 });
 
 const ai = new GoogleGenAI({ api_key: process.env.GEMINI_API_KEY });
-console.log(process.env.GEMINI_API_KEY)
+
 const generateContent = async ({ projectname, projectDescription, language }) => {
   try {
     const prompt = `
@@ -37,6 +37,7 @@ Do NOT include explanations, markdown, or comments outside JSON.
 Generate a NON-LINEAR software roadmap with STRICT LIMITS.
 
 ### HARD CONSTRAINTS (DO NOT VIOLATE):
+- Minimum 15 nodes
 - Maximum 30 nodes
 - Each code block: 5–10 lines ONLY
 - Total output must fit safely in response limits
@@ -80,11 +81,11 @@ Rules:
 - No deployment or DevOps steps
 - Use realistic official documentation links
 - JSON must parse without errors
-- MAXIMUM 5000 TOKENS OR MORE ONLY IF COMPLETE JSON CAN BE STRICTLY PARSED.
+ 
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-flash-lite-latest",
+      model: "gemini-3-flash-preview",
       contents: prompt,
       config: {
         responseMimeType: "application/json",
@@ -93,15 +94,12 @@ Rules:
     });
 
     const roadmap = roadmapSchema.parse(JSON.parse(response.text));
-    console.log(JSON.stringify(roadmap));
+
     return roadmap;
   } catch (error) {
     console.error(error.message);
   }
 };
 
-const requestBody = {
-  projectname: "testing wizard", projectDescription: "   ", language: " javascript"
-}
-generateContent({ ...requestBody })
+
 module.exports = { generateContent }
