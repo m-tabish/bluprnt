@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+import { getLayoutedElements } from '@/services/getLayoutedNodes';
+import { InfoCircledIcon } from '@radix-ui/react-icons';
 import {
     addEdge,
     Background, BackgroundVariant,
@@ -10,54 +12,16 @@ import {
     useNodesState
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import dagre from 'dagre';
-import { ChevronLeft, KeyboardIcon, MessageCircle } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import getData from "../Flow/nodes-edges";
+import getData from "../services/nodes-edges";
 import CustomNode from './Custom-node';
 import { Button } from './ui/button';
 
 
-// Function to layout nodes and edges using Dagre
 
-const nodeWidth = 1000;
-const nodeHeight = 100;
-const getLayoutedElements = (nodes, edges, direction = 'TB') => {
-    const dagreGraph = new dagre.graphlib.Graph();
-    const isHorizontal = direction === 'LR';
-
-    dagreGraph.setGraph({ rankdir: "TB" });
-    dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-    nodes.forEach((node) => {
-        dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-    });
-    // console.log(JSON.stringify(edges))
-    edges.forEach((edge) => {
-        dagreGraph.setEdge(edge.source, edge.target);
-    });
-
-    dagre.layout(dagreGraph);
-
-    const layoutedNodes = nodes.map((node) => {
-        const nodeWithPosition = dagreGraph.node(node.id);
-
-        return {
-            ...node,
-            targetPosition: isHorizontal ? 'left' : 'top',
-            sourcePosition: isHorizontal ? 'right' : 'bottom',
-            position: {
-                x: nodeWithPosition.x - nodeWidth / 2,
-                y: nodeWithPosition.y - nodeHeight / 2,
-            },
-            type: 'customNode'
-        };
-    });
-
-    return { nodes: layoutedNodes, edges };
-};
 
 const LayoutFlow = () => {
     const { id } = useParams()
@@ -130,10 +94,17 @@ const LayoutFlow = () => {
             >
                 <Background bgColor='#2d66bd' color="#fff" variant={BackgroundVariant.Dots} />
                 <Panel position="top-left" className='text-white'
-                    onClick={() => navigate("/")}>
+                    onClick={() => navigate("/app")}>
                     <Button variant="default" size="icon">
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
+                </Panel>
+
+                <Panel position="bottom-left" className='text-white flex items-center gap-2'>
+                    <InfoCircledIcon />
+                    <small>     Use CTRL + Mouse Wheel to Zoom In/Out</small>
+
+
                 </Panel>
 
             </ReactFlow>

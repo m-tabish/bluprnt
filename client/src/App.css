@@ -1,7 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Permanent+Marker&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+.scroll-container {
+	max-height: 200px;
+	overflow: auto;
+	scrollbar-width: none;
+}
 
-.blueprint-background {
-	background-color: hsl(210, 100%, 27%);
+.scroll-container::-webkit-scrollbar {
+	display: none;
+}
+.bluprnt-background {
+	background-color: #0066cc;
 	background-image: 
 		/* linear-gradient(rgba(255, 255, 255, 0.3) 1px,transparent 1px), */ linear-gradient(
 			90deg,
@@ -90,4 +98,116 @@
 	height: 80vh;
 }
 
- 
+/* IMPORTANT: Wrap your X Post component with the 'tweet-customizer-wrapper' class for proper styling.
+  
+  Example usage:
+  <div className="tweet-customizer-wrapper" data-theme="dark">
+      <Tweet id="your-post-id" />
+  </div> */
+
+.tweet-customizer-wrapper .react-tweet-theme {
+	--tweet-container-margin: 1.5rem 0;
+
+	/* Font Family */
+	--tweet-font-family: "Merriweather", Georgia, serif;
+
+	/* Header */
+	--tweet-header-font-size: 1rem;
+	--tweet-header-line-height: 1.25rem;
+
+	/* Text */
+	--tweet-body-font-size: 1.125rem;
+	--tweet-body-font-weight: 400;
+	--tweet-body-line-height: 1.5rem;
+	--tweet-body-margin: 0;
+
+	/* Quoted Tweet */
+	--tweet-quoted-container-margin: 0.75rem 0;
+	--tweet-quoted-body-font-size: 1.125rem;
+	--tweet-quoted-body-font-weight: 400;
+	--tweet-quoted-body-line-height: 1.25rem;
+	--tweet-quoted-body-margin: 0.25rem 0 0.75rem 0;
+
+	/* Info */
+	--tweet-info-font-size: 0.9375rem;
+	--tweet-info-line-height: 1.25rem;
+
+	/* Actions */
+	--tweet-actions-font-size: 0.875rem;
+	--tweet-actions-line-height: 1rem;
+	--tweet-actions-font-weight: 500;
+	--tweet-actions-icon-size: 1.25em;
+	--tweet-actions-icon-wrapper-size: calc(
+		var(--tweet-actions-icon-size) + 0.75em
+	);
+
+	/* Reply button - automatically follows actions styling */
+	--tweet-replies-font-size: 0.875rem;
+	--tweet-replies-line-height: 1rem;
+	--tweet-replies-font-weight: 500;
+}
+
+:where(.tweet-customizer-wrapper .react-tweet-theme) * {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+:is([data-theme="light"], .light)
+	:where(.tweet-customizer-wrapper .react-tweet-theme),
+:where(.tweet-customizer-wrapper .react-tweet-theme) {
+	--tweet-skeleton-gradient: linear-gradient(
+		270deg,
+		rgb(240, 235, 225),
+		rgb(225, 220, 210),
+		rgb(225, 220, 210),
+		rgb(240, 235, 225)
+	);
+	--tweet-border: 1px solid rgb(200, 180, 160);
+	--tweet-font-family: "Merriweather", Georgia, serif;
+	--tweet-font-color: rgb(40, 30, 20);
+	--tweet-font-color-secondary: rgb(120, 100, 80);
+	--tweet-bg-color: rgb(250, 245, 235);
+	--tweet-bg-color-hover: rgb(250, 245, 235);
+	--tweet-quoted-bg-color-hover: rgb(250, 245, 235);
+	--tweet-color-blue-primary: rgb(80, 100, 140);
+	--tweet-color-blue-primary-hover: rgba(80, 100, 140, 0.1);
+	--tweet-color-blue-secondary: rgb(60, 80, 120);
+	--tweet-color-blue-secondary-hover: rgba(60, 80, 120, 0.1);
+	--tweet-color-green-primary: rgb(100, 140, 80);
+	--tweet-color-green-primary-hover: rgba(100, 140, 80, 0.1);
+	--tweet-color-red-primary: rgb(160, 80, 60);
+	--tweet-color-red-primary-hover: rgba(160, 80, 60, 0.1);
+	--tweet-twitter-icon-color: var(--tweet-font-color);
+	--tweet-verified-old-color: rgb(130, 154, 171);
+	--tweet-verified-blue-color: var(--tweet-color-blue-primary);
+}
+
+:is([data-theme="dark"], .dark)
+	:where(.tweet-customizer-wrapper .react-tweet-theme) {
+	--tweet-skeleton-gradient: linear-gradient(
+		270deg,
+		rgb(60, 50, 40),
+		rgb(75, 65, 55),
+		rgb(75, 65, 55),
+		rgb(60, 50, 40)
+	);
+	--tweet-border: 1px solid rgb(100, 80, 60);
+	--tweet-font-family: "Merriweather", Georgia, serif;
+	--tweet-font-color: rgb(220, 210, 190);
+	--tweet-font-color-secondary: rgb(180, 160, 140);
+	--tweet-bg-color: rgb(45, 35, 25);
+	--tweet-bg-color-hover: rgb(45, 35, 25);
+	--tweet-quoted-bg-color-hover: rgb(45, 35, 25);
+	--tweet-color-blue-primary: rgb(140, 160, 200);
+	--tweet-color-blue-primary-hover: rgba(140, 160, 200, 0.1);
+	--tweet-color-blue-secondary: rgb(120, 140, 180);
+	--tweet-color-blue-secondary-hover: rgba(120, 140, 180, 0.1);
+	--tweet-color-green-primary: rgb(160, 200, 140);
+	--tweet-color-green-primary-hover: rgba(160, 200, 140, 0.1);
+	--tweet-color-red-primary: rgb(220, 140, 120);
+	--tweet-color-red-primary-hover: rgba(220, 140, 120, 0.1);
+	--tweet-twitter-icon-color: var(--tweet-font-color);
+	--tweet-verified-old-color: rgb(130, 154, 171);
+	--tweet-verified-blue-color: #fff;
+}

@@ -11,17 +11,27 @@ export default {
 		extend: {
 			animation: {
 				'brush-draw': 'brush-draw 0.8s ease-out',
-				'ticker': 'ticker 20s linear infinite',
+				ticker: 'ticker 20s linear infinite'
 			},
 			keyframes: {
 				ticker: {
-					'0%': { transform: 'translateX(100%)' },
-					'100%': { transform: 'translateX(-100%)' }
+					'0%': {
+						transform: 'translateX(100%)'
+					},
+					'100%': {
+						transform: 'translateX(-100%)'
+					}
 				}
 			},
 			fontFamily: {
-				'marker': ["Permanent Marker", 'cursive'],
-				'jetMono': ["JetBrains Mono", 'inter']
+				marker: [
+					'Permanent Marker',
+					'cursive'
+				],
+				jetMono: [
+					'JetBrains Mono',
+					'inter'
+				]
 			},
 			textShadow: {
 				glow: '0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255,1)'
@@ -71,9 +81,20 @@ export default {
 					'3': 'hsl(var(--chart-3))',
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
+				},
+				sidebar: {
+					DEFAULT: 'hsl(var(--sidebar-background))',
+					foreground: 'hsl(var(--sidebar-foreground))',
+					primary: 'hsl(var(--sidebar-primary))',
+					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+					accent: 'hsl(var(--sidebar-accent))',
+					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+					border: 'hsl(var(--sidebar-border))',
+					ring: 'hsl(var(--sidebar-ring))'
 				}
 			}
 		}
 	},
 	plugins: [animate],
+
 }

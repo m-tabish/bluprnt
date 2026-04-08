@@ -1,18 +1,43 @@
 const mongoose = require("mongoose");
-require("dotenv").config();
+const path = require("path");
 
-mongoose.connect(process.env.CONNECTION_URL, {
-  serverSelectionTimeoutMS: 30000 // 30 seconds
-})
-  .then(() => console.log('MongoDB connected...'))
-  .catch(err => console.error('Connection error', err));
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
+const MONGOURL = process.env.MONGO_CONNECTION_URL;
+
+const connectDB = async () => {
+  // Debugging log: This will help you see EXACTLY what the worker sees
+  if (!MONGOURL) {
+    console.error("❌ Worker Error: MONGO_CONNECTION_URL is undefined.");
+    console.error("Looked in:", path.resolve(__dirname, '../.env'));
+    process.exit(1);
+  }
+
+  try {
+    await mongoose.connect(MONGOURL);
+    console.log('✅ MongoDB connected...');
+  } catch (err) {
+    console.error('❌ Connection error', err);
+  }
+};
 
 const projectSchema = new mongoose.Schema({
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    required: true,
+    trim: true
+  },
   projectname: {
     type: String,
     required: true,
+    trim: true
   },
-
+  status: {
+    type: String,
+    enum: ['PENDING', 'COMPLETED', "ERROR"],
+    required: true,
+  },
   technologies: {
     type: [String],
     required: true,
@@ -26,9 +51,24 @@ const projectSchema = new mongoose.Schema({
     required: true,
   },
   steps: {
-    type: Object,
-    required: true,
-  },
+    nodes: [
+      {
+        nodeId: String,
+        process: String,
+        description: String,
+        code: String,
+        resources: [String],
+        target: [String]
+      }
+    ],
+    edges: [
+      {
+        source: String,
+        target: String,
+        label: String
+      }
+    ]
+  }
 
 });
 
@@ -42,6 +82,7 @@ const waitlistSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   twitterHandle: {
     type: String,
@@ -56,4 +97,4 @@ const waitlistSchema = new mongoose.Schema({
 const Project = mongoose.model('Project', projectSchema);
 const Waitlist = mongoose.model("Waitlist", waitlistSchema);
 
-module.exports = { Project, Waitlist };
+module.exports = { Project, Waitlist, connectDB };

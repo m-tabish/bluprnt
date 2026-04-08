@@ -1,0 +1,184 @@
+/* eslint-disable no-unused-vars */
+import { Analytics } from "@vercel/analytics/react";
+// Remove axios import, it is handled in your hook service
+// import axios from "axios";
+import bg from "@/assets/2.jpg";
+import logo from "@/assets/logo.png";
+import AllProjects from "@/components/AllProjects";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/firebase/authContext";
+import { useCreateProject } from "@/hooks/useCreateProject";
+import { usePollProjectStatus } from "@/hooks/usePollProjectStatus";
+import { useProjects } from "@/hooks/useProjects";
+import { ArrowDown, Loader2 } from "lucide-react";
+import { useState } from "react"; // Added useEffect if you need to react to status changes
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+function Dashboard() {
+
+    const { userLoggedIn } = useAuth();
+    const serverURL = useSelector(state => state.serverURL);
+    const [reloadTrigger, setReloadTrigger] = useState(0);
+    const [activeProjectId, setActiveProjectId] = useState(null);
+    const { projects, loading: projectsLoading, hasMore, loadMore } = useProjects(serverURL, reloadTrigger);
+    const { submitProject, loading: isSubmitting, status, createdProjectId } = useCreateProject(serverURL);
+    const [input, setInput] = useState({
+        project: "",
+        projectDescription: "",
+        language: ""
+    });
+
+
+
+
+    const { isPolling, pollError } = usePollProjectStatus(serverURL, activeProjectId, () => {
+        // When polling completes (success or failure), refresh the list
+        setReloadTrigger(prev => prev + 1);
+        setActiveProjectId(null); // Stop polling
+    });
+
+
+    // Submit button function
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (input.project && input.projectDescription && input.language && !isSubmitting) {
+            const projectId = await submitProject(input);
+
+            if (projectId) {
+                // Set active project ID to trigger polling (don't reload immediately)
+                setActiveProjectId(projectId);
+            }
+
+            // Clear inputs after successful submission
+            setInput({
+                project: "",
+                projectDescription: "",
+                language: ""
+            });
+        }
+    };
+
+
+
+
+    if (!userLoggedIn) return (<Navigate to={'/login'} replace={true} />)
+
+    return (
+        <div className={`h-screen bg-cover bg-fixed bg-center m-auto bg-black/10 text-white overflow-none shadow-none bg-no-repeat overflow-x-hidden items-center flex flex-col `} style={{ backgroundColor: "black", backgroundImage: `url(${bg})`, backgroundBlendMode: 'hard-light', opacity: "90%" }}>
+            <Analytics />
+
+            <div className='h-screen sm:mt-36 flex flex-col min-w-screen justify-center items-center overflow-visible overscroll-contain'>
+                <div className="flex flex-col gap-3 scroll-my-0">
+
+                    <div className='text-center flex flex-col text-black tracking-wider mb-10 flex-wrap items-center'>
+                        <div className="hover:underline text-transparent h-24 mx-auto bg-center font-extrabold justify-end w-3/4 flex items-center gap-10 z-10 text-3xl " target="_blank" rel="noopener noreferrer " style={{ backgroundImage: `url(${logo})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat' }}>
+                        </div>
+                        <div className="text-2xl font-semibold text-white">Generate a Roadmap for your next project.</div>
+                        <div className="text-base  text-white font-bold">made with 💙 by <a href="https://www.tabishcodes.site" className="underline text-white">Tabish</a> <ArrowDown size={"1em"} className=" inline animate-bounce" />
+                        </div>
+                    </div>
+
+                    {/* Project Form  */}
+
+                    <form onSubmit={handleSubmit} className='flex flex-col w-3/4 m-auto p-auto gap-3'>
+                        <span className="flex flex-col gap-2">
+                            <label className="text-lg w-auto font-bold ">Project Name</label>
+                            <Input
+                                type="text"
+                                className=' text-black outline-none bg-white/90 placeholder:text-black focus:outline-none active:outline-none active:ring-0 focus:ring-0'
+                                value={input.project}
+                                onChange={(e) => setInput({ ...input, project: e.target.value })}
+                                placeholder="Project Name"
+                                required
+                                minLength={1}
+                            /></span>
+                        <span className="flex flex-col gap-2">
+                            <label className="text-lg font-bold ">Project Description</label>
+                            <Textarea
+                                type="text"
+                                className=' text-black outline-none active:border bg-white/90 placeholder:text-black'
+                                onChange={(e) => setInput({ ...input, projectDescription: e.target.value })}
+                                placeholder="Description of your project"
+                                value={input.projectDescription}
+                                required
+                                minLength={1}
+                            />
+                        </span>
+                        <span className="flex flex-col gap-2 ">
+                            <label className="text-lg font-bold ">Language and Frameworks</label>
+                            <Input
+                                type="text"
+                                className=' text-black outline-none active:border focus:ring-0 bg-white/90 placeholder:text-black border-none'
+                                onChange={(e) => setInput({ ...input, language: e.target.value })}
+                                placeholder="Javascript..."
+                                value={input.language}
+                                required
+                                minLength={1}
+                            />
+                            <Button type='submit' disabled={isSubmitting || isPolling}>
+                                {isSubmitting || isPolling ?
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin " /> :
+                                    'Submit'
+                                }
+                            </Button>
+
+
+                            {isPolling && (
+                                <div className="text-blue-400 font-semibold w-full text-sm text-center animate-pulse">
+                                    AI is crunching your data... Your roadmap will appear below shortly.
+                                </div>
+                            )}
+
+                            {status === 'success' && !isPolling && !pollError && (
+                                <div className="text-green-400 font-semibold w-full text-sm text-center">
+                                    ✓ Project created successfully! Processing has started...
+                                </div>
+                            )}
+
+                            {status === 'failed' && !isPolling && (
+                                <div className="text-red-400 font-semibold w-full text-sm text-center">
+                                    ✗ Failed to create project. Please try again.
+                                </div>
+                            )}
+
+                            {pollError && (
+                                <div className="text-red-400 font-semibold w-full text-sm text-center">
+                                    ✗ Processing failed: {pollError}
+                                </div>
+                            )}
+
+                        </span>
+                    </form>
+                </div>
+            </div >
+
+            {/* Showing all the projects made till now  */}
+            <div className=" w-full text-center text-4xl mt-[10%] font-mono text-white/80">Check out what people have made <ArrowDown className="hover:translate-y-3 inline animate-bounce" /></div>
+
+
+            {Array.isArray(projects) && projects.length > 0 ? (projects.map((project, index) => (
+                <AllProjects className={" text-white relative  -z-1  "} project={project} key={project._id} />
+            ))) : (<div>No projects found</div>)}
+
+            {hasMore && (
+                <div className="flex justify-center my-8">
+                    <Button
+                        onClick={loadMore}
+                        disabled={projectsLoading}
+                        className="bg-white/20 hover:bg-white/30 text-white border-white/20"
+                    >
+                        {projectsLoading ? <Loader2 className="animate-spin mr-2" /> : null}
+                        {projectsLoading ? "Loading..." : "Load More"}
+                    </Button>
+                </div>
+            )}
+
+
+        </div >
+    );
+}
+
+export default Dashboard;

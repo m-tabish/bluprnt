@@ -1,44 +1,34 @@
 /* eslint-disable no-unused-vars */
 import { Analytics } from "@vercel/analytics/react";
-import axios from "axios";
 
 import { ArrowDown, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import bg from "./assets/2.jpg";
-import logo from "./assets/logo.png";
-import AllProjects from "./components/AllProjects";
-import Socials from "./components/Socials";
-import { Button } from "./components/ui/button";
-import { Input } from "./components/ui/input";
+import bg from "@/assets/2.jpg";
+import logo from "@/assets/logo.png";
+import AllProjects from "../components/AllProjects";
+import Socials from "@/components/Socials";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-import NavigationBar from "./components/NavigationMenu";
-import { Textarea } from "./components/ui/textarea";
-import { useAuth } from "./firebase/authContext";
-import { addProject } from "./slices/projectSlice";
+import { useCreateProject } from "@/hooks/useCreateProject";
+import { useProjects } from "@/hooks/useProjects";
+import NavigationBar from "@/components/NavigationMenu";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/firebase/authContext";
+import { addProject } from "@/slices/projectSlice";
+
+
 function App() {
 
-
     const { userLoggedIn } = useAuth();
-    async function call_backend() {
-        try {
-            const resp = await axios.get(`${serverURL}/projects`)
-            // console.log('backend hit', resp.data);
-        }
-        catch (e) {
-            console.log(e)
-        }
+    const serverURL = useSelector((state) => state.serverURL)
+    const dispatch = useDispatch();
 
-    }
-
-    useEffect(() => {
-        call_backend()
-    }, [])
 
     // Stores all the projects made till now 
     const [projects, setProjects] = useState([]);
-    const [loading, setLoading] = useState(false)
     const [input, setInput] = useState({
         project: "",
         projectDescription: "",
@@ -46,65 +36,24 @@ function App() {
     });
     const [generation, setGeneration] = useState("")
 
-    const dispatch = useDispatch();
-
-
-    const serverURL = useSelector(state => state.serverURL)
-
-    // console.log(serverURL);
 
     // Fetches all the projects
-    useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                const projectsData = await axios.get(`${serverURL}/projects`);
-                // console.log(serverURL)
 
-                setProjects(projectsData.data)
-            } catch (error) {
-                console.error("Error fetching projects:", error);
-            }
-        };
-        fetchProjects();
-    }, [loading, generation, serverURL]);
+    const { latestProjects } = useProjects(serverURL)
+    const { submitProject, loading, status } = useCreateProject(serverURL);
+
 
 
     //  Submit button function : Runs when submit is clicked
     const handleSubmit = async (e) => {
-        setGeneration("")
-        setLoading(false)
         e.preventDefault();
-        if (input.project && input.projectDescription && input.language) {
-            setLoading(true)
-            // Dispatching the addProject action with the current input
-            dispatch(addProject({
-                project: input.project,
-                projectDescription: input.projectDescription,
-                language: input.language
-            }));
 
-            // Sending the user input to the GenAI API using post method
-            try {
-
-                const response = await axios.post(`${serverURL}/create-project`, {
-                    projectname: input.project,
-                    projectDescription: input.projectDescription,
-                    language: input.language
-                });
-                if (response) {
-                    setGeneration("success")
-                }
-                setLoading(false)
-            } catch (e) {
-                setGeneration("failed")
-                setLoading(false)
-                console.log("Post request not sent", e);
-            }
-        }
-    };
+        dispatch(addProject(input));
+        await submitProject(input);
+    }
 
 
-    if (!userLoggedIn) return (<Navigate to={'/login'} replace={true} />)
+
     return (
 
         <div className={`h-screen  bg-cover bg-fixed  bg-center m-auto bg-black/10 text-white overflow-none  shadow-none  bg-no-repeat  overflow-x-hidden items-center flex flex-col`}>
@@ -198,9 +147,11 @@ function App() {
             <div className="  w-full text-center text-4xl mt-[10%] font-mono text-white/80">Check out what people have made <ArrowDown className="hover:translate-y-3 inline animate-bounce" /></div>
 
 
-            {projects ? ((projects.reverse()).map((project, index) => (
-                <AllProjects className={" text-white relative  z-50 "} project={project} key={project._id} />
-            ))) : (<div>No projects found</div>)}
+
+            {latestProjects.map(project => (
+                <AllProjects key={project._id} project={project} />
+            ))}
+
 
 
         </div >

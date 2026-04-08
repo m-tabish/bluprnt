@@ -4,11 +4,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { doSignInWithGoogle, handleSignUp } from "@/firebase/auth";
 import { cn } from "@/lib/utils";
-import { GalleryVerticalEnd, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import "../App.css";
+import googleIcon from "../assets/googleIcon.png";
+import navlogo from "../assets/navlogo.png";
 import { useAuth } from "../firebase/authContext/index";
-
 export default function Signup({ className, ...props }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -62,49 +64,25 @@ export default function Signup({ className, ...props }) {
     // Show email verification message
     if (emailSent) {
         return (
-            <div className={cn("w-screen h-screen flex flex-col gap-6 justify-center items-center text-blue-500", className)} {...props}>
-                <div className="flex flex-col items-center gap-4 max-w-md text-center">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-                        <Mail className="size-8 text-green-600" />
-                    </div>
-                    <h1 className="text-2xl font-bold">Check Your Email</h1>
-                    <p className="text-gray-600">
-                        We&apos;ve sent a verification link to <strong>{email}</strong>.
-                        Click the link in the email to verify your account.
-                    </p>
-                    <div className="flex flex-col gap-2 w-full">
-                        <Button
-                            onClick={() => window.location.href = '/login'}
-                            className="w-full"
-                        >
-                            Go to Sign In
-                        </Button>
-                        <Button
-                            variant="outline"
-                            onClick={() => setEmailSent(false)}
-                            className="w-full"
-                        >
-                            Back to Sign Up
-                        </Button>
-                    </div>
-                </div>
-            </div>
+            <CheckYourEmail email={email} setEmailSent={setEmailSent} />
         );
     }
 
     return (
-        <div className={cn("w-screen h-screen flex flex-col gap-6 justify-center items-center text-blue-500", className)} {...props}>
-            {userLoggedIn && (<Navigate to={"/"} replace={true} />)}
+        <div className={cn("overscroll-y-nonebluprnt-background  flex flex-col gap-8 justify-center items-center font-jetMono text-white ", className)} {...props}>
+            {userLoggedIn && (<Navigate to={"/app"} replace={true} />)}
 
             <form onSubmit={handleSubmit}>
-                <div className="flex flex-col gap-6">
-                    <div className="flex flex-col items-center gap-2">
-                        <a href="#" className="flex flex-col items-center gap-2 font-medium">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-md">
-                                <GalleryVerticalEnd className="size-6" />
+                <div className="flex flex-col gap-6 ">
+                    <div className="flex flex-col items-center gap-2 ">
+                        <a href="/" className="flex flex-col items-center gap-2 font-medium">
+                            <div className="flex w-full h-full p-4 items-center justify-center rounded-2xl gap-3 mb-2 bg-white/30 backdrop-blur-4xl shadow-lg border border-white/20">
+                                <img src={navlogo} alt="navlogo" className="scale-125" />
+                                <h1 className="font-marker text-white text-2xl flex items-center gap-3">Bluprnt</h1>
                             </div>
                             <span className="sr-only">Bluprnt.tech</span>
                         </a>
+
                         <h1 className="text-xl font-bold">Create your account</h1>
                         <div className="text-center text-sm">
                             Already have an account?{" "}
@@ -120,10 +98,11 @@ export default function Signup({ className, ...props }) {
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="m@example.com"
+                                placeholder="johndoe@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                className="text-black"
                             />
                         </div>
 
@@ -132,22 +111,25 @@ export default function Signup({ className, ...props }) {
                             <Input
                                 id="password"
                                 type="password"
-                                placeholder="Create a password (min 6 characters)"
+                                placeholder="Create a password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                className="text-black"
                                 required
                                 minLength={6}
                             />
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="confirmPassword">Confirm Password</Label>
+                            <Label htmlFor="confirmPassword"
+                            >Confirm Password</Label>
                             <Input
                                 id="confirmPassword"
                                 type="password"
                                 placeholder="Confirm your password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
+                                className="text-black"
                                 required
                                 minLength={6}
                             />
@@ -159,40 +141,69 @@ export default function Signup({ className, ...props }) {
                             </div>
                         )}
 
-                        <Button type="submit" className="w-full" disabled={isSigningUp}>
+                        <Button type="submit" className="w-full bg-primary/90 border-2 border-blue-400 text-white font-extrabold hover:text-white hover:bg-primary hover:border-white hover:border-2 " disabled={isSigningUp}>
                             {isSigningUp ? "Creating account..." : "Create Account"}
                         </Button>
                     </div>
 
                     <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-                        <span className="relative z-10 bg-background px-2 text-muted-foreground">
+                        <span className="relative z-10 font-bold text-primary bg-background rounded-lg px-2 align-middle">
                             Or
                         </span>
                     </div>
 
-                    <div className="grid gap-4 sm:grid-cols-1">
+                    <div className="grid gap-4 sm:grid-cols-1 ">
                         <Button
-                            variant="outline"
-                            className="w-full"
+                            variant="outline" className="w-full text-white bg-white/30 hover:bg-white/40"
+
                             onClick={onGoogleSignIn}
                             disabled={isSigningUp}
                             type="button"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4 mr-2">
-                                <path
-                                    d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
-                                    fill="currentColor" />
-                            </svg>
-                            {isSigningUp ? "Creating account..." : "Continue with Google"}
+
+                            {isSigningUp ? "Creating account..." : <div className="flex items-center gap-2 text-white font-semibold "><img className="w-4 h-4 mr-2 bg-white rounded-full p-0.5" src={googleIcon} alt="Google" />Sign in with Google</div>}
                         </Button>
                     </div>
                 </div>
             </form>
-           
-            <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary ">
-                By clicking continue, you agree to our <a href="#">Terms of Service</a>
-                and <a href="#">Privacy Policy</a>.
-            </div>
+
+
         </div>
     );
+}
+
+const CheckYourEmail = ({ className, ...props }) => {
+    const { email, setEmailSent } = props;
+    return (
+        <div className={cn("flex flex-col gap-6 justify-center items-center text-white", className)} {...props}>
+            <div className="flex flex-col items-center gap-4 max-w-md text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+                    <Mail className="size-8 text-blue-600" />
+                </div>
+                <h1 className="text-2xl font-bold">Check Your Email</h1>
+                <p className="text-white">
+                    We&apos;ve sent a verification link to <strong className="underline underline-offset-2">{email}</strong>. <br />
+                    Try checking spam folders too.
+                    <br />
+                    Click the link in the email to verify your account.
+                </p>
+                <div className="flex flex-col gap-2 w-full ">
+                    <Button
+                        onClick={() => window.location.href = '/login'}
+                        className="w-full bg-primary text-white hover:text-primary hover:bg-white hover:border-primary border"
+                        variant="default  "
+                    >
+                        Go to Sign In
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={() => setEmailSent(false)}
+                        className="w-full bg-primary/90 text-white hover:text-primary hover:bg-white hover:border-primary border"
+                    >
+                        Back to Sign Up
+                    </Button>
+                </div>
+            </div>
+        </div>
+    )
 }
