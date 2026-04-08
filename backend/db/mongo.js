@@ -1,31 +1,41 @@
 const mongoose = require("mongoose");
-const { date } = require("zod");
-const { _enum } = require("zod/v4/core");
-require("dotenv").config();
+const path = require("path");
 
-const MONGOURL = process.env.MONGO_TEST_CONNECTION_URL
-// const MONGOURL = process.env.MONGO_CONNECTION_URL
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
+const MONGOURL = process.env.MONGO_CONNECTION_URL;
+
 const connectDB = async () => {
-  mongoose.connect(MONGOURL, {
-    serverSelectionTimeoutMS: 30000 // 30 seconds
-  })
-    .then(() => console.log('MongoDB connected...'))
-    .catch(err => console.error('Connection error', err));
-}
+  // Debugging log: This will help you see EXACTLY what the worker sees
+  if (!MONGOURL) {
+    console.error("❌ Worker Error: MONGO_CONNECTION_URL is undefined.");
+    console.error("Looked in:", path.resolve(__dirname, '../.env'));
+    process.exit(1);
+  }
+
+  try {
+    await mongoose.connect(MONGOURL);
+    console.log('✅ MongoDB connected...');
+  } catch (err) {
+    console.error('❌ Connection error', err);
+  }
+};
 
 const projectSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    required: true
+    required: true,
+    trim: true
   },
   projectname: {
     type: String,
     required: true,
+    trim: true
   },
   status: {
     type: String,
-    _enum: ['PENDING', 'COMPLETED', "ERROR"],
+    enum: ['PENDING', 'COMPLETED', "ERROR"],
     required: true,
   },
   technologies: {
@@ -72,6 +82,7 @@ const waitlistSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   twitterHandle: {
     type: String,

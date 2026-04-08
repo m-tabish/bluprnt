@@ -20,7 +20,7 @@ app.use(express.json({ limit: '10mb' })); // Adjust '10mb' as needed
 connectRabbitMQ()
     .then((ch) => {
         channel = ch; // Assign the returned channel to our global variable
-        console.log("🚀 Channel assigned to global variable");
+        console.log("  Channel assigned to global variable");
     })
     .catch(err => console.error("Failed to init RabbitMQ:", err));
 
