@@ -1,6 +1,5 @@
 import navlogo from "@/assets/navlogo.png";
 
-import { AvatarDemo } from '@/components/AvatarDemo';
 import { Button } from "@/components/ui/button";
 import {
     NavigationMenu,
@@ -92,7 +91,6 @@ function Navbar() {
                         <Button className="bg-transparent  m-auto" onClick={() =>
                             window.open("https://github.com/m-tabish/bluprnt", "_blank")
                         }>
-                            <AvatarDemo />
                             <GitHubLogoIcon className="w-full h-full " />
                             <NumberTicker value={stars} className="font-jetMono font-black" />
                             <StarFilledIcon color="gold" />
