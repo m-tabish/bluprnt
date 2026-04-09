@@ -7,11 +7,11 @@ const mock_data = require('./mock_data')
 async function startWorker() {
     try {
         await connectDB();
-
-        const connection = await amqp.connect(process.env.RABBITMQ_URL || 'amqp://localhost');
+	console.log(process.env.RABBITMQ_URL)
+        const connection = await amqp.connect(process.env.RABBITMQ_URL);
         const channel = await connection.createChannel();
         const queue = 'roadmap_queue';
-
+	
         await channel.assertQueue(queue, { durable: true });
         channel.prefetch(1);
 
