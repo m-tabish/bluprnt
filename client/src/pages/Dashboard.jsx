@@ -134,7 +134,7 @@ function Dashboard() {
 
                             {status === 'success' && !isPolling && !pollError && (
                                 <div className="text-green-400 font-semibold w-full text-sm text-center">
-                                    ✓ Project created successfully! Processing has started...
+                                    ✓ Project created successfully``
                                 </div>
                             )}
 

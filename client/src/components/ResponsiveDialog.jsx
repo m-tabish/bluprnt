@@ -10,7 +10,6 @@ function ResponsiveDialog({ submit, setSubmit }) {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false)
     const serverURL = useSelector(state => state.serverURL)
-    // console.log(serverURL);
 
     const submitDetails = async (email) => {
         try {
@@ -27,7 +26,7 @@ function ResponsiveDialog({ submit, setSubmit }) {
                     }
                 )
 
-                if (result.status === 201) { setLoading(false); setSubmit(true); setSubmitted(true); console.log(result) }
+                if (result.status === 201) { setLoading(false); setSubmit(true); setSubmitted(true);   }
             }
         } catch (error) {
             console.error(error)
@@ -38,8 +37,7 @@ function ResponsiveDialog({ submit, setSubmit }) {
     async function handleSubmit(e) {
         e.preventDefault(); // Prevent form from reloading the page
         setLoading(true);
-
-        console.log(email);
+ 
 
         if (email && email.includes("@")) {
             setTimeout(async () => { await submitDetails(email) }, 2000)

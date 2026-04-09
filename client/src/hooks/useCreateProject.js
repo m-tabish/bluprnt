@@ -20,7 +20,7 @@ export const useCreateProject = (serverURL, projectId) => {
             })
             setStatus('success');
             // Extract project ID from response
-            const projectId = response?._id || response?.id;
+            const projectId = response?.projectId || response?._id || response?.id;
             setCreatedProjectId(projectId);
             return projectId;
 
