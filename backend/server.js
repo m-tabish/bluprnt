@@ -4,7 +4,6 @@ const app = express();
 
 const { Project, Waitlist } = require("./db/mongo.js");
 const { getRepoStars } = require('./lib/githubStars.js');
-require('dotenv').config();
 const { connectDB } = require("./db/mongo.js")
 const PORT = process.env.PORT || 3000;
 const connectRabbitMQ = require("./lib/connectRabbitMQ.js");
