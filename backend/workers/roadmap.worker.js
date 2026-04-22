@@ -1,17 +1,35 @@
 const amqp = require('amqplib');
 const { updateProject } = require('../services/projectService');
 const { connectDB } = require("../db/mongo");
-require('dotenv').config();
-const { generateContent } = require("../gemini/nindex")
-const mock_data = require('./mock_data')
+
+const { generateContent } = require("../gemini");
+const mock_data = require('./mock_data');
+
+async function connectRabbitMQ() {
+    const url = process.env.RABBITMQ_URL || "amqp://guest:guest@rabbitmq:5672";
+
+    console.log("Using RabbitMQ URL:", url);
+
+    while (true) {
+        try {
+            const connection = await amqp.connect(url);
+            console.log("✅ RabbitMQ connected");
+            return connection;
+        } catch (err) {
+            console.log("❌ RabbitMQ not ready, retrying in 5s...");
+            await new Promise(res => setTimeout(res, 5000));
+        }
+    }
+}
+
 async function startWorker() {
     try {
         await connectDB();
-	console.log(process.env.RABBITMQ_URL)
-        const connection = await amqp.connect(process.env.RABBITMQ_URL);
+
+        const connection = await connectRabbitMQ();
         const channel = await connection.createChannel();
         const queue = 'roadmap_queue';
-	
+
         await channel.assertQueue(queue, { durable: true });
         channel.prefetch(1);
 
@@ -26,32 +44,26 @@ async function startWorker() {
             try {
                 console.log(`[${new Date().toISOString()}] Processing: ${projectId}`);
 
-                // 1. Logic for Gemini
-                const result = await generateContent(body);
-
+                const result = mock_data; // or generateContent(body)
 
                 await updateProject(projectId, { ...result, status: 'COMPLETED' });
 
-                console.log(`  Finished: ${projectId}`);
+                console.log(`✅ Finished: ${projectId}`);
                 channel.ack(msg);
 
             } catch (error) {
-                console.error(`  Error on Project ${projectId}:`, error.message);
+                console.error(`❌ Error on Project ${projectId}:`, error.message);
 
-                // Get the current retry count from message headers
                 const retryCount = (msg.properties.headers?.['x-death']?.length || 0);
                 const MAX_RETRIES = 3;
 
-                // If max retries exceeded, mark as FAILED and acknowledge the message
                 if (retryCount >= MAX_RETRIES) {
-                    console.error(`  Max retries (${MAX_RETRIES}) exceeded for ${projectId}. Marking as FAILED.`);
                     await updateProject(projectId, {
                         status: 'FAILED',
                         error: error.message
                     });
                     channel.ack(msg);
                 } else {
-                    // Requeue if it's a temporary error (not a validation error)
                     const shouldRequeue = !error.message.includes("validation failed");
                     channel.nack(msg, false, shouldRequeue);
                 }

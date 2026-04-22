@@ -1,14 +1,16 @@
-version: "3"
+version: "3.8"
 
 services:
   backend:
     build: .
+    container_name: exp
     ports:
       - "8080:3000"
     volumes:
-      - .:/app # Mount your local files into the container
-      - /app/node_modules # Avoid overwriting node_modules
-    env_file:
-      - .env # Load your local .env file
-    command: npm run dev # Use nodemon or vite for hot reload
-    container_name: exp
+      - .:/app
+      - /app/node_modules
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@host.docker.internal:5672
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
