@@ -6,7 +6,7 @@ const updateProject = async (projectId, project) => {
             projectDescription: project.description,
             steps: project.steps,
             status: "COMPLETED",
-            created_at: Date.now()
+            createdAt: Date.now()
         }, { new: true });
         return updateProject;
     }

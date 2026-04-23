@@ -6,7 +6,7 @@ const { generateContent } = require("../gemini");
 const mock_data = require('./mock_data');
 
 async function connectRabbitMQ() {
-    const url = process.env.RABBITMQ_URL || "amqp://guest:guest@rabbitmq:5672";
+    const url = process.env.RABBITMQ_URL;
 
     console.log("Using RabbitMQ URL:", url);
 
@@ -16,7 +16,7 @@ async function connectRabbitMQ() {
             console.log("✅ RabbitMQ connected");
             return connection;
         } catch (err) {
-            console.log("❌ RabbitMQ not ready, retrying in 5s...");
+            console.log("❌ RabbitMQ not ready, retrying in 5s...", err);
             await new Promise(res => setTimeout(res, 5000));
         }
     }
@@ -44,7 +44,8 @@ async function startWorker() {
             try {
                 console.log(`[${new Date().toISOString()}] Processing: ${projectId}`);
 
-                const result = mock_data; // or generateContent(body)
+                // const result = mock_data; // for testing
+                const result = await generateContent(body);
 
                 await updateProject(projectId, { ...result, status: 'COMPLETED' });
 

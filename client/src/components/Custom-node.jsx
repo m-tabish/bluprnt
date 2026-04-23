@@ -59,8 +59,6 @@ export default function CustomNode({ data }) {
 
                             {parsedData.resources.length !== 0 ? (
                                 <DialogDescription className="max-w-4xl whitespace-pre-wrap  break-words">
-
-                                    {console.log(parsedData.resources)}
                                     <ul>
                                         {parsedData.resources.map((res, idx) => (
                                             <a className="text-blue-600 whitespace-pre-wrap underline underline-offset-1 " target="_blank" href={`${res}`} key={idx}>

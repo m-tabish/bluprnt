@@ -10,6 +10,5 @@ export const createProject = async (serverURL, payload) => {
     const response = await axios.post(
         `${serverURL}/create-project`, payload
     )
-    const res = await response.data;
-    return res;
+    return response.data;
 }

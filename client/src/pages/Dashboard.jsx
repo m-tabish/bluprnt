@@ -13,7 +13,7 @@ import { useCreateProject } from "@/hooks/useCreateProject";
 import { usePollProjectStatus } from "@/hooks/usePollProjectStatus";
 import { useProjects } from "@/hooks/useProjects";
 import { ArrowDown, Loader2 } from "lucide-react";
-import { useState } from "react"; // Added useEffect if you need to react to status changes
+import { useCallback, useState } from "react"; // Added useEffect if you need to react to status changes
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 function Dashboard() {
@@ -33,11 +33,13 @@ function Dashboard() {
 
 
 
-    const { isPolling, pollError } = usePollProjectStatus(serverURL, activeProjectId, () => {
+    const onPollComplete = useCallback(() => {
         // When polling completes (success or failure), refresh the list
         setReloadTrigger(prev => prev + 1);
         setActiveProjectId(null); // Stop polling
-    });
+    }, []);
+
+    const { isPolling, pollError } = usePollProjectStatus(serverURL, activeProjectId, onPollComplete);
 
 
     // Submit button function
@@ -46,9 +48,11 @@ function Dashboard() {
 
         if (input.project && input.projectDescription && input.language && !isSubmitting) {
             const projectId = await submitProject(input);
+         
 
             if (projectId) {
                 // Set active project ID to trigger polling (don't reload immediately)
+                
                 setActiveProjectId(projectId);
             }
 
@@ -126,7 +130,7 @@ function Dashboard() {
                             </Button>
 
 
-                            {isPolling && (
+                            {(isSubmitting || isPolling) && (
                                 <div className="text-blue-400 font-semibold w-full text-sm text-center animate-pulse">
                                     AI is crunching your data... Your roadmap will appear below shortly.
                                 </div>
