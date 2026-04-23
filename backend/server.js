@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+let channel;
 
 const { Project, Waitlist } = require("./db/mongo.js");
 const { getRepoStars } = require('./lib/githubStars.js');
@@ -54,22 +55,40 @@ app.post("/newUser", async (req, res) => {
 })
 
 //------------------------------GenAI API-----------------------------------------//
-
 app.post("/create-project", async (req, res) => {
+    let project; // Declare outside the try block so the catch block can access it for rollbacks
+
     try {
-        const project = await Project.create({ ...req.body, status: "PENDING" })
+        if (!channel) {
+            throw new Error("RabbitMQ channel not ready");
+        }
+        // 1. Create the project in the DB
+        project = await Project.create({ ...req.body, status: "PENDING" });
 
         const taskData = {
             projectId: project._id,
             body: req.body
-        }
+        };
 
-        channel.sendToQueue('roadmap_queue',
-            Buffer.from(JSON.stringify(taskData)),
-            { persistent: true }
-        );
+        // 2. Wrap sendToQueue in a Promise to catch network/broker failures
+        await new Promise((resolve, reject) => {
+            // CRITICAL: 'channel' MUST be created using connection.createConfirmChannel()
+            // Standard channels do not support this callback signature.
+            channel.sendToQueue(
+                'roadmap_queue',
+                Buffer.from(JSON.stringify(taskData)),
+                { persistent: true },
+                (err, ok) => {
+                    if (err) {
+                        reject(new Error("Broker rejected or failed to receive the message"));
+                    } else {
+                        resolve(ok);
+                    }
+                }
+            );
+        });
 
-        // Parsing the response and sending immediate ack
+        // 3. Send success response ONLY if both DB and MQ succeeded
         res.status(202).json({
             msg: "Project generation started",
             projectId: project._id,
@@ -77,13 +96,28 @@ app.post("/create-project", async (req, res) => {
         });
 
     } catch (e) {
+        // 4. Rollback: If the DB creation succeeded but RabbitMQ failed,
+        // we must clean up the stranded database record.
+        if (project && project._id) {
+            try {
+                // You can either delete it
+                await Project.findByIdAndDelete(project._id);
+
+                console.warn(`Rolled back project ${project._id} due to RabbitMQ failure.`);
+            } catch (rollbackError) {
+                // Log this heavily - you now have an inconsistent state requiring manual intervention
+                console.error("CRITICAL: Failed to rollback database after MQ failure:", rollbackError);
+
+            }
+        }
+
+        // 5. Send appropriate error response to the client
         res.status(500).json({
-            msg: "Failed to create project", error: e.message
-        },
-        )
+            msg: "Failed to initialize project generation",
+            error: e.message
+        });
     }
 });
-
 
 //---------------------------------GET---------------------------------------//
 
@@ -122,7 +156,7 @@ app.get("/projects/:id", async (req, res) => {
     try {
         const projectId = req.params['id']
         const project = await Project.find({ _id: projectId })
-        if (project)
+        if (project && project.length > 0)
             res.send(project)
         else
             res.status(404).send("Not found")

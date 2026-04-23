@@ -4,8 +4,10 @@ import Edge from "../models/Edge";
 import Node from "../models/Node";
 let DBnodes;
 let labels;
+const serverURL = import.meta.env.VITE_SERVER_URL;
+
 async function Nodes() {
-    DBnodes = await axios.get('http://localhost:3000/projects')
+    DBnodes = await axios.get(serverURL)
     let nodes = []
     let edges = []
     //Edge style

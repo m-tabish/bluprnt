@@ -2,7 +2,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const dotenv = require("dotenv");
 dotenv.config();
 
-// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 async function generateContent({ projectname, projectDescription, language }) {
 
   const prompt = `
@@ -67,9 +67,9 @@ Rules:
 
   try {
     const result = await model.generateContent(prompt);
-    const response = result.response.text()
-    console.log(response)
-    return response; // already JSON string
+    const responseText = result.response.text();
+    const roadmap = JSON.parse(responseText);
+    return roadmap;
   } catch (error) {
     console.error("Error generating content:", error.message);
     console.log(process.env.GEMINI_API_KEY)
@@ -80,4 +80,4 @@ Rules:
 //   projectname: "testing wizard", projectDescription: "input url of webstie and run automated tests ", language: " javascript"
 // }
 // generateContent({ ...requestBody })
-// module.exports = { generateContent };
+module.exports = { generateContent };
