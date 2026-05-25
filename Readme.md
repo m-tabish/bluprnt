@@ -1,141 +1,143 @@
-# 🚀 Bluprnt   
-# Visit  [🔹BluPrnt🔹](https://www.bluprnt.tech/) 
+# 🚀 Bluprnt
 
+**Bluprnt** is an AI-powered project planning platform that transforms project descriptions into interactive, visual roadmaps. Using the Gemini API and React Flow, it generates structured JSON roadmaps to help developers visualize their path from idea to execution.
 
-
-
-## Project Overview   
-Bluprnt is a web application that leverages the power of the [Gemini API](https://gemini.com) to generate structured JSON responses, which are dynamically rendered as interactive flowcharts on the frontend using [React Flow](https://reactflow.dev/). The platform is an AI-powered solution aimed at simplifying project planning and execution for developers, innovators, and teams. Users input their project name, description, and tech stack, and Bluprnt generates a detailed, interactive roadmap in the form of a visual flowchart. It also provides curated resources, source code examples, and study materials to accelerate learning and development. By addressing challenges like unclear project direction, steep learning curves for new tech stacks, and time-consuming manual planning, Bluprnt enables users to focus on building while the system handles the blueprint. Whether visualizing processes, creating learning roadmaps, or mapping system workflows, Bluprnt makes project planning intuitive, efficient, and visually engaging.
----
-
-## Installation 🛠️  
-
-### Prerequisites  
-v
-Ensure the following are installed before proceeding:  
-- **Node.js**: [Download here](https://nodejs.org/)  
-- **npm**: Comes bundled with Node.js  
-
-### Steps to Install  
-
-1. **Clone the Repository**  
-   ```bash
-   git clone git@github.com:m-tabish/Heckers_AMUHACKS4.0.git
-   ```
-
-2. **Navigate to Project Directory**  
-   ```bash
-   cd <projectDirectory>
-   ```
-
-3. **Install Backend Dependencies**  
-   ```bash
-   cd backend
-   npm install
-   ```
-
-4. **Install Frontend Dependencies**  
-   ```bash
-   cd ../client
-   npm install
-   ```
+Visit the live app: [🔹BluPrnt🔹](https://www.bluprnt.tech/)
 
 ---
 
-## Environment Setup 🌐  
+## 🏗️ System Architecture
 
-Create a `.env` file in the `backend` directory and set the following variables:
+A high-level overview of how the components interact across the stack.
 
-```env
-CONNECTION_URL=your_mongodb_connection_string_here
-GEMINI_API_KEY=your_gemini_api_key_here
+```mermaid
+graph TD
+    subgraph Client [Frontend - React/Vite]
+        UI[User Interface]
+        RF[React Flow Renderer]
+    end
+
+    subgraph Server [Backend - Node.js/Express]
+        API[Express API]
+        RMQ[RabbitMQ Queue]
+        Worker[Roadmap Worker]
+    end
+
+    subgraph External [External Services & Storage]
+        G[Gemini AI API]
+        DB[(MongoDB)]
+    end
+
+    %% Logical Flow
+    UI -- "1. Submit Project" --> API
+    API -- "2. Create Pending" --> DB
+    API -- "3. Push Task" --> RMQ
+    RMQ -- "4. Pull Task" --> Worker
+    Worker -- "5. Gen Roadmap" --> G
+    G -- "6. JSON Result" --> Worker
+    Worker -- "7. Update DB" --> DB
+    UI -- "8. Poll/Fetch" --> API
+    API -- "9. Fetch Result" --> DB
+    API -- "10. Deliver JSON" --> UI
+    UI -- "11. Render" --> RF
 ```
 
 ---
 
-## Running the Application  
+## 🔄 Process Flow
 
-1. **Start Backend Server**  
-   ```bash
-   cd backend
-   npm run dev
-   ```
+Detailed step-by-step logic of the roadmap generation lifecycle.
 
-2. **Start Frontend Application**  
-   ```bash
-   cd ../client
-   npm run dev
-   ```
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UI as Frontend (UI)
+    participant API as Express API
+    participant DB as MongoDB
+    participant MQ as RabbitMQ
+    participant W as Roadmap Worker
+    participant G as Gemini AI
 
-3. **Access the App**  
-   - Frontend: [http://localhost:5173](http://localhost:5173)  
-   - Backend: [http://localhost:3000](http://localhost:3000)  
+    Note over UI, G: Phase 1: Submission
+    UI->>API: Submit Project Description
+    API->>DB: Save Project as 'PENDING'
+    API->>MQ: Add Generation Task to Queue
+    API-->>UI: Acknowledge (Return Project ID)
 
----
+    Note over UI, G: Phase 2: Background Generation
+    MQ->>W: Pull Task from Queue
+    W->>G: Request AI Roadmap Generation
+    G-->>W: Return Structured JSON
+    W->>DB: Save Roadmap & Mark as 'COMPLETED'
 
-## Technical Stack  
-
-### Backend  
-- **Framework**: [Express.js](https://expressjs.com/)  
-- **API**: Integration with Gemini API for generating JSON-based flowchart content  
-
-### Frontend  
-- **Framework**: [React.js](https://reactjs.org/)  
-- **Flowchart Tool**: [React Flow](https://reactflow.dev/)  
-- **State Management**: React's built-in state management  
-
----
-# Proposed System
-The proposed system is an intelligent, web-based platform that leverages AI to generate customized project roadmaps dynamically. Key features include:
-
-AI-Driven Roadmap Generation : Users input project details, and the system creates a visual, interactive roadmap using React Flow.
-Resource Recommendations : Curated learning materials, source code snippets, and documentation are provided based on the chosen tech stack.
-Collaboration Tools : Real-time sharing and collaboration on roadmaps for team projects.
-Scalability : Adaptable to various project sizes and complexities, from small apps to enterprise-level systems.
-The system works by analyzing user inputs, mapping dependencies, and suggesting optimal workflows, ensuring clarity and efficiency in project execution.
-
-# Existing System and Drawbacks
-Currently, project planning relies heavily on manual efforts or generic tools like flowchart software, whiteboards, or static templates. These methods have significant limitations:
-
-Time-Consuming : Creating detailed roadmaps manually is labor-intensive and prone to errors.
-Lack of Customization : Generic tools fail to account for specific tech stacks or project requirements.
-No Learning Support : Existing solutions do not provide integrated resources or guidance for unfamiliar technologies.
-Limited Collaboration : Many tools lack real-time collaboration features, making teamwork inefficient.
-
-## Features 🌟  
-
-- ⚙️ **Dynamic Flowchart Generation** from AI-generated JSON  
-- 🧠 **AI-Powered Suggestions** for nodes and steps  
-- 🧩 **User Interaction** for modifying flowcharts  
-- 🛠️ **Frontend-Backend Integration** using Gemini API  
+    Note over UI, G: Phase 3: Retrieval & Rendering
+    UI->>API: Poll Project Status (by ID)
+    API->>DB: Fetch Project Data
+    DB-->>API: Return Result
+    API-->>UI: Deliver Roadmap JSON
+    UI->>UI: Render via React Flow
+```
 
 ---
 
-## Issues Encountered ⚠️  
+## ✨ Features
 
-- **Inconsistent API Responses** from the deployed Railway server (success rate ~60%)  
-- **Concurrency Limitations** potentially due to free-tier deployment  
-
----
-
-## Future Considerations 🔮  
-
-- 🤝 **Real-time Collaboration** on roadmaps  
-- ✏️ **Editable AI Output** for customization  
-- 🧱 **Manual Roadmap Creation** option for full user control  
+- ⚙️ **AI Roadmap Generation**: Converts text descriptions into structured roadmaps.
+- 🧩 **Interactive Flowcharts**: Visualized using React Flow for easy navigation.
+- 📚 **Learning Resources**: Curated materials and code snippets for every node.
+- 🚀 **Scalable Worker Architecture**: Uses RabbitMQ for efficient background processing.
 
 ---
 
-## Contributing 🤝  
+## 🛠️ Technical Stack
 
-Have an idea or feature in mind?  
-Feel free to fork the repo and submit a PR. Contributions are highly appreciated!  
+- **Frontend**: React.js, Tailwind CSS, React Flow, Vite.
+- **Backend**: Node.js, Express.js, RabbitMQ.
+- **Database**: MongoDB (Mongoose).
+- **AI Engine**: Google Gemini API.
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+- Node.js (v18+)
+- MongoDB
+- RabbitMQ
+
+### 2. Installation
+```bash
+git clone git@github.com:m-tabish/Heckers_AMUHACKS4.0.git
+cd bluprnt
+
+# Backend Setup
+cd backend && npm install
+
+# Frontend Setup
+cd ../client && npm install
+```
+
+### 3. Environment Setup
+Create a `.env` file in `backend/`:
+```env
+MONGO_CONNECTION_URL=your_mongodb_url
+GEMINI_API_KEY=your_gemini_api_key
+RABBITMQ_URL=your_rabbitmq_url
+```
+
+### 4. Running the App
+```bash
+# Terminal 1: Start Backend (in backend/)
+npm run dev
+
+# Terminal 2: Start Worker (in backend/)
+node workers/roadmap.worker.js
+
+# Terminal 3: Start Frontend (in client/)
+npm run dev
+```
 
 ---
 
-## Contact 📧  
-
-For questions, reach out at [mohdtabishkhan001@gmail.com](#)
-
----
- 
+## 📧 Contact
+Mohd Tabish Khan - [mohdtabishkhan001@gmail.com](mailto:mohdtabishkhan001@gmail.com)
