@@ -2,7 +2,7 @@
 
 **Bluprnt** is an AI-powered project planning platform that transforms project descriptions into interactive, visual roadmaps. Using the Gemini API and React Flow, it generates structured JSON roadmaps to help developers visualize their path from idea to execution.
 
-Visit the live app: [🔹BluPrnt🔹](https://www.bluprnt.tech/)
+Visit the live app: [🔹BluPrnt🔹](bluprnt.tabishcodes.site/)
 
 ---
 
