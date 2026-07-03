@@ -1,14 +1,18 @@
-import axios from "axios";
-export const fetchProjects = async (serverURL, page = 1, limit = 6) => {
-    const response = await axios.get(`${serverURL}/projects`, {
+import api from "./api.js";
+
+export const fetchProjectsService = async (page = 1, limit = 6) => {
+    const response = await api.get(`/projects`, {
         params: { page, limit }
     });
-    return response.data;
-}
+    return response.data.data;
+};
 
-export const createProject = async (serverURL, payload) => {
-    const response = await axios.post(
-        `${serverURL}/create-project`, payload
-    )
-    return response.data;
-}
+export const createProjectService = async (payload) => {
+    const response = await api.post(`/projects/create-project`, payload);
+    return response.data.data;
+};
+
+export const deleteProjectService = async (projectId) => {
+    const response = await api.delete(`/projects/delete/${projectId}`);
+    return response.data.data;
+};

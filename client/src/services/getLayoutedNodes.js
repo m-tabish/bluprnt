@@ -1,15 +1,19 @@
 import dagre from 'dagre';
 
-const nodeWidth = 1000;
+const nodeWidth = 220;
 const nodeHeight = 100;
 
 // Function to layout nodes and edges using Dagre
-export const getLayoutedElements = (nodes, edges,) => {
-    const direction = "TB"
+export const getLayoutedElements = (nodes, edges, direction = "TB") => {
     const dagreGraph = new dagre.graphlib.Graph();
     const isHorizontal = direction === 'LR';
 
-    dagreGraph.setGraph({ rankdir: "TB" });
+    dagreGraph.setGraph({
+        rankdir: direction,
+        nodesep: 50,
+        ranksep: 80
+    });
+
     dagreGraph.setDefaultEdgeLabel(() => ({}));
 
     nodes.forEach((node) => {

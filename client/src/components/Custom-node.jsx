@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
+
 import {
     Dialog,
     DialogContent,
@@ -9,21 +8,15 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog";
 import { Handle, Position } from "@xyflow/react";
-import { useSelector } from "react-redux";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { vs2015 } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 
 
-export default function CustomNode({ data }) {
-    const colorMode = useSelector((state) => state.colorModeGlobal);
+export default function CustomNode({ data, targetPosition, sourcePosition }) {
     const parsedData = JSON.parse(data.label);
 
 
-    // dark and light theme classes
-    const darkClass = 'border border-black text-black bg-white';
-    const lightClass = 'border border-black text-white bg-black';
-    // const currentClass = colorMode === 'dark' ? darkClass : lightClass;
     const currentClass = "bg-white"
 
 
@@ -31,7 +24,7 @@ export default function CustomNode({ data }) {
         <div className="flex gap-2 items-center relative  ">
             <div className={`relative text-center font-bold rounded-lg w-[200px] h-auto min-h-[50px] text-xs whitespace-normal p-1 flex flex-col justify-center items-center gap-1 ${currentClass}`}>
 
-                <Handle type="target" position={Position.Top} id="1" />
+                <Handle type="target" position={targetPosition || Position.Top} id="1" />
                 {parsedData.process.length > 100 ? parsedData.process.slice(0, 100) + "..." : parsedData.process}
 
                 {/* Code button */}
@@ -76,7 +69,7 @@ export default function CustomNode({ data }) {
                     </DialogContent>
                 </Dialog>
 
-                <Handle type="source" position={Position.Bottom} id="1" />
+                <Handle type="source" position={sourcePosition || Position.Right} id="1" />
             </div>
         </div >
     );

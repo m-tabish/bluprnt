@@ -1,9 +1,9 @@
-const amqp = require('amqplib');
-const { updateProject } = require('../services/projectService');
-const { connectDB } = require("../db/mongo");
+import amqp from 'amqplib';
+import 'dotenv/config';
+import { generateContent } from "../gemini/index.js";
+import { updateProjectRepo } from '../repository/project.repository.js';
 
-const { generateContent } = require("../gemini");
-const mock_data = require('./mock_data');
+
 
 async function connectRabbitMQ() {
     const url = process.env.RABBITMQ_URL;
@@ -24,7 +24,6 @@ async function connectRabbitMQ() {
 
 async function startWorker() {
     try {
-        await connectDB();
 
         const connection = await connectRabbitMQ();
         const channel = await connection.createChannel();
@@ -47,7 +46,7 @@ async function startWorker() {
                 // const result = mock_data; // for testing
                 const result = await generateContent(body);
 
-                await updateProject(projectId, { ...result, status: 'COMPLETED' });
+                await updateProjectRepo(projectId, { ...result, status: 'COMPLETED' });
 
                 console.log(`✅ Finished: ${projectId}`);
                 channel.ack(msg);
@@ -59,7 +58,7 @@ async function startWorker() {
                 const MAX_RETRIES = 3;
 
                 if (retryCount >= MAX_RETRIES) {
-                    await updateProject(projectId, {
+                    await updateProjectRepo(projectId, {
                         status: 'FAILED',
                         error: error.message
                     });

@@ -67,4 +67,4 @@ const scope = nock('https://api.github.com')
         ],
     },
 };
-module.exports = mock_data
+export default mock_data;

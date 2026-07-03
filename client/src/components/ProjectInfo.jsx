@@ -41,8 +41,8 @@ function ProjectInfo({ project, className }) {
             
 
             <CardFooter className="bg-white py-2 border-t flex justify-between items-center rounded-lg rounded-t-none">
-                <CardTitle className="text-base font-marker text-center w-full text-balance">{project.projectname}</CardTitle>
-                <Button variant="link" className="p-0  m-0" onClick={() => navigate(`map/${project._id}`)}>
+                <CardTitle className="text-base font-marker text-center w-full text-balance">{project.projectName || project.projectname}</CardTitle>
+                <Button variant="link" className="p-0  m-0" onClick={() => navigate(`map/${project.id}`)}>
                     <ArrowRightCircle className="text-amber-500  " style={{ minWidth: "2rem", minHeight: "2rem" }} />
                 </Button>
             </CardFooter>

@@ -7,7 +7,7 @@ const query = `
           }
         }
       `
-const getRepoStars = async () => {
+export const getRepoStars = async () => {
   const response = await fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: {
@@ -27,4 +27,3 @@ const getRepoStars = async () => {
 
   return result.data.repository.stargazers.totalCount;
 }
-module.exports = { getRepoStars }

@@ -10,8 +10,8 @@ import {
     NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
 import { NumberTicker } from "@/components/ui/number-ticker";
-import { doSignOut } from "@/firebase/auth";
-import { useAuth } from "@/firebase/authContext";
+import { signOut as doSignOut } from "@/supabase/auth";
+import { useAuth } from "@/supabase/authContext";
 import { useGithubStars } from "@/hooks/useGithubStars";
 import { ExitIcon, GitHubLogoIcon, StarFilledIcon } from "@radix-ui/react-icons";
 import { Menu, X } from "lucide-react";
@@ -26,8 +26,7 @@ function Navbar() {
 
     const options = [
         { label: "Home", href: "/" },
-        { label: "Explore", href: "#" },
-        { label: "Library", href: "#" },
+        { label: "Community", href: "#" },
         { label: "Settings", component: <Settings />, href: "#" },
     ];
 

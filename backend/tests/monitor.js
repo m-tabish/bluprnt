@@ -1,6 +1,7 @@
-const axios = require('axios');
-const mongoose = require('mongoose');
-require('dotenv').config();
+import axios from 'axios';
+import mongoose from 'mongoose';
+import 'dotenv/config';
+
 
 async function monitorSystem() {
     await mongoose.connect(process.env.TEST_CONNECTION_URL);

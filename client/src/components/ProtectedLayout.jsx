@@ -2,16 +2,16 @@
 import { Navigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { useAuth } from '@/firebase/authContext';
+import { useAuth } from '@/supabase/authContext';
 import { Outlet } from 'react-router-dom';
 function ProtectedLayout
     () {
 
 
-    const { userLoggedIn, loading } = useAuth();
+    const { userLoggedIn, authLoading } = useAuth();
 
 
-    if (loading) {
+    if (authLoading) {
         return <div>Loading...</div>
     }
 

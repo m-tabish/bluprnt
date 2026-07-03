@@ -6,8 +6,8 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
-import { doSignOut } from "@/firebase/auth";
-import { useAuth } from "@/firebase/authContext";
+import { signOut as doSignOut } from "@/supabase/auth";
+import { useAuth } from "@/supabase/authContext";
 function NavigationBar() {
     const { userLoggedIn } = useAuth();
 

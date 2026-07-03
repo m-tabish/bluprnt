@@ -1,26 +1,18 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "../services/api.js";
 
-const isValidObjectId = (value) => /^[a-f\d]{24}$/i.test(value);
-export const usePollProjectStatus = (serverURL, projectId, onComplete) => {
+export const usePollProjectStatus = (projectId, onComplete) => {
     const [isPolling, setIsPolling] = useState(false);
     const [pollError, setPollError] = useState(null);
 
     useEffect(() => {
         if (!projectId) {
-            
+
             setIsPolling(false);
             return;
         }
 
-        if (!isValidObjectId(projectId)) {
-            console.error("Invalid projectId for polling:", projectId);
-            setIsPolling(false);
-            setPollError("Invalid project id");
-            return;
-        }
 
-        
         setIsPolling(true);
         setPollError(null);
 
@@ -29,7 +21,7 @@ export const usePollProjectStatus = (serverURL, projectId, onComplete) => {
             if (!isMounted) return;
 
             try {
-                const { data } = await axios.get(`${serverURL}/projects/${projectId}`);
+                const { data } = await api.get(`/projects/${projectId}`);
                 if (!isMounted) return;
 
                 const status = data[0]?.status || data.status;
@@ -55,7 +47,7 @@ export const usePollProjectStatus = (serverURL, projectId, onComplete) => {
             isMounted = false;
             clearInterval(interval);
         };
-        // Only depend on projectId - serverURL is app config, onComplete is from useCallback
+
     }, [projectId]);
 
     return { isPolling, pollError };

@@ -2,15 +2,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { doSignInWithGoogle, handleSignUp } from "@/firebase/auth";
 import { cn } from "@/lib/utils";
+import { handleSignUp, doSignInwithGoogle } from "@/supabase/auth";
 import { Mail } from "lucide-react";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import "../App.css";
 import googleIcon from "../assets/googleIcon.png";
 import navlogo from "../assets/navlogo.png";
-import { useAuth } from "../firebase/authContext/index";
+import { useAuth } from "../supabase/authContext/index";
 export default function Signup({ className, ...props }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -19,7 +19,10 @@ export default function Signup({ className, ...props }) {
     const [errorMessage, setErrorMessage] = useState("");
     const [emailSent, setEmailSent] = useState(false);
 
-    const { userLoggedIn } = useAuth();
+    const { currentUser,
+        userLoggedIn,
+        emailVerified,
+        authLoading } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -53,7 +56,7 @@ export default function Signup({ className, ...props }) {
         if (!isSigningUp) {
             setIsSigningUp(true);
             try {
-                await doSignInWithGoogle();
+                await doSignInwithGoogle();
             } catch (error) {
                 setErrorMessage(error.message);
                 setIsSigningUp(false);
