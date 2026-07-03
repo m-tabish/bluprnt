@@ -70,4 +70,3 @@ const schema = {
     },
     required: ["description", "nodes", "edges"],
 };
- 

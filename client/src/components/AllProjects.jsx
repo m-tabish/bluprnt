@@ -8,20 +8,19 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/card";
+
+import { deleteProjectService } from "@/services/projectService";
 import { viewProject } from "@/slices/projectSlice";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 
-function AllProjects({ deleteFunction, className, project }) {
-    const serverURL = useSelector(state => state.serverURL)
+function AllProjects({ className, project }) {
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const view = useSelector(state => state.viewProject)
     const [deleteId, setDeleteId] = useState("")
-
     function clickedView(id) {
         dispatch(viewProject(id))
         navigate("map/" + id)
@@ -31,7 +30,7 @@ function AllProjects({ deleteFunction, className, project }) {
 
         if (deleteId) {
             const performDelete = async () => {
-                const result = await axios.delete(`${serverURL}/delete-project/${deleteId}`)
+                const result = await deleteProjectService(deleteId);
                 if (result) {
                     setDeleteId("")
                     return "Item deleted Succesfully"
@@ -48,7 +47,7 @@ function AllProjects({ deleteFunction, className, project }) {
     return (
         <Card className={`${className}    bg-transparent w-screen flex p-4 rounded  outline-none  border-none   `}  >
             <CardHeader className="w-1/2 text-right flex text-white ">
-                <CardTitle className=" text-lg flex flex-col gap-2 font-semibold  border-none outline-none">{project.projectname}
+                <CardTitle className=" text-lg flex flex-col gap-2 font-semibold  border-none outline-none">{project.projectName || project.projectname}
                     <div className="flex-end  ">
                         {project.technologies && project.technologies.map((lang, index) => {
                             return (
@@ -68,10 +67,10 @@ function AllProjects({ deleteFunction, className, project }) {
                 <p>{project.projectDescription}</p>
             </CardContent>
             <CardFooter className="w-1/3 gap-2  ">
-                <Button className="bg-white text-black hover:text-white" onClick={() => clickedView(project._id)}>View</Button>
+                <Button className="bg-white text-black hover:text-white" onClick={() => clickedView(project.id)}>View</Button>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPaKwDIXYElN8y62tHemR1Y6qJODqNN087dPEApgNJtCrXdw/viewform?usp=sharing" target='_blank' className='flex-col flex items-center ' ><Button className="  active:bg-[#2d66bd] ">Feedback</Button></a>
 
-                {/* <Button variant={"outline"} onClick={() => deleteProject(project._id)}><Trash2 /></Button> */}
+                {/* <Button variant={"outline"} onClick={() => deleteProject(project.id)}><Trash2 /></Button> */}
             </CardFooter>
         </Card >
     )

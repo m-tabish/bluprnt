@@ -32,14 +32,17 @@ const LayoutFlow = () => {
     const [colorMode, setColorMode] = useState(useSelector(state => state.colorModeGlobal || "dark"));
     const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
 
-    const serverURL = useSelector(state => state.serverURL)
-
     //fetching the projects
     useEffect(() => {
         const fetchData = async () => {
 
             // custom node label
-            const { initialNodes, initialEdges } = await getData({ serverURL, id });
+            const data = await getData({ id });
+            if (!data) {
+                setLoading(false);
+                return;
+            }
+            const { initialNodes, initialEdges } = data;
             const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(initialNodes, initialEdges);
             setNodes(layoutedNodes);
             setEdges(layoutedEdges);
@@ -82,6 +85,7 @@ const LayoutFlow = () => {
                 connectionLineType={ConnectionLineType.SmoothStep}
                 // snapToGrid={true}
                 fitView
+                fitViewOptions={{ padding: 0.3 }}
                 minZoom={0}
                 translateExtent={[[-Infinity, -Infinity], [Infinity, Infinity]]}
                 colorMode={colorMode}

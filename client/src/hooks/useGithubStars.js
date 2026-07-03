@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
-export const useGithubStars = (serverURL) => {
+import api from "../services/api.js";
+
+export const useGithubStars = () => {
     const [stars, setStars] = useState(0);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (!serverURL) return;
+
         const getStars = async () => {
             try {
-                const response = await fetch(`${serverURL}/github-stars`)
-
-
-                const result = await response.json();
-                setStars(result.stars);
+                const response = await api.get(`/github-stars`)
+                setStars(response.data.stars);
             } catch (error) {
                 setError(error);
             }
         }
         getStars();
-    }, [serverURL])
+    }, [])
 
 
     return { stars, error };

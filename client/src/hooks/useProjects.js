@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { fetchProjects } from "@/services/projectService";
+import { fetchProjectsService } from "@/services/projectService";
 
-export const useProjects = (serverURL, reloadTrigger) => {
+export const useProjects = (reloadTrigger) => {
     const [projects, setProjects] = useState([]);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(1);
@@ -10,43 +10,49 @@ export const useProjects = (serverURL, reloadTrigger) => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // Reset state when serverURL or reloadTrigger changes (e.g. new project added)
-        setProjects([]);
+        // Reset state when reloadTrigger changes (e.g. new project added)
         setPage(1);
-        setHasMore(true);
-        setError(null);
-    }, [serverURL, reloadTrigger]);
+    }, [reloadTrigger]);
 
     useEffect(() => {
+        let isMounted = true;
         const loadProjects = async () => {
-            if (!hasMore || loading) return;
+            // If we are on page > 1, respect hasMore. If page is 1 (initial/reload), always load.
+            if (page > 1 && !hasMore) return;
+            if (loading) return;
+
             setLoading(true);
             try {
                 // Fetch the specific page
-                const data = await fetchProjects(serverURL, page, 6);
-                
+                const data = await fetchProjectsService(page, 6);
+                if (!isMounted) return;
+
                 setProjects(prev => {
                     // Prevent duplicates if StrictMode causes double fetches
+                    if (page === 1) {
+                        return data.projects;
+                    }
                     const newProjects = data.projects.filter(
-                        newProj => !prev.some(existingProj => existingProj._id === newProj._id)
+                        newProj => !prev.some(existingProj => existingProj.id === newProj.id)
                     );
                     return [...prev, ...newProjects];
                 });
-                
+
                 setHasMore(page < data.totalPages);
+                setError(null);
             }
             catch (err) {
-                setError(err);
+                if (isMounted) setError(err);
             } finally {
-                setLoading(false);
+                if (isMounted) setLoading(false);
             }
         };
+        loadProjects();
+        return () => {
+            isMounted = false;
+        };
+    }, [page, reloadTrigger]); // run effect when page or reloadTrigger changes
 
-        if (serverURL) {
-            loadProjects();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [serverURL, page, reloadTrigger]); // run effect when page changes
 
     const loadMore = () => {
         if (!loading && hasMore) {

@@ -1,29 +1,26 @@
 /* eslint-disable no-unused-vars */
-import { Analytics } from "@vercel/analytics/react";
-// Remove axios import, it is handled in your hook service
-// import axios from "axios";
 import bg from "@/assets/2.jpg";
 import logo from "@/assets/logo.png";
 import AllProjects from "@/components/AllProjects";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/firebase/authContext";
 import { useCreateProject } from "@/hooks/useCreateProject";
 import { usePollProjectStatus } from "@/hooks/usePollProjectStatus";
 import { useProjects } from "@/hooks/useProjects";
+import { useAuth } from "@/supabase/authContext";
+import { Analytics } from "@vercel/analytics/react";
 import { ArrowDown, Loader2 } from "lucide-react";
-import { useCallback, useState } from "react"; // Added useEffect if you need to react to status changes
-import { useSelector } from "react-redux";
+import { useCallback, useState } from "react";
 import { Navigate } from "react-router-dom";
+
 function Dashboard() {
 
     const { userLoggedIn } = useAuth();
-    const serverURL = useSelector(state => state.serverURL);
     const [reloadTrigger, setReloadTrigger] = useState(0);
     const [activeProjectId, setActiveProjectId] = useState(null);
-    const { projects, loading: projectsLoading, hasMore, loadMore } = useProjects(serverURL, reloadTrigger);
-    const { submitProject, loading: isSubmitting, status, createdProjectId } = useCreateProject(serverURL);
+    const { projects, loading: projectsLoading, hasMore, loadMore } = useProjects(reloadTrigger);
+    const { submitProject, loading: isSubmitting, status } = useCreateProject();
     const [input, setInput] = useState({
         project: "",
         projectDescription: "",
@@ -39,7 +36,7 @@ function Dashboard() {
         setActiveProjectId(null); // Stop polling
     }, []);
 
-    const { isPolling, pollError } = usePollProjectStatus(serverURL, activeProjectId, onPollComplete);
+    const { isPolling, pollError } = usePollProjectStatus(activeProjectId, onPollComplete);
 
 
     // Submit button function
@@ -48,20 +45,20 @@ function Dashboard() {
 
         if (input.project && input.projectDescription && input.language && !isSubmitting) {
             const projectId = await submitProject(input);
-         
+
 
             if (projectId) {
-                // Set active project ID to trigger polling (don't reload immediately)
-                
+                // Set active project ID to trigger polling
                 setActiveProjectId(projectId);
             }
 
             // Clear inputs after successful submission
-            setInput({
-                project: "",
-                projectDescription: "",
-                language: ""
-            });
+            if (status === "SUCCESS")
+                setInput({
+                    project: "",
+                    projectDescription: "",
+                    language: ""
+                });
         }
     };
 
@@ -160,11 +157,11 @@ function Dashboard() {
             </div >
 
             {/* Showing all the projects made till now  */}
-            <div className=" w-full text-center text-4xl mt-[10%] font-mono text-white/80">Check out what people have made <ArrowDown className="hover:translate-y-3 inline animate-bounce" /></div>
+            <div className=" w-full text-center text-4xl mt-[10%] font-mono text-white/80">Your previous Bluprnts<ArrowDown className="hover:translate-y-3 inline animate-bounce" /></div>
 
 
             {Array.isArray(projects) && projects.length > 0 ? (projects.map((project, index) => (
-                <AllProjects className={" text-white relative  -z-1  "} project={project} key={project._id} />
+                <AllProjects className={" text-white relative  -z-1  "} project={project} key={index} />
             ))) : (<div>No projects found</div>)}
 
             {hasMore && (

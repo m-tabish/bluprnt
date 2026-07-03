@@ -1,6 +1,6 @@
 import brush from "@/assets/brush.svg"
 import logo from "@/assets/logo.png"
-import { useAuth } from "@/firebase/authContext"
+import { useAuth } from "@/supabase/authContext"
 import { Navigate } from "react-router-dom"
 import Signup from "../components/Signup.jsx"
 export default function SignupPage() {

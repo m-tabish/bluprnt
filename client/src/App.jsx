@@ -74,7 +74,7 @@ export default function App() {
                         <div className="grid grid-cols-1 w-3/5 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {projects.slice(0, 6).map((project) => (
                                 <ProjectInfo
-                                    key={project._id}
+                                    key={project.id}
                                     project={project}
                                 />
                             ))}

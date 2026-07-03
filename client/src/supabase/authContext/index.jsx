@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
-import { auth } from '@/firebase/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
 import React, { useContext, useEffect, useState } from 'react';
+import { supabase } from '../supabase';
 
 const AuthContext = React.createContext();
 
@@ -16,24 +15,30 @@ export function AuthProvider({ children }) {
     const [authLoading, setAuthLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, initializeUser);
-        return unsubscribe;
+        // Get initial session on load
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            initializeUser(session?.user ?? null);
+        });
+
+        // Listen for Auth state changes (SIGN_IN, SIGN_OUT, TOKEN_REFRESHED)
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+            async (event, session) => {
+                initializeUser(session?.user ?? null);
+            }
+        );
+
+        return () => {
+            subscription.unsubscribe();
+        };
     }, []);
 
-    async function initializeUser(user) {
+    function initializeUser(user) {
         if (user) {
-            const isEmailVerified = user.emailVerified;
-            setEmailVerified(isEmailVerified);
+            setCurrentUser(user);
+            setUserLoggedIn(true);
 
-            if (isEmailVerified || user.providerData[0]?.providerId === 'google.com') {
-                // Allow access if email is verified OR signed in with Google
-                setCurrentUser({ ...user });
-                setUserLoggedIn(true);
-            } else {
-                // User exists but email not verified
-                setCurrentUser({ ...user });
-                setUserLoggedIn(false);
-            }
+            // Supabase sets email_confirmed_at when email is verified
+            setEmailVerified(!!user.email_confirmed_at);
         } else {
             setCurrentUser(null);
             setUserLoggedIn(false);

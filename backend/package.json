@@ -3,12 +3,13 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"type": "module",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "nodemon server.js",
 		"start": "node server.js",
 		"build": "npm install",
-		"worker": "node src/workers/roadmap.worker.js"
+		"worker": "node workers/roadmap.worker.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -23,12 +24,17 @@
 		"backend": "file:",
 		"cors": "^2.8.5",
 		"dotenv": "^16.5.0",
+		"drizzle-orm": "^0.45.2",
 		"express": "^4.19.2",
 		"http": "^0.0.1-security",
+		"jose": "^6.2.3",
+		"jsonwebtoken": "^9.0.3",
 		"mongoose": "^8.6.3",
+		"postgres": "^3.4.9",
 		"socket.io": "^4.7.5",
 		"ws": "^8.18.0",
-		"zod": "^3.23.8"
+		"zod": "^3.23.8",
+		"zod-to-json-schema": "^3.25.2"
 	},
 	"devDependencies": {
 		"nodemon": "^3.1.10"

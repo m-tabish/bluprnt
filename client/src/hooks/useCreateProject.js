@@ -1,41 +1,51 @@
-import { createProject } from "@/services/projectService";
+import { createProjectService } from "@/services/projectService";
+import { useAuth } from "@/supabase/authContext";
 import { useState } from "react";
 
-const isValidObjectId = (value) => /^[a-f\d]{24}$/i.test(value);
-
-export const useCreateProject = (serverURL, projectId) => {
+// Creates first entry in the db and updates after generating response from LLM .
+export const useCreateProject = () => {
+    const { currentUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState('');
     const [createdProjectId, setCreatedProjectId] = useState(null);
 
-    const submitProject = async (input) => {
+    const submitProject = async (payload) => {
         setLoading(true);
         setStatus('');
         setCreatedProjectId(null);
 
         try {
-            const response = await createProject(serverURL, {
-                projectname: input.project,
-                projectDescription: input.projectDescription,
-                language: input.language
+
+            const userId = currentUser?.id || ""
+
+            // Create project entry in the db with status: PENDING
+            const response = await createProjectService({
+                userId: userId,
+                projectName: payload.project,
+                projectDescription: payload.projectDescription,
+                tags: [payload.language || "General"],
+                isPublic: false,
+                steps: null
             })
-           
-            // Extract project ID from response
-            const projectId = response?.projectId || response?._id || response?.id;
-          
-            if (!isValidObjectId(projectId)) {
-                console.error("Invalid projectId returned:", projectId);
+
+            // Extract project ID from response 
+
+            const newProjectId = response?.id;
+
+
+            if (!newProjectId) {
+                console.error("No projectId returned in response");
                 setCreatedProjectId(null);
-                setStatus('failed');
+                setStatus('FAILED');
                 return null;
             }
-            setCreatedProjectId(projectId);
-            setStatus('success');
-            return projectId;
+            setCreatedProjectId(newProjectId);
+            setStatus('SUCCESS');
+            return newProjectId;
 
         } catch (error) {
             console.error("Create project error:", error);
-            setStatus('failed');
+            setStatus('FAILED');
             return null;
         }
         finally {

@@ -2,12 +2,12 @@ import googleIcon from "@/assets/googleIcon.png"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { doSignInwithEmailandPassword, doSignInWithGoogle } from "@/firebase/auth"
+import { doSignInwithEmailandPassword, doSignInwithGoogle } from "@/supabase/auth"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { Link, Navigate } from "react-router-dom"
 import navlogo from "../assets/navlogo.png"
-import { useAuth } from "../firebase/authContext"
+import { useAuth } from "../supabase/authContext"
 export function LoginForm({
   // eslint-disable-next-line react/prop-types
   className,
@@ -47,7 +47,7 @@ export function LoginForm({
     if (!isSigningIn) {
       setIsSigningIn(true);
       try {
-        const result = await doSignInWithGoogle();
+        const result = await doSignInwithGoogle();
         console.log("Signin successfull", result.user);
       } catch (error) {
         setErrorMessage(error.message);

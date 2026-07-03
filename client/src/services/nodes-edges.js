@@ -1,10 +1,10 @@
-import axios from "axios";
-export let initialNodes = [];
-export let initialEdges = [];
+import api from "./api.js";
 
-export default async function getData({ serverURL, id }) {
+export default async function getData({ id }) {
+  let initialNodes = [];
+  let initialEdges = [];
   try {
-    const response = await axios.get(`${serverURL}/projects/${id}`);
+    const response = await api.get(`/projects/${id}`);
 
     if (response) {
       const children = response.data[0].steps;
@@ -27,18 +27,24 @@ export default async function getData({ serverURL, id }) {
         return null; // Filter out invalid nodes
       }).filter(Boolean); // Remove null entries
 
-      // Mapping edges
+      // Mapping edges (with deduplication)
+      const edgeKeys = new Set();
       initialEdges = children.edges.map((item) => {
         const source = item.source;
         const target = item.target;
 
         if (source && target) {
+          const key = `${source}-${target}`;
+          if (edgeKeys.has(key)) return null; // Skip duplicates
+          edgeKeys.add(key);
+
           return {
-            id: `${source}-${target}`,
+            id: key,
             source: source,
             target: target,
-            type: "default",
-            style: { stroke: "beige", strokeWidth: 2 }
+            type: "smoothstep",
+            markerEnd: { type: "arrowclosed" },
+            style: { stroke: "#cbd5e1", strokeWidth: 2 }
           };
         }
         return null; // Filter out invalid edges

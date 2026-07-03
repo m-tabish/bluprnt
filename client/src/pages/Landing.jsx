@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import PillNav from '@/components/PillNav';
 import ProjectInfo from '@/components/ProjectInfo.jsx';
 import RippleGrid from '@/components/RippleGrid.jsx';
-import { useAuth } from '@/firebase/authContext';
+import { useAuth } from '@/supabase/authContext';
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import { Link } from 'lucide-react';

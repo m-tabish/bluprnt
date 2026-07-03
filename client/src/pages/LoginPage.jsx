@@ -1,7 +1,7 @@
 import brush from "@/assets/brush.svg"
 import logo from "@/assets/logo.png"
 import { LoginForm } from "@/components/login-form"
-import { useAuth } from "@/firebase/authContext"
+import { useAuth } from "@/supabase/authContext"
 import { Navigate } from "react-router-dom"
 
 export default function LoginPage() {
