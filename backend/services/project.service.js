@@ -4,6 +4,7 @@ import {
     deleteProjectRepo,
     getProjectByIdRepo,
     getProjectsRepo,
+    getPublicProjectsRepo,
     updateProjectRepo
 } from "../repository/project.repository.js";
 
@@ -63,6 +64,17 @@ export async function getProjectsService(page = 1, limit = 6, userId) {
     };
 }
 
+
+export async function getPublicProjectsService(page = 1, limit = 6) {
+    const { projects: list, totalCount } = await getPublicProjectsRepo(page, limit);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return {
+        projects: list,
+        totalPages
+    }
+}
 export async function getProjectByIdService(id) {
     return getProjectByIdRepo(id);
 }

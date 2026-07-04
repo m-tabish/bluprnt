@@ -1,4 +1,4 @@
-export function getPrompt({ projectName, projectDescription, language }) {
+wexport function getPrompt({ projectName, projectDescription, language }) {
     return `You are an expert backend systems architect.
 Generate a structured, non-linear backend system architecture and software roadmap for:
 - Project Name: ${projectName}

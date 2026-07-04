@@ -24,7 +24,7 @@ export const useCreateProject = () => {
                 projectName: payload.project,
                 projectDescription: payload.projectDescription,
                 tags: [payload.language || "General"],
-                isPublic: false,
+                isPublic: payload.isPublic ?? false,
                 steps: null
             })
 

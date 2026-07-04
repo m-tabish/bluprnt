@@ -1,6 +1,6 @@
-import { createProjectService, deleteProjectService, getProjectByIdService, getProjectsService } from "../services/project.service.js";
+import { createProjectService, deleteProjectService, getProjectByIdService, getProjectsService, getPublicProjectsService } from "../services/project.service.js";
 
-async function createProjectController(req, res) {
+export async function createProjectController(req, res) {
     let project
     try {
         const projectData = {
@@ -20,7 +20,7 @@ async function createProjectController(req, res) {
     }
 }
 
-async function getProjectController(req, res) {
+export async function getProjectController(req, res) {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 6;
 
@@ -36,14 +36,14 @@ async function getProjectController(req, res) {
     );
 }
 
-async function getProjectByIdController(req, res) {
+export async function getProjectByIdController(req, res) {
     try {
         const id = req.params.id;
         const project = await getProjectByIdService(id);
         if (project) {
 
             // match user id with authenticated user id 
-            if (project.userId !== req.user.id) {
+            if (project.userId !== req.user.id && !project.isPublic) {
                 return res.fail({
                     message: "Forbidden",
                     error: "",
@@ -58,8 +58,19 @@ async function getProjectByIdController(req, res) {
         return res.status(500).send({ msg: error.message || error });
     }
 }
+export async function getPublicProjectsController(req, res) {
+    const page = parseInt(req.query.page || 1);
+    const limit = parseInt(req.query.limit || 6);
 
-async function deleteProjectController(req, res) {
+    try {
+        const result = await getPublicProjectsService(page, limit);
+        return res.success("Public projects fetch successfully", result);
+    } catch (error) {
+        return res.fail("Failed to fetch public projects", error.message, 500);
+    }
+}
+
+export async function deleteProjectController(req, res) {
     try {
         const id = req.params.id;
         const deletedItem = await deleteProjectService(id);
@@ -71,6 +82,4 @@ async function deleteProjectController(req, res) {
         return res.status(500).json({ message: 'Server error', error: error.message || error });
     }
 }
-
-export { createProjectController, deleteProjectController, getProjectByIdController, getProjectController };
 

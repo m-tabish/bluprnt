@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ProtectedLayout from './components/ProtectedLayout.jsx'
-import { AuthProvider } from './supabase/authContext/index.jsx'
 import './index.css'
+import Community from "./pages/Community.jsx"
 import Dashboard from './pages/Dashboard.jsx'
 import Error404 from './pages/Error404.jsx'
 import Landing from './pages/Landing.jsx'
@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage.jsx"
 import SignupPage from "./pages/SignupPage.jsx"
 import Waitlist from './pages/Waitlist.jsx'
 import store from './store/store.js'
+import { AuthProvider } from './supabase/authContext/index.jsx'
 const router = createBrowserRouter(
     [
         {
@@ -42,7 +43,10 @@ const router = createBrowserRouter(
             path: "/app",
             element: <ProtectedLayout />,
             children: [
-
+                {
+                    path: "community",
+                    element: <Community />
+                },
 
                 {
                     path: "",

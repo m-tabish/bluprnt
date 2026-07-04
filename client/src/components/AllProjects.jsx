@@ -23,7 +23,7 @@ function AllProjects({ className, project }) {
     const [deleteId, setDeleteId] = useState("")
     function clickedView(id) {
         dispatch(viewProject(id))
-        navigate("map/" + id)
+        navigate("/app/map/" + id)
     }
 
     useEffect(() => {
@@ -45,34 +45,47 @@ function AllProjects({ className, project }) {
     }, [deleteId, setDeleteId])
 
     return (
-        <Card className={`${className}    bg-transparent w-screen flex p-4 rounded  outline-none  border-none   `}  >
-            <CardHeader className="w-1/2 text-right flex text-white ">
-                <CardTitle className=" text-lg flex flex-col gap-2 font-semibold  border-none outline-none">{project.projectName || project.projectname}
-                    <div className="flex-end  ">
-                        {project.technologies && project.technologies.map((lang, index) => {
-                            return (
-                                <Badge
-                                    key={index}
-                                    variant={"outline"}
-                                    className="self-end ml-1 text-xs w-fit items-center border-white/30 text-white/60"
-                                >
-                                    {lang.trim()}
-                                </Badge>
-                            );
-                        })}
+        <Card className={`${className} bg-transparent w-full flex flex-col md:flex-row p-4 rounded outline-none border-none justify-between items-center gap-4`} >
+            {/* 1. Header (Title & Tags) - Left column */}
+            <CardHeader className="w-full md:w-1/4 text-left flex text-white p-2">
+                <CardTitle className="text-lg flex flex-col gap-2 font-semibold border-none outline-none">
+                    {project.projectName || project.projectname}
+                    <div className="flex flex-wrap gap-1 mt-1">
+                        {project.technologies && project.technologies.map((lang, index) => (
+                            <Badge
+                                key={index}
+                                variant={"outline"}
+                                className="text-xs border-white/30 text-white/60"
+                            >
+                                {lang.trim()}
+                            </Badge>
+                        ))}
                     </div>
                 </CardTitle>
             </CardHeader>
-            <CardContent className="w-full  flex flex-grow items-center font-sans">
-                <p>{project.projectDescription}</p>
-            </CardContent>
-            <CardFooter className="w-1/3 gap-2  ">
-                <Button className="bg-white text-black hover:text-white" onClick={() => clickedView(project.id)}>View</Button>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfPaKwDIXYElN8y62tHemR1Y6qJODqNN087dPEApgNJtCrXdw/viewform?usp=sharing" target='_blank' className='flex-col flex items-center ' ><Button className="  active:bg-[#2d66bd] ">Feedback</Button></a>
 
-                {/* <Button variant={"outline"} onClick={() => deleteProject(project.id)}><Trash2 /></Button> */}
+            {/* 2. Content (Description) - Middle column */}
+            <CardContent className="w-full md:w-2/4 flex items-center font-sans p-2 text-white/80">
+                <p className="text-sm line-clamp-3 md:line-clamp-none">
+                    {project.projectDescription}
+                </p>
+            </CardContent>
+
+            {/* 3. Footer (Action Buttons) - Right column */}
+            <CardFooter className="w-full md:w-1/4 flex justify-end gap-2 p-2">
+                <Button className="bg-white text-black hover:text-white" onClick={() => clickedView(project.id)}>
+                    View
+                </Button>
+                <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSfPaKwDIXYElN8y62tHemR1Y6qJODqNN087dPEApgNJtCrXdw/viewform?usp=sharing"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    <Button className="active:bg-[#2d66bd]">Feedback</Button>
+                </a>
             </CardFooter>
-        </Card >
-    )
+        </Card>
+    );
+
 }
 export default AllProjects
