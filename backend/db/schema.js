@@ -31,7 +31,7 @@ export const roadmapPayloadSchema = z.object({
 
 export const users = pgTable('users', {
     id: uuid('id').defaultRandom().primaryKey(),
-    fullName: text('full_name').notNull(),
+    username: text('username').notNull().unique(),
     email: text("email").notNull().unique(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });

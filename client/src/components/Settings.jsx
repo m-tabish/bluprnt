@@ -7,11 +7,13 @@ const Settings = () => {
     if (!currentUser) return null // or a loader
 
     return (
-        <div className='h-auto flex  bg-white/20 items-center'>
+        <div className='h-auto flex bg-white/20 items-center p-2 rounded-lg'>
             <AvatarDemo />
-            <div className='flex w-full justify-center bg-transparent flex-col py-2 px-7 flex-wrap gap-1'>
-                <h1>{currentUser.user_metadata?.full_name || currentUser.email}</h1>
-                <p className="max-w-[220px] break-words text-sm text-gray-600">
+            <div className='flex flex-col min-w-0 py-1 px-4 gap-0.5 justify-center'>
+                <h1 className="truncate text-sm font-bold text-slate-800" title={currentUser.user_metadata?.username || currentUser.email.split("@")[0]}>
+                    {currentUser.user_metadata?.username || currentUser.email.split("@")[0]}
+                </h1>
+                <p className="truncate text-xs text-slate-500" title={currentUser.email}>
                     {currentUser.email}
                 </p>
             </div>

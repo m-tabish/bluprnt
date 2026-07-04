@@ -41,10 +41,14 @@ export async function doSignInwithGoogle() {
 }
 
 
-export async function handleSignUp(email, password) {
+export async function handleSignUp(email, password, username) {
     const { data, error } = await supabase.auth.signUp({
         email,
-        password
+        password, options: {
+            data: {
+                username: username
+            }
+        }
     });
 
     if (error) throw error;

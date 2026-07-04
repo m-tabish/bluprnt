@@ -43,7 +43,7 @@ export async function getPublicProjectsRepo(page = 1, limit = 6, userId) {
         tags: projects.tags,
         createdAt: projects.createdAt,
         status: projects.status,
-        creatorName: users.fullName
+        creatorName: users.username
     })
         .from(projects)
         .leftJoin(users, eq(projects.userId, users.id))

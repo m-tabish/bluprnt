@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { handleSignUp, doSignInwithGoogle } from "@/supabase/auth";
+import { doSignInwithGoogle, handleSignUp } from "@/supabase/auth";
 import { Mail } from "lucide-react";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
@@ -18,14 +18,21 @@ export default function Signup({ className, ...props }) {
     const [isSigningUp, setIsSigningUp] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [emailSent, setEmailSent] = useState(false);
+    const [username, setUsername] = useState("");
 
-    const { currentUser,
-        userLoggedIn,
-        emailVerified,
-        authLoading } = useAuth();
+    const { userLoggedIn } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+
+        const usernameRegex = /^[a-zA-Z0-9_]{4,}$/;
+
+        if (!usernameRegex.test(username)) {
+            setErrorMessage("Username must be atleast 4 characters, with alphanumeric and underscore only.  ")
+            return;
+        }
+
 
         if (password !== confirmPassword) {
             setErrorMessage("Passwords do not match");
@@ -41,9 +48,10 @@ export default function Signup({ className, ...props }) {
             setIsSigningUp(true);
             setErrorMessage("");
             try {
-                const result = await handleSignUp(email, password);
+                const result = await handleSignUp(email, password, username);
                 setEmailSent(true);
                 setIsSigningUp(false);
+
             } catch (error) {
                 setErrorMessage(error.message);
                 setIsSigningUp(false);
@@ -97,7 +105,22 @@ export default function Signup({ className, ...props }) {
 
                     <div className="flex flex-col gap-6">
                         <div className="grid gap-2">
+                            <Label htmlFor="username">Username</Label>
+
+                            <Input
+                                id="username"
+                                type="text"
+                                placeholder="johndoe_123"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value.trim().toLowerCase())}
+                                required
+                                className="text-black"
+                            />
+                        </div>
+
+                        <div className="grid gap-2">
                             <Label htmlFor="email">Email</Label>
+
                             <Input
                                 id="email"
                                 type="email"
@@ -174,9 +197,7 @@ export default function Signup({ className, ...props }) {
         </div>
     );
 }
-
-const CheckYourEmail = ({ className, ...props }) => {
-    const { email, setEmailSent } = props;
+const CheckYourEmail = ({ className, email, setEmailSent, ...props }) => {
     return (
         <div className={cn("flex flex-col gap-6 justify-center items-center text-white", className)} {...props}>
             <div className="flex flex-col items-center gap-4 max-w-md text-center">
@@ -194,7 +215,7 @@ const CheckYourEmail = ({ className, ...props }) => {
                     <Button
                         onClick={() => window.location.href = '/login'}
                         className="w-full bg-primary text-white hover:text-primary hover:bg-white hover:border-primary border"
-                        variant="default  "
+                        variant="default"
                     >
                         Go to Sign In
                     </Button>
@@ -208,5 +229,5 @@ const CheckYourEmail = ({ className, ...props }) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};

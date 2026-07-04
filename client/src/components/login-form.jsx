@@ -2,8 +2,8 @@ import googleIcon from "@/assets/googleIcon.png"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { doSignInwithEmailandPassword, doSignInwithGoogle } from "@/supabase/auth"
 import { cn } from "@/lib/utils"
+import { doSignInwithEmailandPassword, doSignInwithGoogle } from "@/supabase/auth"
 import { useState } from "react"
 import { Link, Navigate } from "react-router-dom"
 import navlogo from "../assets/navlogo.png"
@@ -84,6 +84,7 @@ export function LoginForm({
             placeholder="johndoe@example.com"
             className="text-black"
             value={email}
+            required
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
@@ -99,7 +100,7 @@ export function LoginForm({
             type="password"
             placeholder="Enter your password"
             className="text-black"
-
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
