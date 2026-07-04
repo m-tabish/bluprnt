@@ -10,9 +10,9 @@ import {
     NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
 import { NumberTicker } from "@/components/ui/number-ticker";
+import { useGithubStars } from "@/hooks/useGithubStars";
 import { signOut as doSignOut } from "@/supabase/auth";
 import { useAuth } from "@/supabase/authContext";
-import { useGithubStars } from "@/hooks/useGithubStars";
 import { ExitIcon, GitHubLogoIcon, StarFilledIcon } from "@radix-ui/react-icons";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
@@ -26,7 +26,7 @@ function Navbar() {
 
     const options = [
         { label: "Home", href: "/" },
-        { label: "Community", href: "#" },
+        { label: "Community", href: "/app/community" },
         { label: "Settings", component: <Settings />, href: "#" },
     ];
 

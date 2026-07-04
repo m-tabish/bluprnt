@@ -4,7 +4,7 @@ import { projects, users } from "../db/schema.js";
 
 
 // Get projects
-async function getProjectsRepo(page = 1, limit = 6, userId) {
+export async function getProjectsRepo(page = 1, limit = 6, userId) {
     const offset = (page - 1) * limit;
 
 
@@ -33,8 +33,50 @@ async function getProjectsRepo(page = 1, limit = 6, userId) {
 }
 
 
+export async function getPublicProjectsRepo(page = 1, limit = 6, userId) {
+    const offset = (page - 1) * limit;
+
+    const data = await db.select({
+        id: projects.id,
+        projectName: projects.projectName,
+        projectDescription: projects.projectDescription,
+        tags: projects.tags,
+        createdAt: projects.createdAt,
+        status: projects.status,
+        creatorName: users.fullName
+    })
+        .from(projects)
+        .leftJoin(users, eq(projects.userId, users.id))
+        .where(
+            and(
+                eq(projects.isPublic, true),
+                eq(projects.status, "COMPLETED")
+            )
+        )
+        .orderBy(desc(projects.createdAt))
+        .limit(limit)
+        .offset(offset)
+
+
+    // Get total count of public completed projects
+    const [countResult] = await db.select({ count: count() })
+        .from(projects)
+        .where(
+            and(
+                eq(projects.isPublic, true),
+                eq(projects.status, "COMPLETED")
+            )
+        )
+
+    return {
+        projects: data,
+        totalCount: Number(countResult.count)
+    }
+
+}
+
 // Create project
-async function createProjectRepo(data) {
+export async function createProjectRepo(data) {
     if (data.userId) {
         const [existingUser] = await db
             .select()
@@ -57,7 +99,7 @@ async function createProjectRepo(data) {
 
 
 // Update project
-async function updateProjectRepo(id, data) {
+export async function updateProjectRepo(id, data) {
     const [project] = await db
         .update(projects)
         .set(data)
@@ -68,7 +110,7 @@ async function updateProjectRepo(id, data) {
 }
 
 // Get project by ID
-async function getProjectByIdRepo(id) {
+export async function getProjectByIdRepo(id) {
     const [project] = await db
         .select()
         .from(projects)
@@ -79,7 +121,7 @@ async function getProjectByIdRepo(id) {
 }
 
 // Delete project
-async function deleteProjectRepo(id) {
+export async function deleteProjectRepo(id) {
     const [project] = await db
         .delete(projects)
         .where(eq(projects.id, id))
@@ -87,7 +129,4 @@ async function deleteProjectRepo(id) {
 
     return project;
 }
-
-
-export { createProjectRepo, deleteProjectRepo, getProjectByIdRepo, getProjectsRepo, updateProjectRepo };
 

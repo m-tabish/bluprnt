@@ -24,7 +24,8 @@ function Dashboard() {
     const [input, setInput] = useState({
         project: "",
         projectDescription: "",
-        language: ""
+        language: "",
+        isPublic: false
     });
 
 
@@ -119,6 +120,18 @@ function Dashboard() {
                                 required
                                 minLength={1}
                             />
+                            <div className="flex items-center gap-2 my-2 py-1">
+                                <input
+                                    type="checkbox"
+                                    id="isPublic"
+                                    checked={input.isPublic}
+                                    onChange={(e) => setInput({ ...input, isPublic: e.target.checked })}
+                                    className="w-4 h-4 rounded text-blue-600 bg-white/20 border-white/30 focus:ring-blue-500"
+                                />
+                                <label htmlFor="isPublic" className="text-sm font-semibold select-none cursor-pointer text-white/80">
+                                    Share this roadmap with the community (Make Public)
+                                </label>
+                            </div>
                             <Button type='submit' disabled={isSubmitting || isPolling}>
                                 {isSubmitting || isPolling ?
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin " /> :
