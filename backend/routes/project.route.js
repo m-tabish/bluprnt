@@ -7,11 +7,12 @@ import { requireAuth } from "../middleware/auth.middleware.js"; // Import middle
 const projectRouter = Router();
 
 
+// Public routes (no authentication required)
+projectRouter.get("/public", asyncHandler(getPublicProjectsController));
+
+// Protected routes (require authentication)
 projectRouter.use(requireAuth);
 projectRouter.get("", asyncHandler(getProjectController));
-
-
-projectRouter.get("/public", asyncHandler(getPublicProjectsController));
 
 
 projectRouter.get("/:id", asyncHandler(getProjectByIdController));
