@@ -33,10 +33,12 @@
 		"postgres": "^3.4.9",
 		"socket.io": "^4.7.5",
 		"ws": "^8.18.0",
+		"yaml": "^2.9.0",
 		"zod": "^3.23.8",
 		"zod-to-json-schema": "^3.25.2"
 	},
 	"devDependencies": {
+		"drizzle-kit": "^0.31.10",
 		"nodemon": "^3.1.10"
 	}
 }

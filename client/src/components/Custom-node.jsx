@@ -16,6 +16,13 @@ import { vs2015 } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 export default function CustomNode({ data, targetPosition, sourcePosition }) {
     const parsedData = JSON.parse(data.label);
 
+    const process = parsedData.process || parsedData.lbl || parsedData.label || "";
+    const description = parsedData.description || parsedData.r || parsedData.role || "";
+    const code = parsedData.code || parsedData.c || "";
+    let resources = parsedData.resources || parsedData.urls || [];
+    if (!Array.isArray(resources)) {
+        resources = resources ? [resources] : [];
+    }
 
     const currentClass = "bg-white"
 
@@ -25,7 +32,7 @@ export default function CustomNode({ data, targetPosition, sourcePosition }) {
             <div className={`relative text-center font-bold rounded-lg w-[200px] h-auto min-h-[50px] text-xs whitespace-normal p-1 flex flex-col justify-center items-center gap-1 ${currentClass}`}>
 
                 <Handle type="target" position={targetPosition || Position.Top} id="1" />
-                {parsedData.process.length > 100 ? parsedData.process.slice(0, 100) + "..." : parsedData.process}
+                {process.length > 100 ? process.slice(0, 100) + "..." : process}
 
                 {/* Code button */}
                 <Dialog >
@@ -34,9 +41,9 @@ export default function CustomNode({ data, targetPosition, sourcePosition }) {
                         <DialogHeader>
                             <DialogTitle className=" ">Code</DialogTitle>
                             <DialogDescription className="max-h-1/2 max-w-4xl whitespace-pre-wrap  break-words">
-                                <div className="m-1  ">{JSON.stringify(parsedData.description)}</div>
+                                <div className="m-1  ">{description}</div>
                                 <SyntaxHighlighter wrapLongLines={true} language="javascript" style={vs2015}>
-                                    {parsedData.code}
+                                    {code}
                                 </SyntaxHighlighter>
                             </DialogDescription>
                         </DialogHeader>
@@ -50,10 +57,10 @@ export default function CustomNode({ data, targetPosition, sourcePosition }) {
                         <DialogHeader>
                             <DialogTitle>Resources</DialogTitle>
 
-                            {parsedData.resources.length !== 0 ? (
+                            {resources.length !== 0 ? (
                                 <DialogDescription className="max-w-4xl whitespace-pre-wrap  break-words">
                                     <ul>
-                                        {parsedData.resources.map((res, idx) => (
+                                        {resources.map((res, idx) => (
                                             <a className="text-blue-600 whitespace-pre-wrap underline underline-offset-1 " target="_blank" href={`${res}`} key={idx}>
 
                                                 {res + "\n"}
