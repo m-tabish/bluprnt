@@ -11,6 +11,32 @@ This project follows Semantic Versioning.
 - Forgot password
 - Add Mobile Friendly version
 - change the logout button in nav open menu with user details and logout
+## [2.2.1] - 2026-07-05
+### Added
+- **Bidirectional Edge Merging**: Implemented A->B and B->A merging in the client-side edge processor, combining labels (e.g. `A ⇄ B`) and adding double-headed arrows to prevent coincident edge lines from overlapping.
+- **High-Contrast Edge Palette**: Introduced a neon/pastel color palette tailored for high visibility on the dark blue `#2d66bd` canvas background.
+- **Model Error Propagation**: Updated backend generation logic to throw a distinct error if the LLM output is empty or contains zero nodes, allowing the background worker to correctly mark failed projects as `FAILED`.
+- **Interactive Node Dragging**: Enabled node dragging on the canvas by setting `draggable: true` in node definitions.
+- **Refined Project Metadata**: Instructed Gemini to generate a concise project description (`DESCRIPTION:`) and a list of specific framework/tool tags (`TAGS:`) at the start of the response.
+- **Frontend Tag Badges**: Updated the `AllProjects` dashboard component to display the new project tags below the project title.
+
+### Fixed
+- **Resource URL Parsing**: Fixed a backend bug by adding the missing `r:` (resources) branch in the backend parser.
+- **Layout Direction Config**: Fixed a bug where direction parameter was ignored by restoring `rankdir: direction` in the Dagre setGraph configuration.
+- **API Gateway Bias**: Removed the hardcoded API Gateway default from the system prompt instruction and example, allowing the LLM to choose appropriate context-driven entrypoints.
+
+## [2.2.0] - 2026-07-05
+### Added
+- **Asymmetric Micro-DSL Data Pipeline**: Integrated a custom text-based Micro-DSL for Gemini LLM response generation to bypass JSON escaping crashes with complex code blocks.
+- **Server-Side Parser**: Created a robust parser utility `microDslParse.js` to process plain-text DSL into structured JSON containing nodes, edges, and automatic layout mapping on the backend.
+- **Raw Response Logging**: Added a new `raw_response` text column to the `projects` table to archive raw output strings directly from the LLM.
+- **Usernames**: Implemented username registration and profile mapping for users.
+- **Public Projects**: Enabled public project discovery and sharing through dedicated endpoints.
+- **Scoped Permissions**: Restructured project access controls so users can only view or manage their own projects, while retaining view-only access to public blueprints.
+
+### Fixed
+- **Canvas Rendering Bug**: Patched node mapping (`nodes-edges.js`) and rendering logic (`Custom-node.jsx`) to seamlessly support both standard schemas and minified schemas (`id`/`nodeId`, `lbl`/`process`, `r`/`description`, `c`/`code`, `urls`/`resources`, `src`/`tgt`/`source`/`target`), enabling manual/compact database entries to display correctly.
+- **Line Splitting & Regex Matching**: Fixed line splitting and variable scoping bugs in the Micro-DSL parser function to correctly extract all generated nodes and edges.
 
 ## [2.1.0] - 2026-07-03
 ### Added

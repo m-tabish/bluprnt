@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { mapYamlToReactFlow } from '@/lib/yamlMapper';
 import { getLayoutedElements } from '@/services/getLayoutedNodes';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import {
@@ -21,8 +22,6 @@ import CustomNode from './Custom-node';
 import { Button } from './ui/button';
 
 
-
-
 const LayoutFlow = () => {
     const { id } = useParams()
     const navigate = useNavigate();
@@ -32,18 +31,18 @@ const LayoutFlow = () => {
     const [colorMode, setColorMode] = useState(useSelector(state => state.colorModeGlobal || "dark"));
     const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
 
+
     //fetching the projects
     useEffect(() => {
         const fetchData = async () => {
 
-            // custom node label
             const data = await getData({ id });
             if (!data) {
                 setLoading(false);
                 return;
             }
             const { initialNodes, initialEdges } = data;
-            const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(initialNodes, initialEdges);
+            const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(initialNodes, initialEdges, "LR");
             setNodes(layoutedNodes);
             setEdges(layoutedEdges);
             setLoading(false);
@@ -55,7 +54,7 @@ const LayoutFlow = () => {
         (params) =>
             setEdges((eds) =>
                 addEdge(
-                    { ...params, type: ConnectionLineType.SmoothStep, animated: true },
+                    { ...params, type: ConnectionLineType.SmoothStep, animated: true  },
                     eds
                 )
             ),
@@ -92,8 +91,7 @@ const LayoutFlow = () => {
                 nodeTypes={nodeTypes}
                 preventScrolling={false}
                 noWheelClassName='nowheel'
-                panOnDrag={true}
-
+                panOnDrag={true}   
 
             >
                 <Background bgColor='#2d66bd' color="#fff" variant={BackgroundVariant.Dots} />

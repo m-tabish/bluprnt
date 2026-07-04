@@ -1,0 +1,72 @@
+tech: [Express, JWT, PostgreSQL]
+desc: A secure routing architecture with public and private endpoints.
+nodes:
+  - id: n1
+    t: gateway
+    lbl: API Gateway
+    r: The main entry point for all incoming client traffic. Handles routing and rate limiting.
+    urls: [https://expressjs.com/]
+    c: |
+      const express = require('express');
+      const app = express();
+      
+      app.get('/api', (req, res) => {
+        res.send('Gateway is active');
+      });
+      
+      app.listen(3000);
+      
+  - id: n2
+    t: compute
+    lbl: Authentication Service
+    r: Validates JWT tokens to ensure the user is authorized before accessing restricted data.
+    urls: [https://jwt.io/]
+    c: |
+      const jwt = require('jsonwebtoken');
+      
+      function verifyToken(req, res, next) {
+        const token = req.headers['authorization'];
+        if (!token) return res.status(403).send('Forbidden');
+        
+        jwt.verify(token, process.env.SECRET, (err, decoded) => {
+          if (err) return res.status(401).send('Unauthorized');
+          next();
+        });
+      }
+      
+  - id: n3
+    t: compute
+    lbl: Public Content Service
+    r: Serves public-facing data like blog posts and marketing assets that do not require authentication.
+    urls: [https://expressjs.com/en/guide/routing.html]
+    c: |
+      app.get('/content/public', (req, res) => {
+        const data = cache.get('homepage_assets');
+        res.json({ success: true, data });
+      });
+      
+  - id: n4
+    t: database
+    lbl: PostgreSQL Database
+    r: The primary relational database storing user profiles and secure account information.
+    urls: [https://www.postgresql.org/docs/]
+    c: |
+      CREATE TABLE user_profiles (
+        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+      
+edges:
+  - id: e1
+    s: n1
+    t: n2
+    lbl: Routes secure traffic
+  - id: e2
+    s: n1
+    t: n3
+    lbl: Routes public traffic
+  - id: e3
+    s: n2
+    t: n4

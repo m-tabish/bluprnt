@@ -53,6 +53,7 @@ const projects = pgTable('projects', {
     projectDescription: text("project_description").notNull(),
     isPublic: boolean("is_public").default(false).notNull(),
     steps: jsonb("steps"),
+    rawResponse: text("raw_response").default("")
 },
     (table) => [index("projects_user_idx").on(table.userId),
     index("projects_public_idx").on(table.isPublic)

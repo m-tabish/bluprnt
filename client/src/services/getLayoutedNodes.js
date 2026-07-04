@@ -10,8 +10,8 @@ export const getLayoutedElements = (nodes, edges, direction = "TB") => {
 
     dagreGraph.setGraph({
         rankdir: direction,
-        nodesep: 50,
-        ranksep: 80
+        nodesep: 120,
+        ranksep: 140
     });
 
     dagreGraph.setDefaultEdgeLabel(() => ({}));

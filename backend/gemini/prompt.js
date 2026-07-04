@@ -1,28 +1,65 @@
 export function getPrompt({ projectName, projectDescription, language }) {
-   return `You are an expert backend systems architect.
-Generate a structured, non-linear backend system architecture and software roadmap for:
+  return `You are a backend architecture generator. You output a custom Micro-DSL topology.
+Do NOT wrap the response in markdown code blocks (e.g., do NOT use \`\`\` or \`\`\`dsl).
+
+CRITICAL INSTRUCTIONS:
+1. Your response MUST begin with these two exact lines:
+DESCRIPTION: [A concise, professional backend architecture description for this project, under 150 characters]
+TAGS: [Pipe-separated list of the actual frameworks, tools, databases, or libraries needed, e.g., Express | Redis | PostgreSQL | Docker]
+
+2. Followed by a blank line, and then the NODE and EDGE declarations.
+3. Except for the first two metadata lines, do NOT include any explanations, comments, or intro/outro text.
+4. You MUST generate EXACTLY between 10 to 15 nodes. Do NOT generate more than 15 nodes under any circumstances.
+5. All EDGE declarations MUST follow the format: EDGE [sourceNodeId] -> [targetNodeId] "[label]". Never omit the -> or the target node!
+
+Generate a backend system topology for:
 - Project Name: ${projectName}
 - Project Description: ${projectDescription}
-- Main Language/Technology: ${language}
+- Primary Tech/Language: ${language}
 
-### GRAPH LAYOUT & STRUCTURE RULES:
-1. The graph MUST represent a clean hierarchical tree or Directed Acyclic Graph (DAG) branching out from a single root node (e.g., API Gateway or Client Entrypoint).
-2. **NO DUPLICATE OR PARALLEL EDGES**: Do not define more than one edge between the same two nodes.
-3. **NO BYPASS EDGES**: Avoid redundant direct connections. For example, if node A connects to node B, and B connects to C, do not connect A directly to C unless there is an actual direct secondary interaction.
-4. Every node MUST have a unique ID using the format 'n1', 'n2', 'n3', etc.
-5. Every edge's 'source' and 'target' MUST strictly match an existing node's 'nodeId'. Do not create dangling edges.
+### MICRO-DSL SYNTAX RULES:
+For every Node (component), output exactly four consecutive lines:
+NODE [nodeId] [type] "[process]"
+d: [description]
+c: [single-line flattened code string with semicolons]
+r: [comma-separated official documentation URLs]
 
-### HARD CONSTRAINTS:
-1. **NODE COUNT**: You MUST generate at least 10 to 15 distinct, logical architectural components/nodes. Do not stop early.
-2. Do NOT include deployment, DevOps, or monitoring nodes (e.g., Docker, Kubernetes, CI/CD, Prometheus). Focus strictly on application-level backend architecture (e.g., Auth Service, Processing Workers, Cache, Search Index, Databases).
-3. For each node/step:
-   - Provide a short, clear description of the component's role.
-   - Provide 5 to 10 lines of real, syntactically correct code in ${language} showing how to configure or use that specific component (e.g. database schema definition, route controller, queue consumer configuration). Do not use mock comments or empty placeholders.
-   - Provide 1 to 2 realistic official documentation URLs under 'resources' (e.g. https://expressjs.com, https://redis.io/docs).
+Where:
+- [nodeId] is a unique sequential identifier like n1, n2, n3, etc.
+- [type] is one of: gateway, compute, database, queue, cache.
+- [process] is the title of the node in double quotes.
+- [description] is a short one-sentence description of the node's role.
+- [single-line flattened code string with semicolons] is 5-10 lines of real, syntactically correct code in ${language} flattened into a single line. Do not use double quotes inside this code block unless escaped as \\".
+- [comma-separated official documentation URLs] is 1-2 realistic URLs (e.g., https://expressjs.com, https://redis.io).
 
-4. The overall JSON structure must adhere to:
-   - 'technologies': array of max 4 primary technologies.
-   - 'description': short summary of the generated architecture.
-   - 'steps': containing 'nodes' and 'edges'.
-`;
+For every Edge (relationship), output a single line:
+EDGE [sourceNodeId] -> [targetNodeId] "[label]"
+
+Where:
+- [sourceNodeId] and [targetNodeId] match existing nodeIds.
+- [label] is a relationship label in double quotes.
+
+Separate nodes and edges by a single blank line.
+
+### TOPOLOGY RULES:
+- Determine an appropriate entrypoint node based on the project description and tech stack (does not have to be an API gateway).
+- Organize the topology logically (e.g., entrypoints connecting to compute modules, processing workers, queues, caches, and databases).
+- Generate exactly 10 to 15 nodes.
+- Do NOT include deployment, DevOps, or monitoring nodes. Focus strictly on application-level backend architecture.
+
+Example Output:
+DESCRIPTION: A scaleable image processing pipeline utilizing Sharp and Redis for caching.
+TAGS: Node.js | Express | Sharp | Redis | Docker
+
+NODE n1 compute "Image Processor Worker"
+d: Background worker that processes uploaded images and creates thumbnails.
+c: const sharp = require('sharp'); async function resize(img) { return await sharp(img).resize(200).toBuffer(); }
+r: https://sharp.pixelplumbing.com
+
+NODE n2 cache "Image Store Cache"
+d: Redis cache for serving frequently accessed images.
+c: const redis = require('redis'); const client = redis.createClient(); await client.set('img_1', data);
+r: https://redis.io
+
+EDGE n1 -> n2 "Caches processed image"`;
 }
