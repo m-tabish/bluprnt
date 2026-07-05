@@ -18,14 +18,14 @@ graph TD
     end
 
     subgraph Server [Backend - Node.js/Express]
-        API[Express API]
+        API[Express API]v
         RMQ[RabbitMQ Queue]
         Worker[Roadmap Worker]
     end
 
     subgraph External [External Services & Storage]
         G[Gemini AI API]
-        DB[(MongoDB)]
+        DB[(PostgreSQL / Supabase)]
     end
 
     %% Logical Flow
@@ -53,7 +53,7 @@ sequenceDiagram
     autonumber
     participant UI as Frontend (UI)
     participant API as Express API
-    participant DB as MongoDB
+    participant DB as PostgreSQL
     participant MQ as RabbitMQ
     participant W as Roadmap Worker
     participant G as Gemini AI
@@ -93,7 +93,7 @@ sequenceDiagram
 
 - **Frontend**: React.js, Tailwind CSS, React Flow, Vite.
 - **Backend**: Node.js, Express.js, RabbitMQ.
-- **Database**: MongoDB (Mongoose).
+- **Database**: PostgreSQL (Supabase & Drizzle ORM).
 - **AI Engine**: Google Gemini API.
 
 ---
@@ -102,7 +102,7 @@ sequenceDiagram
 
 ### 1. Prerequisites
 - Node.js (v18+)
-- MongoDB
+- PostgreSQL (Supabase)
 - RabbitMQ
 
 ### 2. Installation
@@ -118,14 +118,34 @@ cd ../client && npm install
 ```
 
 ### 3. Environment Setup
-Create a `.env` file in `backend/`:
+
+#### Backend Setup
+Create a `.env` file in `backend/` (see `backend/.env.example` for reference):
 ```env
-MONGO_CONNECTION_URL=your_mongodb_url
+PORT=5000
+DATABASE_URL=your_postgresql_connection_string
 GEMINI_API_KEY=your_gemini_api_key
 RABBITMQ_URL=your_rabbitmq_url
+JWT_SECRET=your_jwt_secret
+GITHUB_API_TOKEN=your_github_personal_access_token
+```
+
+#### Client Setup
+Create a `.env` file in `client/` (see `client/.env.example` for reference):
+```env
+VITE_SERVER_URL=http://localhost:5000
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key
 ```
 
 ### 4. Running the App
+
+Start a RabbitMQ instance (e.g., using Docker):
+```bash
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+```
+
+Start the application services:
 ```bash
 # Terminal 1: Start Backend (in backend/)
 npm run dev
