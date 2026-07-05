@@ -1,0 +1,1 @@
+ALTER TABLE "projects" ADD COLUMN "raw_response" text DEFAULT '';

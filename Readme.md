@@ -122,7 +122,7 @@ cd ../client && npm install
 #### Backend Setup
 Create a `.env` file in `backend/` (see `backend/.env.example` for reference):
 ```env
-PORT=5000
+PORT=8080
 DATABASE_URL=your_postgresql_connection_string
 GEMINI_API_KEY=your_gemini_api_key
 RABBITMQ_URL=your_rabbitmq_url
