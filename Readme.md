@@ -18,7 +18,7 @@ graph TD
     end
 
     subgraph Server [Backend - Node.js/Express]
-        API[Express API]v
+        API[Express API]
         RMQ[RabbitMQ Queue]
         Worker[Roadmap Worker]
     end
