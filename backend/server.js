@@ -1,11 +1,11 @@
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
-import { deleteProjectController } from "./controllers/project.controller.js";
 import { errorHandler } from "./lib/errorHandler.js";
 import { getRepoStars } from './lib/githubStars.js';
 import { responseMiddleware } from "./middleware/response.middleware.js";
 import projectRouter from "./routes/project.route.js";
+import subscriptionRouter from "./routes/subscription.route.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(cors());
@@ -24,9 +24,7 @@ app.get('/health', (req, res) => {
 
 
 app.use("/projects", projectRouter)
-
-app.delete('/delete-project/:id', deleteProjectController);
-
+app.use("/subscriptions", subscriptionRouter)
 app.get("/github-stars", async (req, res) => {
 
     try {

@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import * as schema from "./schema.js";
+import * as schema from "./schemas.js";
 
 import path from "path";
 import { fileURLToPath } from "url";

@@ -1,7 +1,7 @@
 import { and, count, desc, eq } from "drizzle-orm";
 import { db } from "../db/dbInitialise.js";
-import { projects, users } from "../db/schema.js";
-
+import { projects } from "../db/schema/projects.js";
+import { users } from "../db/schema/users.js";
 
 // Get projects
 export async function getProjectsRepo(page = 1, limit = 6, userId) {

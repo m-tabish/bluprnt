@@ -1,5 +1,5 @@
 import db from "./dbInitialise.js";
-import { projects } from "./schema.js";
+import { projects } from "./schemas.js";
 
 async function main() {
     const data = await db.select().from(projects).limit(1);

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { createProjectController, deleteProjectController, getProjectByIdController, getProjectController, getPublicProjectsController } from "../controllers/project.controller.js";
 import { asyncHandler } from "../lib/asyncHandler.js";
-import { requireAuth } from "../middleware/auth.middleware.js"; // Import middleware
+import { requireAuth } from "../middleware/auth.middleware.js";
 
 
 const projectRouter = Router();

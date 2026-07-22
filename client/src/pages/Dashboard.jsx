@@ -9,9 +9,10 @@ import { useCreateProject } from "@/hooks/useCreateProject";
 import { usePollProjectStatus } from "@/hooks/usePollProjectStatus";
 import { useProjects } from "@/hooks/useProjects";
 import { useAuth } from "@/supabase/authContext";
+import { supabase } from "@/supabase/supabase";
 import { Analytics } from "@vercel/analytics/react";
 import { ArrowDown, Loader2 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 function Dashboard() {
@@ -28,7 +29,11 @@ function Dashboard() {
         isPublic: false
     });
 
-
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data }) => {
+            console.log("🔑 YOUR JWT ACCESS TOKEN FOR POSTMAN:\n", data?.session?.access_token);
+        });
+    }, []);
 
 
     const onPollComplete = useCallback(() => {

@@ -3,6 +3,7 @@ import {
     boolean,
     index,
     jsonb,
+    PgDoublePrecision,
     pgEnum,
     pgTable,
     text,
@@ -13,7 +14,7 @@ import {
 import { z } from "zod";
 
 
-export const roadmapPayloadSchema = z.object({
+const roadmapPayloadSchema = z.object({
     nodes: z.array(z.object({
         nodeId: z.string(),
         process: z.string(),
@@ -29,14 +30,14 @@ export const roadmapPayloadSchema = z.object({
     }))
 });
 
-export const users = pgTable('users', {
+const users = pgTable('users', {
     id: uuid('id').defaultRandom().primaryKey(),
     username: text('username').notNull().unique(),
     email: text("email").notNull().unique(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const projectstatusEnum = pgEnum("project_status", [
+const projectstatusEnum = pgEnum("project_status", [
     "PENDING",
     "COMPLETED",
     "FAILED"
@@ -60,4 +61,3 @@ const projects = pgTable('projects', {
     ]
 );
 
-export { projects };
