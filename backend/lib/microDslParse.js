@@ -1,4 +1,8 @@
 export function parseMicroDsl(rawDslString) {
+    if (!rawDslString || typeof rawDslString !== 'string') {
+        throw new Error("DSL input must be a non-empty string");
+    }
+
     const nodes = [];
     const edges = [];
     let description = "";
@@ -58,6 +62,12 @@ export function parseMicroDsl(rawDslString) {
             }
         }
     });
+
+
+    // Throw error if no valid DSL components were extracted
+    if (nodes.length === 0 && !description) {
+        throw new Error("Failed to parse valid nodes or description from DSL payload");
+    }
 
     nodes.forEach((node, index) => {
         node.target = edges
