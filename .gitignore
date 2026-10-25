@@ -7,3 +7,6 @@ backend/node_modules
 .env
 .env.*
 docs/
+.aider*
+.*C 
+.agents

@@ -15,7 +15,7 @@ export async function createProjectController(req, res) {
 
 
     } catch (error) {
-        console.error("Error creating project:", error); // 👈 Add this line
+        console.error("Error creating project:", error); 
         res.fail(error.message || "Failed to create project", error, 500)
     }
 }

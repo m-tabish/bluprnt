@@ -1,5 +1,6 @@
-import { parseMicroDsl } from "../../lib/microDslParse";
-import { dslInput, nodeCount } from "../../workers/mock_response";
+import { parseMicroDsl } from "../../lib/microDslParse.js";
+import { dslInput, nodeCount } from "../../workers/mock_response.js";
+
 describe("Unit Test: Micro DSL Parser Engine", () => {
     it("should parse valid DSL string into node/edge objects", () => {
         const result = parseMicroDsl(dslInput)

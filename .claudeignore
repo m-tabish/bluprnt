@@ -1,0 +1,25 @@
+# IDE & Editor
+.idea/
+.vscode/
+
+# Dependencies
+node_modules/
+
+# Build & Output
+dist/
+build/
+.vite/
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Logs & Debug
+logs/
+*.log
+
+# Git & OS
+.git/
+.DS_Store
+Thumbs.db

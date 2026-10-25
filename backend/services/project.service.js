@@ -10,6 +10,8 @@ import {
 
 export async function createProjectService(data) {
     let project;
+
+    // checks for existing queues
     let channel = await getRabbitMQChannel();
     try {
         if (!channel) {

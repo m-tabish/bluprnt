@@ -4,6 +4,7 @@ import express from "express";
 import { errorHandler } from "./lib/errorHandler.js";
 import { getRepoStars } from './lib/githubStars.js';
 import { responseMiddleware } from "./middleware/response.middleware.js";
+import aiderRouter from "./routes/aider.routes.js";
 import projectRouter from "./routes/project.route.js";
 import subscriptionRouter from "./routes/subscription.route.js";
 const app = express();
@@ -25,6 +26,7 @@ app.get('/health', (req, res) => {
 
 app.use("/projects", projectRouter)
 app.use("/subscriptions", subscriptionRouter)
+app.use(aiderRouter);
 app.get("/github-stars", async (req, res) => {
 
     try {
@@ -38,6 +40,11 @@ app.get("/github-stars", async (req, res) => {
 
 app.use(errorHandler)
 
-app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT} `);
-});
+if (process.env.NODE_ENV !== 'test') {
+
+    app.listen(PORT, () => {
+        console.log(`Server started on port ${PORT} `);
+    });
+}
+
+export default app;

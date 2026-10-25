@@ -2,7 +2,7 @@ import amqp from 'amqplib';
 import 'dotenv/config';
 import { generateContent } from "../gemini/index.js";
 import { updateProjectRepo } from '../repository/project.repository.js';
-
+import { dslInput, nodeCount } from './mock_response.js';
 
 
 async function connectRabbitMQ() {
@@ -43,8 +43,8 @@ async function startWorker() {
             try {
                 console.log(`[${new Date().toISOString()}] Processing: ${projectId}`);
 
-                // const result = mock_data; // for testing
-                const result = await generateContent(body);
+                const result = dslInput; // for testing
+                // const result = await generateContent(body);
 
                 await updateProjectRepo(projectId, { ...result, status: 'COMPLETED' });
 
